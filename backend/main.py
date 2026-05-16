@@ -18,7 +18,7 @@ import threading
 
 app = FastAPI(title="Shiv Shakti Secure Backend", version="2.0.0")
 
-# Secure CORS policy
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Security Helpers ---
+
 def hash_password(password: str) -> str:
     """Hash password using SHA-256 with a random salt."""
     salt = os.urandom(32)
@@ -60,13 +60,13 @@ def validate_password_strength(password: str) -> tuple[bool, str]:
         return False, "Access code must contain at least one number"
     return True, "Valid"
 
-# --- Auto Email Service ---
+
 def send_welcome_email(email: str, name: str = "Operative"):
     """Send a welcome email to newly registered users (runs in background thread)."""
     def _send():
         try:
-            # Using a no-reply style approach - works with any SMTP
-            # For production, configure SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS env vars
+            
+            
             smtp_host = os.environ.get('SMTP_HOST', '')
             smtp_port = int(os.environ.get('SMTP_PORT', '587'))
             smtp_user = os.environ.get('SMTP_USER', '')
@@ -74,7 +74,7 @@ def send_welcome_email(email: str, name: str = "Operative"):
             
             if not smtp_host or not smtp_user:
                 print(f"[EMAIL SERVICE] Welcome email queued for {email} (SMTP not configured - set SMTP_HOST, SMTP_USER, SMTP_PASS env vars)")
-                # Log the email for records even without SMTP
+                
                 log_email_event(email, "welcome", "queued")
                 return
 
@@ -149,7 +149,7 @@ def send_welcome_email(email: str, name: str = "Operative"):
             print(f"[EMAIL SERVICE] Failed to send welcome email to {email}: {e}")
             log_email_event(email, "welcome", f"failed: {str(e)}")
     
-    # Run email sending in background thread so it doesn't block the response
+    
     thread = threading.Thread(target=_send, daemon=True)
     thread.start()
 
@@ -167,7 +167,7 @@ def log_email_event(email: str, email_type: str, status: str):
     except Exception as e:
         print(f"[DB] Failed to log email event: {e}")
 
-# --- Pydantic Models ---
+
 class Product(BaseModel):
     id: int
     name: str
@@ -208,7 +208,7 @@ class NewsletterRequest(BaseModel):
             raise ValueError('Invalid email format')
         return v.lower().strip()
 
-# --- Database ---
+
 def get_db():
     conn = sqlite3.connect("shiv_shakti.db")
     conn.row_factory = sqlite3.Row
@@ -221,7 +221,7 @@ def init_db():
     conn = sqlite3.connect("shiv_shakti.db")
     cursor = conn.cursor()
     
-    # Products Table
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -233,7 +233,7 @@ def init_db():
         )
     ''')
     
-    # Users Table (with hashed passwords)
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -244,7 +244,7 @@ def init_db():
         )
     ''')
 
-    # Orders Table
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -255,7 +255,7 @@ def init_db():
         )
     ''')
     
-    # Email Logs Table
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS email_logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -266,7 +266,7 @@ def init_db():
         )
     ''')
     
-    # Newsletter Subscribers Table
+    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS newsletter_subscribers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -275,7 +275,7 @@ def init_db():
         )
     ''')
     
-    # Seed Products if empty
+    
     cursor.execute("SELECT COUNT(*) FROM products")
     if cursor.fetchone()[0] < 100:
         categories = ["SHAKTI", "SHIVA"]
@@ -295,7 +295,7 @@ def init_db():
 
 init_db()
 
-# --- API Endpoints ---
+
 @app.get("/api/products")
 def get_all_products(db: sqlite3.Connection = Depends(get_db)):
     cursor = db.cursor()
@@ -312,7 +312,7 @@ def get_product(product_id: int, db: sqlite3.Connection = Depends(get_db)):
 
 @app.post("/api/auth/register")
 def register_user(user: UserAuth, db: sqlite3.Connection = Depends(get_db)):
-    # Validate password strength
+    
     is_valid, message = validate_password_strength(user.password)
     if not is_valid:
         raise HTTPException(status_code=400, detail=message)
@@ -327,7 +327,7 @@ def register_user(user: UserAuth, db: sqlite3.Connection = Depends(get_db)):
         )
         db.commit()
         
-        # Send welcome email in background
+        
         send_welcome_email(user.email)
         
         return {
@@ -389,8 +389,8 @@ def verify_token(token: str, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid token")
     return {"valid": True, "email": row["email"]}
 
-# --- Serve Frontend Static Files ---
-# Mount the parent directory to serve all HTML, CSS, JS, and image assets
+
+
 FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 @app.get("/")
@@ -403,7 +403,7 @@ async def serve_static(filepath: str):
     full_path = os.path.join(FRONTEND_DIR, filepath)
     if os.path.isfile(full_path):
         return FileResponse(full_path)
-    # Fallback to index.html for SPA-like behavior
+    
     raise HTTPException(status_code=404, detail="File not found")
 
 if __name__ == "__main__":

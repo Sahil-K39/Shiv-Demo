@@ -14,7 +14,7 @@
         body { background-color: #FFFFFF; color: #000000; font-family: 'Jost', sans-serif; }
         ::-webkit-scrollbar { display: none; }
         
-        /* Premium UI Enhancements */
+        
         .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
         .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
         @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
@@ -54,7 +54,7 @@
     <button id="clear-filters" class="text-[10px] tracking-[0.1em] text-gray-500 hover:text-black uppercase underline">Clear All</button>
 </div>
 
-<!-- Category -->
+
 <div class="mb-8 border-b border-black/10 pb-6 filter-group">
     <h3 class="text-[11px] font-medium tracking-[0.2em] mb-4 text-black uppercase flex justify-between cursor-pointer select-none">CATEGORY <span class="material-symbols-outlined text-sm">expand_more</span></h3>
     <div class="space-y-3 text-[12px] uppercase tracking-wider text-gray-600 filter-options">
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<!-- Price -->
+
 <div class="mb-8 border-b border-black/10 pb-6 filter-group">
     <h3 class="text-[11px] font-medium tracking-[0.2em] mb-4 text-black uppercase flex justify-between cursor-pointer select-none">PRICE <span class="material-symbols-outlined text-sm">expand_more</span></h3>
     <div class="space-y-3 text-[12px] uppercase tracking-wider text-gray-600 filter-options">
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<!-- Size -->
+
 <div class="mb-8 border-b border-black/10 pb-6 filter-group">
     <h3 class="text-[11px] font-medium tracking-[0.2em] mb-4 text-black uppercase flex justify-between cursor-pointer select-none">SIZE <span class="material-symbols-outlined text-sm">expand_more</span></h3>
     <div class="grid grid-cols-3 gap-2 text-[12px] uppercase tracking-wider text-gray-600 filter-options">
@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<!-- Color -->
+
 <div class="mb-8 border-b border-black/10 pb-6 filter-group">
     <h3 class="text-[11px] font-medium tracking-[0.2em] mb-4 text-black uppercase flex justify-between cursor-pointer select-none">COLOR <span class="material-symbols-outlined text-sm">expand_more</span></h3>
     <div class="space-y-3 text-[12px] uppercase tracking-wider text-gray-600 filter-options">
@@ -104,7 +104,7 @@
 <span id="item-count" class="text-[11px] tracking-[0.2em]">MEN'S COLLECTION / 3 ITEMS</span>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 bg-black border border-black/10" id="product-grid">
-<!-- Product 1 -->
+
 <article onclick="window.location.href='product.html'" data-category="outerwear" data-price="1250" data-size="l" data-color="obsidian" class="product-item bg-white flex flex-col group cursor-pointer p-4 animate-fade-in-up" style="animation-delay: 0.1s;">
 <div class="relative aspect-[2/3] w-full overflow-hidden mb-4">
 <img class="w-full h-full object-cover grayscale contrast-125 transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8D75C5r_ob1kjQXocCUpaR4jtSzMiDfaE8h-gPc1UxScESCDGpzWnYWHcUhJnijaHMue1ic1QLmxVIGYEaBve4GtocR-RyVKyVYMhCkOsbrkvNkuzvvfsrM78CNnccNcidUHiayKFTXiMcQWO_wM7muqdADPmZLjBhirGWEIuPdIkae6NFt5R1pdDyI26HT61D93r1DSkJgx3Ru9S2OR_TAErEHrQ7HL6yzb_nEa2K0Bh-8uNywa9CXw2toAZzBtayoFzPG4ZERgi" alt="Obsidian Trench"/>
@@ -112,7 +112,7 @@
 <h2 class="text-[11px] tracking-[0.2em] font-medium">NOMAD TRENCH</h2>
 <p class="text-[14px] mt-1">$1,250</p>
 </article>
-<!-- Product 2 -->
+
 <article onclick="window.location.href='product.html'" data-category="outerwear" data-price="1100" data-size="m" data-color="ash" class="product-item bg-white flex flex-col group cursor-pointer p-4 animate-fade-in-up" style="animation-delay: 0.2s;">
 <div class="relative aspect-[2/3] w-full overflow-hidden mb-4">
 <img class="w-full h-full object-cover grayscale contrast-125 transition-transform duration-1000 group-hover:scale-110" src="assets/images/shiva_look_1_1778314931006.png" alt="Tactical Bomber"/>
@@ -120,7 +120,7 @@
 <h2 class="text-[11px] tracking-[0.2em] font-medium">URBAN RECON BOMBER</h2>
 <p class="text-[14px] mt-1">$1,100</p>
 </article>
-<!-- Product 3 -->
+
 <article onclick="window.location.href='product.html'" data-category="accessories" data-price="850" data-size="os" data-color="void" class="product-item bg-white flex flex-col group cursor-pointer p-4 animate-fade-in-up" style="animation-delay: 0.3s;">
 <div class="relative aspect-[2/3] w-full overflow-hidden mb-4">
 <img class="w-full h-full object-cover grayscale contrast-125 transition-transform duration-1000 group-hover:scale-110" src="assets/images/shiva_look_2_1778314953057.png" alt="Armor Trousers"/>
@@ -141,7 +141,7 @@
   document.addEventListener('DOMContentLoaded', () => {
 
 
-    // Custom Cursor
+    
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
     let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
@@ -149,7 +149,7 @@
     const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
     animateCursor();
 
-    // Amazon/Flipkart Style Filtering Logic
+    
     const filterCheckboxes = document.querySelectorAll('input[type="checkbox"][data-filter]');
     const products = document.querySelectorAll('.product-item');
     const clearBtn = document.getElementById('clear-filters');
@@ -201,7 +201,7 @@
         });
     }
 
-    // Collapsible Filter Groups
+    
     document.querySelectorAll('.filter-group h3').forEach(header => {
         header.addEventListener('click', () => {
             const options = header.nextElementSibling;

@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Product Detail Page
- * page.tsx — Dynamic product route with gallery and add-to-cart
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -30,13 +25,13 @@ export default function ProductDetail() {
   const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
-    // We fetch all products and find the slug. In production, we'd add a GET /api/products/slug/:slug endpoint.
+    
     productsAPI.listAll().then((data) => {
       const found = data.products.find((p) => p.slug === slug);
       if (found) {
         setProduct(found);
         
-        // Auto-select first size and color
+        
         const sizes = parseList(found.sizes);
         const colors = parseList(found.colors);
         
@@ -78,9 +73,9 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-[1600px] mx-auto px-6 md:px-10 py-12 lg:py-20 flex flex-col lg:flex-row gap-12 lg:gap-24">
-      {/* ── Left: Image Gallery ──────────────────────────────── */}
+      {}
       <div className="w-full lg:w-1/2 flex flex-col gap-4">
-        {/* Main Image */}
+        {}
         <motion.div 
           className="relative aspect-[3/4] bg-obsidian overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
@@ -100,12 +95,12 @@ export default function ProductDetail() {
             />
           </AnimatePresence>
           
-          {/* Scan lines */}
+          {}
           <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
                style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 3px)" }} />
         </motion.div>
 
-        {/* Thumbnails */}
+        {}
         {images.length > 1 && (
           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
             {images.map((img, idx) => (
@@ -129,7 +124,7 @@ export default function ProductDetail() {
         )}
       </div>
 
-      {/* ── Right: Product Info ──────────────────────────────── */}
+      {}
       <div className="w-full lg:w-1/2 flex flex-col pt-8 lg:pt-16">
         <motion.div
           initial={{ opacity: 0, x: 30 }}
@@ -137,7 +132,7 @@ export default function ProductDetail() {
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-8"
         >
-          {/* Header */}
+          {}
           <div>
             <p className="text-[10px] tracking-[0.3em] uppercase text-stone mb-4">
               {product.category} / {product.collection}
@@ -152,13 +147,13 @@ export default function ProductDetail() {
 
           <div className="glow-line w-full" />
 
-          {/* Description */}
+          {}
           <p className="text-[14px] leading-[1.8] text-stone tracking-wide">
             {product.description}
           </p>
 
           <div className="space-y-6 pt-4">
-            {/* Color Selection */}
+            {}
             {colors.length > 0 && (
               <div className="space-y-3">
                 <p className="text-[10px] tracking-[0.2em] uppercase text-stone">
@@ -184,7 +179,7 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Size Selection */}
+            {}
             {sizes.length > 0 && (
               <div className="space-y-3">
                 <p className="text-[10px] tracking-[0.2em] uppercase text-stone flex justify-between">
@@ -210,7 +205,7 @@ export default function ProductDetail() {
             )}
           </div>
 
-          {/* Add to Cart Button */}
+          {}
           <motion.button
             onClick={handleAddToCart}
             disabled={!product.in_stock || isAdding}
@@ -234,7 +229,7 @@ export default function ProductDetail() {
             )}
           </motion.button>
           
-          {/* Metadata */}
+          {}
           <ul className="space-y-2 pt-6 text-[10px] uppercase tracking-[0.15em] text-stone">
             {["WORLDWIDE SECURE SHIPPING", "LIFETIME REPAIR GUARANTEE", "MADE IN LIMITED RUNS"].map((item) => (
               <li key={item} className="flex items-center gap-2">

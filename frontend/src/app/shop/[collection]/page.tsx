@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Collection Page
- * page.tsx — Renders garments for a specific collection
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -24,11 +19,11 @@ export default function ShopCollection() {
     productsAPI
       .listAll()
       .then((data) => {
-        // Simple client-side filtering for the stub
+        
         const filtered = data.products.filter(
           (p) => p.collection.toLowerCase() === collection.toLowerCase()
         );
-        // If empty, just show all for demo purposes
+        
         setProducts(filtered.length > 0 ? filtered : data.products);
         setIsLoading(false);
       })

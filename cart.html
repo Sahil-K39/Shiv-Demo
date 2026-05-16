@@ -14,7 +14,7 @@
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   ::-webkit-scrollbar { display: none; }
 
-  /* Premium UI Enhancements */
+  
   .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
   .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
   @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
@@ -57,7 +57,7 @@
 <span class="text-[11px] tracking-[0.2em] text-gray-500 hidden md:inline">SECURE CHECKOUT</span>
 </div>
 <div id="cart-items-container" class="flex flex-col gap-8 w-full max-w-4xl animate-fade-in-up" style="animation-delay: 0.1s;">
-    <!-- Items dynamically injected here -->
+    
 </div>
 </div>
 <aside class="w-full lg:w-[400px] bg-black text-white p-10 flex flex-col justify-between flex-shrink-0 animate-fade-in-up" style="animation-delay: 0.2s;">
@@ -90,7 +90,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 
-    // Custom Cursor
+    
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
     let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
@@ -110,7 +110,7 @@
       elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
     });
 
-    // Cart Logic
+    
     const cartContainer = document.getElementById('cart-items-container');
     const subtotalEl = document.getElementById('summary-subtotal');
     const totalEl = document.getElementById('summary-total');
@@ -173,7 +173,7 @@
 
     renderCart();
 
-    // Checkout Logic
+    
     const checkoutBtn = document.getElementById('checkout-btn');
     const checkoutText = document.getElementById('checkout-btn-text');
     

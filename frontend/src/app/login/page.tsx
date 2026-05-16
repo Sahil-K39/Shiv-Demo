@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Login Page
- * page.tsx — Authentication view
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -65,7 +60,7 @@ export default function Login() {
 
   return (
     <div className="w-full h-[calc(100vh-80px)] flex flex-col md:flex-row bg-white">
-      {/* Image Panel */}
+      {}
       <div className="hidden md:block w-1/2 h-full bg-black relative overflow-hidden border-r border-black">
         <Image
           src="/assets/images/deconstructed-blazer.jpg" 
@@ -84,10 +79,10 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Form Panel */}
+      {}
       <div className="w-full md:w-1/2 h-full bg-white flex items-center justify-center p-10 md:p-20 overflow-y-auto">
         <div className="w-full max-w-md">
-          {/* Tab Switcher */}
+          {}
           <div className="relative flex mb-16 border-b border-black/10">
             <button 
               type="button"

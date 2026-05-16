@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Lookbook
- * page.tsx — Visual gallery
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 import Image from "next/image";
 

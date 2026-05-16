@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — The Council
- * page.tsx — Community and announcements page
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 export default function Council() {
   return (

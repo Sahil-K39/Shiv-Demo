@@ -20,26 +20,26 @@ files_to_process = {
 }
 
 def update_links(html):
-    # Update navigation links
+    
     html = re.sub(r'<a[^>]*>DEMOWOMAN</a>', r'<a href="shop.html" class="font-nav-ui text-nav-ui uppercase text-gray-500 hover:text-black transition-colors duration-300 flex items-center h-full border-b border-transparent">DEMOWOMAN</a>', html)
     html = re.sub(r'<a[^>]*>DEMOMAN</a>', r'<a href="shop.html" class="font-nav-ui text-nav-ui uppercase text-gray-500 hover:text-black transition-colors duration-300 flex items-center h-full border-b border-transparent">DEMOMAN</a>', html)
     html = re.sub(r'<a[^>]*>BAZACOLLECTIONS</a>', r'<a href="index.html" class="font-nav-ui text-nav-ui uppercase text-gray-500 hover:text-black transition-colors duration-300 flex items-center h-full border-b border-transparent">BAZACOLLECTIONS</a>', html)
     html = re.sub(r'<a[^>]*>BAZANEWS</a>', r'<a href="index.html" class="font-nav-ui text-nav-ui uppercase text-gray-500 hover:text-black transition-colors duration-300 flex items-center h-full border-b border-transparent">BAZANEWS</a>', html)
     html = re.sub(r'<a[^>]*>LOOKBOOK</a>', r'<a href="lookbook.html" class="font-nav-ui text-nav-ui uppercase text-gray-500 hover:text-black transition-colors duration-300 flex items-center h-full border-b border-transparent">LOOKBOOK</a>', html)
 
-    # Replace logo text with image link
+    
     logo_html = r'<a href="index.html" class="flex items-center justify-center"><img src="assets/logo.png" alt="SHIV SHAKTI PROJECT" class="h-[40px] object-contain mix-blend-multiply" /></a>'
     html = re.sub(r'<div[^>]*>\s*SHIV SHAKTI PROJECT\s*</div>', logo_html, html)
     html = re.sub(r'<span[^>]*>SHIV SHAKTI PROJECT</span>', logo_html, html)
     
-    # Homepage specific links
+    
     html = html.replace('href="#"', 'href="shop.html"')
     
-    # Update shopping bag icon to link to cart.html
+    
     html = html.replace('<button class="text-gray-500 hover:text-black transition-colors duration-300 flex items-center justify-center">\n<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>\n</button>', 
                         '<a href="cart.html" class="text-gray-500 hover:text-black transition-colors duration-300 flex items-center justify-center"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span></a>')
     
-    # Product grid links to product.html
+    
     html = re.sub(r'<article[^>]*>', r'\g<0 onclick="window.location.href=\'product.html\'" >', html)
     
     return html

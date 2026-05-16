@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Footer
- * Footer.tsx — Global footer with secondary logos
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 import Link from "next/link";
 import BrandLogo from "@/components/ui/BrandLogo";
@@ -12,12 +7,12 @@ import { ArrowRightIcon, BrandMark } from "@/components/ui/Icons";
 export default function Footer() {
   return (
     <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-white px-6 py-16 text-black md:px-10">
-      {/* Decorative large logo in background */}
+      {}
       <BrandMark className="pointer-events-none absolute -bottom-16 -right-12 h-[360px] w-[280px] text-black opacity-[0.025] md:h-[520px] md:w-[400px]" />
 
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
         
-        {/* Brand Column */}
+        {}
         <div className="space-y-6">
           <BrandLogo variant="footer" />
           <p className="text-[11px] tracking-[0.2em] text-gray-500 uppercase leading-loose max-w-[250px]">
@@ -25,7 +20,7 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Links Column 1 */}
+        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Collections</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-500 uppercase">
@@ -36,7 +31,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Links Column 2 */}
+        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Information</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-500 uppercase">
@@ -47,7 +42,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Newsletter Column */}
+        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Transmission</h4>
           <p className="text-[10px] tracking-[0.1em] text-gray-500 uppercase leading-loose">

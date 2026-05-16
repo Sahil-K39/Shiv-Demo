@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — TypeScript Types
- * types.ts — Shared type definitions for the commerce platform
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 export interface Product {
   id: number;
@@ -14,9 +9,9 @@ export interface Product {
   currency: string;
   category: "shakti" | "shiva";
   collection: string;
-  sizes: string[];      // Parsed from JSON string
-  colors: string[];     // Parsed from JSON string
-  images: string[];     // Parsed from JSON string
+  sizes: string[];      
+  colors: string[];     
+  images: string[];     
   in_stock: boolean;
   featured: boolean;
   created_at: string;

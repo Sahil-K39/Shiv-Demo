@@ -14,7 +14,7 @@
     .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
     @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
 
-    /* Premium Animations */
+    
     .reveal-element { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal-element.is-visible { opacity: 1; transform: translateY(0); }
     
@@ -52,13 +52,13 @@
 
 <main class="w-full flex flex-col pt-[80px]">
     
-    <!-- Hero Manifesto -->
+    
     <section class="relative w-full h-[90vh] flex items-center justify-center bg-black overflow-hidden image-curtain is-revealed">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAubdN3kNsAPg09iwhfQSSSaI5r0Z041WGGNI5nhvp7_phkjk1WRAPt1f7Psp33809KhkrojQK8eQscqtnsGQz79uolmESqZnVUf5TVR6JH-C_xyYsrm-rcED1Biwuq-tti29kmlrZzeLN-b7wFNp47QQbQR9ehPb2t5Z543WyCOj4X6FosCx84qBUqxr24AJCErEL6xzaAVt9GJJoS5v7gE8a_wucY4SggORbbhg0vSID7VGDCW1wjZ_cRiUFxt_K8hA1Pmk297N48" class="absolute inset-0 w-full h-full object-cover opacity-60 grayscale" />
         <h1 class="relative z-10 text-[60px] md:text-[120px] lg:text-[180px] text-white font-light uppercase tracking-tighter mix-blend-difference text-center leading-none">THE<br>MANIFESTO</h1>
     </section>
 
-    <!-- Marquee -->
+    
     <section class="w-full py-6 border-b border-black bg-white overflow-hidden flex items-center whitespace-nowrap">
         <div class="animate-marquee flex items-center gap-8">
             <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">A NEW ARCHITECTURE OF SILENCE</span>
@@ -80,7 +80,7 @@
         </div>
     </section>
 
-    <!-- The Philosophy Text -->
+    
     <section class="w-full py-32 px-10 md:px-32 flex flex-col items-center border-b border-black">
         <h3 class="text-[11px] tracking-[0.3em] uppercase text-gray-500 mb-16 reveal-element">PHILOSOPHY 001</h3>
         <p class="text-[24px] md:text-[40px] font-light leading-[1.3] text-center max-w-5xl uppercase tracking-widest reveal-element">
@@ -88,7 +88,7 @@
         </p>
     </section>
 
-    <!-- 3 Pillars Grid -->
+    
     <section class="w-full grid grid-cols-1 md:grid-cols-3 border-b border-black">
         <div class="border-r border-black p-16 flex flex-col gap-10 group cursor-pointer hover:bg-black transition-colors duration-700 reveal-element">
             <h2 class="text-[30px] font-light tracking-[0.2em] group-hover:text-white transition-colors duration-700">VOID</h2>
@@ -108,7 +108,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Custom Cursor
+        
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
@@ -116,7 +116,7 @@
         const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
         animateCursor();
 
-        // Magnetic Physics
+        
         document.querySelectorAll('a, button, .magnetic').forEach(elem => {
             if(elem.classList.contains('magnetic')) {
                 elem.addEventListener('mousemove', (e) => {
@@ -129,7 +129,7 @@
             elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
         });
 
-        // Scroll Observer for Reveals
+        
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -142,7 +142,7 @@
         
         document.querySelectorAll('.reveal-element, .image-curtain').forEach(el => observer.observe(el));
         
-        // Header Hide/Show on Scroll
+        
         let lastScroll = 0;
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {

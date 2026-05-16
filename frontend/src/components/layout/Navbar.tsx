@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Navigation Bar
- * Navbar.tsx — Fixed top nav with magnetic links and cart trigger
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -42,7 +37,7 @@ export default function Navbar() {
       >
         <BrandLogo />
 
-        {/* Navigation links */}
+        {}
         <div className="hidden h-full items-center gap-7 text-[11px] font-medium uppercase tracking-[0.16em] md:flex">
           {navLinks.map((link) => {
             const isActive =
@@ -67,7 +62,7 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Action icons */}
+        {}
         <div className="flex items-center gap-1 md:gap-2">
           <Link
             href="/search"

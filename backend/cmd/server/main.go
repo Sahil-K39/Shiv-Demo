@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	// Load Configuration
+	
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -25,7 +25,7 @@ func main() {
 		jwtSecret = "shiv-shakti-dev-secret-change-in-production-2026"
 	}
 
-	// Initialize Database
+	
 	dbPath := os.Getenv("DB_PATH")
 	if dbPath == "" {
 		dbPath = "./shiv_shakti.db"
@@ -36,38 +36,38 @@ func main() {
 	}
 	defer db.Close()
 
-	// Seed initial product data if empty
+	
 	store.SeedProducts(db)
 
-	// Initialize Auth Service
+	
 	authService := auth.NewService(jwtSecret, db)
 
-	// Initialize Handlers
+	
 	productHandler := handlers.NewProductHandler(db)
 	cartHandler := handlers.NewCartHandler(db)
 	orderHandler := handlers.NewOrderHandler(db)
 	authHandler := handlers.NewAuthHandler(authService)
 	communityHandler := handlers.NewCommunityHandler(db)
 
-	// Configure Gin Router
+	
 	if os.Getenv("GIN_MODE") == "" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
 
-	// Global Middleware Stack
-	r.Use(gin.Recovery())                                      // Panic recovery
-	r.Use(middleware.Logger())                                  // Structured request logging
-	r.Use(middleware.SecureHeaders())                           // HSTS, X-Frame, CSP, etc.
+	
+	r.Use(gin.Recovery())                                      
+	r.Use(middleware.Logger())                                  
+	r.Use(middleware.SecureHeaders())                           
 	
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	if corsOrigin == "" {
 		corsOrigin = "http://localhost:3000"
 	}
-	r.Use(middleware.CORS(corsOrigin))                          // Configurable CORS
-	r.Use(middleware.RateLimiter(100, 60))                     // 100 req/min global limit
+	r.Use(middleware.CORS(corsOrigin))                          
+	r.Use(middleware.RateLimiter(100, 60))                     
 
-	// Root Route
+	
 	r.GET("/", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(`<!DOCTYPE html>
 <html lang="en">
@@ -163,7 +163,7 @@ func main() {
 </html>`))
 	})
 
-	// Health Check
+	
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "operational",
@@ -172,19 +172,19 @@ func main() {
 		})
 	})
 
-	// Public API Routes
+	
 	api := r.Group("/api")
 	{
-		// Authentication routes — rate-limited more aggressively
+		
 		authGroup := api.Group("/auth")
-		authGroup.Use(middleware.RateLimiter(10, 60)) // 10 req/min for auth
+		authGroup.Use(middleware.RateLimiter(10, 60)) 
 		{
 			authGroup.POST("/register", authHandler.Register)
 			authGroup.POST("/login", authHandler.Login)
 			authGroup.POST("/logout", authHandler.Logout)
 		}
 
-		// Product routes — publicly accessible
+		
 		products := api.Group("/products")
 		{
 			products.GET("", productHandler.ListAll)
@@ -192,21 +192,21 @@ func main() {
 			products.GET("/category/:category", productHandler.GetByCategory)
 		}
 
-		// Community read routes — publicly accessible
+		
 		community := api.Group("/community")
 		{
 			community.GET("/posts", communityHandler.ListPosts)
 		}
 	}
 
-	// Protected API Routes
+	
 	protected := r.Group("/api")
 	protected.Use(middleware.JWTAuth(jwtSecret))
 	{
-		// Current user info
+		
 		protected.GET("/auth/me", authHandler.Me)
 
-		// Cart operations — require CSRF token for mutations
+		
 		cart := protected.Group("/cart")
 		cart.Use(middleware.CSRFProtection())
 		{
@@ -216,18 +216,18 @@ func main() {
 			cart.DELETE("/remove/:itemId", cartHandler.RemoveItem)
 		}
 
-		// Checkout — heavily rate-limited + CSRF
+		
 		checkout := protected.Group("/checkout")
-		checkout.Use(middleware.RateLimiter(5, 60)) // 5 checkouts/min max
+		checkout.Use(middleware.RateLimiter(5, 60)) 
 		checkout.Use(middleware.CSRFProtection())
 		{
 			checkout.POST("", orderHandler.CreateOrder)
 		}
 
-		// Order history
+		
 		protected.GET("/orders", orderHandler.ListOrders)
 
-		// Community write operations — CSRF protected
+		
 		communityWrite := protected.Group("/community")
 		communityWrite.Use(middleware.CSRFProtection())
 		{
@@ -235,7 +235,7 @@ func main() {
 			communityWrite.POST("/like", communityHandler.LikePost)
 		}
 
-		// Admin Product Management (JWT + CSRF)
+		
 		adminProducts := protected.Group("/admin/products")
 		adminProducts.Use(middleware.CSRFProtection())
 		{
@@ -244,17 +244,17 @@ func main() {
 			adminProducts.DELETE("/:id", productHandler.DeleteProduct)
 		}
 
-		// CSRF token endpoint — returns a fresh token
+		
 		protected.GET("/csrf-token", func(c *gin.Context) {
 			token := middleware.GenerateCSRFToken()
 			c.JSON(http.StatusOK, gin.H{"csrf_token": token})
 		})
 	}
 
-	// Serve Static Assets
+	
 	r.Static("/assets", "./assets")
 
-	// Start Server
+	
 	log.Printf("✓ API running on http://localhost:%s", port)
 	log.Println("✓ JWT Authentication enabled")
 	log.Println("✓ CSRF Protection active")
@@ -266,8 +266,8 @@ func main() {
 	}
 }
 
-// Models Registration
-// This init function ensures models are registered at compile time.
+
+
 func init() {
 	_ = models.User{}
 	_ = models.Product{}

@@ -1,24 +1,16 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — API Client
- * api.ts — Type-safe HTTP client for the Go commerce engine
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 import type { Product, CartItem, User, Order, CommunityPost } from "@/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-/**
- * Base fetch wrapper with credentials and error handling.
- * Automatically sends HttpOnly cookies for authentication.
- */
+
 async function apiFetch<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
-    credentials: "include", // Send HttpOnly cookies
+    credentials: "include", 
     headers: {
       "Content-Type": "application/json",
       ...options.headers,
@@ -34,16 +26,13 @@ async function apiFetch<T>(
   return res.json();
 }
 
-/**
- * Fetches a fresh CSRF token from the server.
- * Must be called before any state-changing request.
- */
+
 export async function getCSRFToken(): Promise<string> {
   const data = await apiFetch<{ csrf_token: string }>("/api/csrf-token");
   return data.csrf_token;
 }
 
-// ── Auth API ────────────────────────────────────────────────────
+
 
 export const authAPI = {
   register: (data: { email: string; password: string; name: string }) =>
@@ -64,7 +53,7 @@ export const authAPI = {
   me: () => apiFetch<User>("/api/auth/me"),
 };
 
-// ── Products API ────────────────────────────────────────────────
+
 
 export const productsAPI = {
   listAll: () =>
@@ -79,7 +68,7 @@ export const productsAPI = {
     ),
 };
 
-// ── Cart API ────────────────────────────────────────────────────
+
 
 export const cartAPI = {
   get: () =>
@@ -119,7 +108,7 @@ export const cartAPI = {
   },
 };
 
-// ── Orders API ──────────────────────────────────────────────────
+
 
 export const ordersAPI = {
   checkout: async () => {
@@ -136,7 +125,7 @@ export const ordersAPI = {
   list: () => apiFetch<{ orders: Order[] }>("/api/orders"),
 };
 
-// ── Community API ───────────────────────────────────────────────
+
 
 export const communityAPI = {
   listPosts: (category?: string) => {

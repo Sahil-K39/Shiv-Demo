@@ -14,26 +14,26 @@
     .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
     @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
 
-    /* Tab Indicator Animation */
+    
     .tab-indicator { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
     
-    /* Form Panel Transitions */
+    
     .form-panel { position: absolute; inset: 0; transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
     .form-panel.hidden-panel { opacity: 0; transform: translateX(30px); pointer-events: none; }
     .form-panel.active-panel { opacity: 1; transform: translateX(0); pointer-events: all; }
 
-    /* Password Strength Bar */
+    
     .strength-bar { height: 2px; transition: width 0.4s ease, background-color 0.4s ease; }
 
-    /* Toast Notification */
+    
     .toast { transform: translateY(100px); opacity: 0; transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
     .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* Shake Animation for errors */
+    
     @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
     .shake { animation: shake 0.4s ease; }
 
-    /* Fade in for page load */
+    
     @keyframes fadeSlideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     .animate-entry { animation: fadeSlideIn 0.8s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
     .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
@@ -52,7 +52,7 @@
 </a>
 
 <div class="w-full h-full flex flex-col md:flex-row">
-    <!-- Image Panel -->
+    
     <div class="hidden md:block w-1/2 h-full bg-black relative overflow-hidden">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8D75C5r_ob1kjQXocCUpaR4jtSzMiDfaE8h-gPc1UxScESCDGpzWnYWHcUhJnijaHMue1ic1QLmxVIGYEaBve4GtocR-RyVKyVYMhCkOsbrkvNkuzvvfsrM78CNnccNcidUHiayKFTXiMcQWO_wM7muqdADPmZLjBhirGWEIuPdIkae6NFt5R1pdDyI26HT61D93r1DSkJgx3Ru9S2OR_TAErEHrQ7HL6yzb_nEa2K0Bh-8uNywa9CXw2toAZzBtayoFzPG4ZERgi" alt="Identity" class="w-full h-full object-cover grayscale opacity-80 transition-transform duration-[3000ms] hover:scale-105" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
@@ -62,17 +62,17 @@
         </div>
     </div>
     
-    <!-- Form Panel -->
+    
     <div class="w-full md:w-1/2 h-full bg-white flex items-center justify-center p-10 md:p-20 lg:p-32 overflow-y-auto">
         <div class="w-full max-w-md">
-            <!-- Tab Switcher -->
+            
             <div class="relative flex gap-0 mb-16 border-b border-black/10 animate-entry">
                 <button id="tab-login" class="tab-btn flex-1 py-4 text-[11px] tracking-[0.2em] uppercase font-medium text-black transition-colors duration-300 text-center" onclick="switchTab('login')">AUTHORIZE</button>
                 <button id="tab-register" class="tab-btn flex-1 py-4 text-[11px] tracking-[0.2em] uppercase font-medium text-gray-400 transition-colors duration-300 text-center" onclick="switchTab('register')">CREATE IDENTITY</button>
                 <div id="tab-line" class="tab-indicator absolute bottom-0 left-0 h-[2px] bg-black w-1/2"></div>
             </div>
             
-            <!-- Login Form -->
+            
             <div class="relative" style="min-height: 380px;">
                 <div id="login-panel" class="form-panel active-panel">
                     <h1 class="text-[28px] font-light tracking-[0.15em] uppercase mb-10 animate-entry delay-1">IDENTIFICATION</h1>
@@ -96,7 +96,7 @@
                     </form>
                 </div>
 
-                <!-- Register Form -->
+                
                 <div id="register-panel" class="form-panel hidden-panel">
                     <h1 class="text-[28px] font-light tracking-[0.15em] uppercase mb-10">ESTABLISH IDENTITY</h1>
                     <form id="register-form" class="space-y-6" novalidate>
@@ -111,7 +111,7 @@
                             <button type="button" onclick="togglePassword('reg-password', this)" class="absolute right-0 top-4 text-gray-400 hover:text-black transition-colors">
                                 <span class="material-symbols-outlined text-[20px]">visibility_off</span>
                             </button>
-                            <!-- Password Strength -->
+                            
                             <div class="w-full bg-gray-100 mt-3 h-[2px]">
                                 <div id="strength-bar" class="strength-bar bg-gray-300" style="width: 0%"></div>
                             </div>
@@ -133,7 +133,7 @@
     </div>
 </div>
 
-<!-- Toast Notification -->
+
 <div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-8 py-4 z-[200] flex items-center gap-4 shadow-2xl">
     <span id="toast-icon" class="material-symbols-outlined text-[18px]">check_circle</span>
     <span id="toast-msg" class="text-[11px] tracking-[0.2em] uppercase"></span>
@@ -142,7 +142,7 @@
 <script>
     const API = 'http://127.0.0.1:8000';
 
-    // --- Tab Switching ---
+    
     function switchTab(tab) {
         const loginPanel = document.getElementById('login-panel');
         const regPanel = document.getElementById('register-panel');
@@ -168,7 +168,7 @@
         }
     }
 
-    // --- Toggle Password Visibility ---
+    
     function togglePassword(inputId, btn) {
         const input = document.getElementById(inputId);
         const icon = btn.querySelector('span');
@@ -176,7 +176,7 @@
         else { input.type = 'password'; icon.textContent = 'visibility_off'; }
     }
 
-    // --- Toast ---
+    
     function showToast(msg, type = 'success') {
         const toast = document.getElementById('toast');
         const icon = document.getElementById('toast-icon');
@@ -188,7 +188,7 @@
         setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // --- Password Strength ---
+    
     document.getElementById('reg-password').addEventListener('input', function() {
         const val = this.value;
         const bar = document.getElementById('strength-bar');
@@ -213,7 +213,7 @@
         text.textContent = lvl.t; text.style.color = lvl.c;
     });
 
-    // --- Email Validation Hint ---
+    
     document.getElementById('reg-email').addEventListener('blur', function() {
         const hint = document.getElementById('reg-email-hint');
         const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -222,7 +222,7 @@
         } else { hint.textContent = ''; }
     });
 
-    // --- Login Submit ---
+    
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value.trim();
@@ -254,7 +254,7 @@
         }
     });
 
-    // --- Register Submit ---
+    
     document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('reg-email').value.trim();
@@ -291,7 +291,7 @@
         }
     });
 
-    // --- Custom Cursor ---
+    
     document.addEventListener('DOMContentLoaded', () => {
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
@@ -305,7 +305,7 @@
             elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; } });
         });
 
-        // Auto-redirect if already logged in
+        
         const token = localStorage.getItem('shiv_token');
         if (token) {
             fetch(API + '/api/auth/verify?token=' + token).then(r => { if(r.ok) window.location.href = 'index.html'; }).catch(() => {});

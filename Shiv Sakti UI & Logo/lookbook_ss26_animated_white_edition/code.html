@@ -21,12 +21,12 @@
             });
         }, observerOptions);
 
-        // Observe standard reveal elements and staggered elements
+        
         document.querySelectorAll('.reveal-element, .stagger-reveal').forEach((element) => {
             observer.observe(element);
         });
         
-        // Immediate check for elements in viewport
+        
         const checkInitialView = () => {
             document.querySelectorAll('.reveal-element, .stagger-reveal').forEach((element) => {
                 const rect = element.getBoundingClientRect();
@@ -179,7 +179,7 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         
-        /* Refined Reveal Animations */
+        
         .reveal-element {
             opacity: 0;
             transform: translateY(30px);
@@ -192,7 +192,7 @@
             transform: translateY(0);
         }
 
-        /* Staggered Reveal for Title */
+        
         .stagger-reveal span {
             display: inline-block;
             opacity: 0;
@@ -205,14 +205,14 @@
             transform: translateY(0);
         }
 
-        /* Image specific fade */
+        
         .image-fade {
             transition: opacity 2s cubic-bezier(0.215, 0.61, 0.355, 1), transform 2s cubic-bezier(0.215, 0.61, 0.355, 1);
         }
     </style>
 </head>
 <body class="bg-white text-black font-body-primary antialiased overflow-x-hidden selection:bg-black selection:text-white">
-<!-- TopNavBar -->
+
 <nav class="bg-white text-black fixed top-0 w-full h-[60px] border-b border-black flex justify-between items-center px-10 z-50">
 <div class="hidden md:flex space-x-8">
 <a class="font-nav-ui text-nav-ui text-black uppercase hover:text-gray-600 transition-none" href="#">DEMOWOMAN</a>
@@ -228,9 +228,9 @@
 <span class="material-symbols-outlined text-black hover:text-gray-600 transition-none cursor-pointer">shopping_bag</span>
 </div>
 </nav>
-<!-- Main Content Canvas -->
+
 <main class="w-full pt-[60px]">
-<!-- Hero Sequence -->
+
 <section class="relative w-full h-[972px] bg-white flex items-center justify-center">
 <img class="absolute inset-0 w-full h-full object-cover grayscale opacity-60 reveal-element image-fade" data-alt="A stark, high-contrast, black and white fashion photography portrait. A model wearing structurally complex, architectural avant-garde clothing stands in an absolute void of deep shadow. The lighting is harsh, cutting across geometric folds of fabric, emphasizing texture over human features. The aesthetic is post-apocalyptic minimalist, cold, and mysterious." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC12-h8hmc9CL4mgUP-hMJeXUf4f7YV8WDoXT02otD-5PiU1o_ohP7-VDu1QbzVZUgGXdvJmHg0RFtm9ijsYPlPc9x5EAz7te1MvpB86P5Yr6MgYCEDxxiopGMQIZVQ3o3MmOAui5UfCYHxU5aMgcZyUEnYenoHP5nZn1Tflk6o3V7rpMAI3Sud2ssrnkM-MFQySsHZuZFVfG7f-nfqiJbu9Db9T0mB-LrUtJWg0K2pLUkwfeZK1f95PCSZ3gax66lcwLLvcDhf5Khx"/>
 <div class="relative z-10 flex flex-col items-center text-center reveal-element" style="transition-delay: 0.2s;">
@@ -238,7 +238,7 @@
 <p class="font-nav-ui text-nav-ui text-black mt-12 tracking-[0.3em] uppercase">Act I / The Descent / Volume.04</p>
 </div>
 </section>
-<!-- Asymmetrical Editorial Grid -->
+
 <section class="w-full mt-section-gap px-0">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-grid-gutter bg-black border-t border-b border-black">
 <div class="lg:col-span-7 bg-white h-[870px] overflow-hidden">
@@ -256,7 +256,7 @@
 </div>
 </div>
 </section>
-<!-- Interstitial Typographic Moment -->
+
 <section class="w-full py-section-gap flex justify-center items-center px-container-margin bg-white reveal-element">
 <div class="max-w-3xl text-center">
 <h2 class="font-logo text-logo text-black uppercase mb-8 tracking-widest text-[32px] font-normal leading-[1.2]">Structural Integrity</h2>
@@ -266,7 +266,7 @@
                 </p>
 </div>
 </section>
-<!-- Symmetrical Diptych Grid -->
+
 <section class="w-full px-0">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-grid-gutter bg-black border-t border-b border-black">
 <div class="bg-white h-[921px] overflow-hidden">
@@ -277,7 +277,7 @@
 </div>
 </div>
 </section>
-<!-- Full Bleed Finale -->
+
 <section class="w-full mt-section-gap mb-section-gap h-[819px] relative overflow-hidden bg-white">
 <img class="w-full h-full object-cover grayscale opacity-70 reveal-element image-fade" data-alt="A wide, landscape fashion shot showing three figures standing miles apart in a barren, endless desert terrain. All are dressed in voluminous, dark, post-apocalyptic minimalist garments that billow statically in an unseen wind. The sky is completely blown out to pure white, contrasting brutally against the pitch-black figures and the dark, textured earth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOzU88eBsTGPmm3ThpQALzCs5tm1YlUJU5uLFcjssb-wwkrC7OVrWSOddQ1xUkCv233XI8en6b8YxKMTVS1dAE2gnUCAg3vUECnRIx8dzXw8DKX0aXEAA7aFhcd4NEVqx3Hz5I67b0v_HGSlTunIYHm-QUAaQ6TPdcVckelBzwvb8M3nysmiqXjjtCZQL-d3hYlsLO3U-HNKJN6INR5Pvy3ZM4Fc1KBslQ08Nsq6eNvuFzlN7KBF9psBaf81zQREA2M9wZe9m_cYte"/>
 <div class="absolute bottom-12 right-12 reveal-element" style="transition-delay: 0.3s;">
@@ -285,7 +285,7 @@
 </div>
 </section>
 </main>
-<!-- Footer -->
+
 <footer class="bg-white text-black w-full border-t border-black pt-20 pb-10">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-10 px-10 max-w-full">
 <div class="col-span-1">
@@ -322,12 +322,12 @@
             });
         }, observerOptions);
 
-        // Observe standard reveal elements and staggered elements
+        
         document.querySelectorAll('.reveal-element, .stagger-reveal').forEach((element) => {
             observer.observe(element);
         });
         
-        // Immediate check for elements in viewport
+        
         const checkInitialView = () => {
             document.querySelectorAll('.reveal-element, .stagger-reveal').forEach((element) => {
                 const rect = element.getBoundingClientRect();

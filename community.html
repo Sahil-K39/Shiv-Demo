@@ -12,54 +12,54 @@
     ::-webkit-scrollbar { display: none; }
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-    /* Custom Cursor */
+    
     .cursor-dot { width: 6px; height: 6px; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; background: white; }
     .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.6); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; mix-blend-mode: difference; }
     @media (pointer: fine) { body { cursor: none; } a, button, input, textarea { cursor: none; } }
 
-    /* Animations */
+    
     @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
     .anim-up { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards; opacity:0; }
     .d1{animation-delay:.1s} .d2{animation-delay:.2s} .d3{animation-delay:.3s} .d4{animation-delay:.4s}
 
-    /* Post Card */
+    
     .post-card { background: #111; border: 1px solid #1e1e1e; transition: border-color 0.4s, transform 0.3s; }
     .post-card:hover { border-color: #333; transform: translateY(-2px); }
 
-    /* Category Chip */
+    
     .cat-chip { border: 1px solid #333; color: #888; transition: all 0.3s; }
     .cat-chip:hover, .cat-chip.active { background: #fff; color: #000; border-color: #fff; }
 
-    /* Compose Modal */
+    
     .modal-overlay { background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); }
     .modal-panel { background: #0d0d0d; border: 1px solid #222; }
 
-    /* Toast */
+    
     .toast { transform: translateY(100px); opacity: 0; transition: all 0.5s cubic-bezier(0.22,1,0.36,1); }
     .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* Like button pulse */
+    
     @keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.3)} 100%{transform:scale(1)} }
     .like-pulse { animation: pulse 0.3s ease; }
 
-    /* Glow line */
+    
     .glow-line { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); height: 1px; }
 
-    /* Scrolling marquee */
+    
     @keyframes scrollLeft { from{transform:translateX(0)} to{transform:translateX(-50%)} }
     .marquee-scroll { animation: scrollLeft 40s linear infinite; }
 </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col selection:bg-white selection:text-black overflow-x-hidden">
 
-<!-- Noise Texture -->
+
 <div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.06] mix-blend-screen" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');"></div>
 
-<!-- Cursor -->
+
 <div class="cursor-dot hidden md:block"></div>
 <div class="cursor-outline hidden md:block"></div>
 
-<!-- Navbar -->
+
 <nav class="fixed top-0 w-full h-[80px] px-10 flex justify-between items-center z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
 <a href="index.html" class="flex items-center h-full">
     <img src="Shiv%20Sakti%20UI%20%26%20Logo/horizontal_logo.png" alt="SHIV SHAKTI" class="h-10 object-contain invert opacity-80 hover:opacity-100 transition-opacity" />
@@ -79,7 +79,7 @@
 </div>
 </nav>
 
-<!-- Hero Section -->
+
 <header class="w-full pt-[80px]">
     <div class="w-full h-[50vh] flex flex-col items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-[#0a0a0a]"></div>
@@ -90,7 +90,7 @@
     </div>
 </header>
 
-<!-- Marquee -->
+
 <div class="w-full py-4 border-y border-white/5 overflow-hidden">
     <div class="whitespace-nowrap marquee-scroll">
         <span class="text-[11px] tracking-[0.3em] uppercase text-white/20 mx-8">SHARE YOUR VISION</span>
@@ -111,12 +111,12 @@
     </div>
 </div>
 
-<!-- Main Content -->
+
 <main class="flex-grow w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16">
 
-    <!-- Controls Bar -->
+    
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 anim-up d2">
-        <!-- Category Filters -->
+        
         <div class="flex flex-wrap gap-3" id="category-filters">
             <button class="cat-chip active px-5 py-2 text-[11px] tracking-[0.2em] uppercase" data-cat="ALL">ALL</button>
             <button class="cat-chip px-5 py-2 text-[11px] tracking-[0.2em] uppercase" data-cat="STYLE">STYLE</button>
@@ -124,7 +124,7 @@
             <button class="cat-chip px-5 py-2 text-[11px] tracking-[0.2em] uppercase" data-cat="GENERAL">GENERAL</button>
             <button class="cat-chip px-5 py-2 text-[11px] tracking-[0.2em] uppercase" data-cat="LOOKBOOK">LOOKBOOK</button>
         </div>
-        <!-- Compose Button -->
+        
         <button id="compose-btn" class="relative overflow-hidden group border border-white text-white px-8 py-4 text-[11px] tracking-[0.2em] uppercase flex items-center gap-3 transition-colors duration-500">
             <span class="material-symbols-outlined text-[16px]">edit</span>
             <span class="relative z-10 group-hover:text-black transition-colors duration-500">NEW TRANSMISSION</span>
@@ -132,25 +132,25 @@
         </button>
     </div>
 
-    <!-- Posts Feed -->
+    
     <div id="posts-feed" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/5">
-        <!-- Posts loaded dynamically -->
+        
     </div>
 
-    <!-- Empty State -->
+    
     <div id="empty-state" class="hidden flex flex-col items-center justify-center py-32 text-center">
         <span class="material-symbols-outlined text-[48px] text-white/10 mb-6">forum</span>
         <p class="text-[14px] tracking-[0.1em] text-white/30 uppercase">THE VOID IS SILENT</p>
         <p class="text-[11px] tracking-[0.1em] text-white/15 mt-2">Be the first to transmit</p>
     </div>
 
-    <!-- Loading State -->
+    
     <div id="loading-state" class="flex items-center justify-center py-32">
         <div class="w-6 h-6 border border-white/30 border-t-white animate-spin"></div>
     </div>
 </main>
 
-<!-- Compose Modal -->
+
 <div id="compose-modal" class="modal-overlay fixed inset-0 z-[200] hidden items-center justify-center p-6">
     <div class="modal-panel w-full max-w-xl p-10 md:p-16 relative">
         <button id="close-modal" class="absolute top-6 right-6 text-white/40 hover:text-white transition-colors flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase">
@@ -160,14 +160,14 @@
         <h2 class="text-[28px] font-light tracking-[0.1em] uppercase mb-2">NEW TRANSMISSION</h2>
         <div class="glow-line w-20 mb-10"></div>
 
-        <!-- Auth Gate -->
+        
         <div id="auth-gate" class="hidden flex flex-col items-center py-10 text-center">
             <span class="material-symbols-outlined text-[36px] text-white/20 mb-4">lock</span>
             <p class="text-[14px] tracking-[0.1em] text-white/50 uppercase mb-6">IDENTITY REQUIRED</p>
             <a href="login.html" class="border border-white text-white px-10 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-colors">ESTABLISH CONNECTION</a>
         </div>
 
-        <!-- Post Form -->
+        
         <form id="post-form" class="space-y-8">
             <div class="flex gap-3 mb-6" id="post-category-selector">
                 <button type="button" class="post-cat-btn cat-chip active px-4 py-2 text-[10px] tracking-[0.2em] uppercase" data-cat="GENERAL">GENERAL</button>
@@ -191,13 +191,13 @@
     </div>
 </div>
 
-<!-- Toast -->
+
 <div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 bg-white text-black px-8 py-4 z-[300] flex items-center gap-3">
     <span id="toast-icon" class="material-symbols-outlined text-[16px]">check_circle</span>
     <span id="toast-msg" class="text-[11px] tracking-[0.2em] uppercase"></span>
 </div>
 
-<!-- Footer -->
+
 <footer class="w-full border-t border-white/5 py-10 px-10">
     <div class="max-w-[1400px] mx-auto flex justify-between items-center">
         <span class="text-[10px] tracking-[0.15em] text-white/20 uppercase">© 2026 SHIV SHAKTI PROJECT</span>
@@ -210,7 +210,7 @@ const API = 'http://127.0.0.1:8000';
 let currentCategory = 'ALL';
 let postCategory = 'GENERAL';
 
-// ─── Toast ─────────────────────────────────────────────
+
 function showToast(msg, type='success') {
     const t = document.getElementById('toast');
     document.getElementById('toast-msg').textContent = msg;
@@ -221,7 +221,7 @@ function showToast(msg, type='success') {
     setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ─── Time Formatter ────────────────────────────────────
+
 function timeAgo(dateStr) {
     const d = new Date(dateStr);
     const now = new Date();
@@ -233,7 +233,7 @@ function timeAgo(dateStr) {
     return d.toLocaleDateString('en-US', {month:'short', day:'numeric'}).toUpperCase();
 }
 
-// ─── Render Posts ──────────────────────────────────────
+
 function renderPosts(posts) {
     const feed = document.getElementById('posts-feed');
     const empty = document.getElementById('empty-state');
@@ -272,7 +272,7 @@ function renderPosts(posts) {
 function escHtml(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function maskEmail(e) { if(!e) return 'ANON'; const [u,d]=e.split('@'); return u.slice(0,2)+'***@'+d; }
 
-// ─── Fetch Posts ───────────────────────────────────────
+
 async function loadPosts(cat='ALL') {
     document.getElementById('loading-state').classList.remove('hidden');
     document.getElementById('posts-feed').innerHTML = '';
@@ -287,7 +287,7 @@ async function loadPosts(cat='ALL') {
     }
 }
 
-// ─── Like Post ─────────────────────────────────────────
+
 async function likePost(id, btn) {
     const token = localStorage.getItem('shiv_token');
     if (!token) { showToast('LOGIN REQUIRED TO REACT', 'error'); return; }
@@ -301,7 +301,7 @@ async function likePost(id, btn) {
     } catch(e) {}
 }
 
-// ─── Category Filters ─────────────────────────────────
+
 document.querySelectorAll('#category-filters .cat-chip').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('#category-filters .cat-chip').forEach(b => b.classList.remove('active'));
@@ -311,7 +311,7 @@ document.querySelectorAll('#category-filters .cat-chip').forEach(btn => {
     });
 });
 
-// ─── Compose Modal ─────────────────────────────────────
+
 const modal = document.getElementById('compose-modal');
 const authGate = document.getElementById('auth-gate');
 const postForm = document.getElementById('post-form');
@@ -333,7 +333,7 @@ modal.addEventListener('click', (e) => {
     if (e.target === modal) { modal.style.display = 'none'; modal.classList.add('hidden'); }
 });
 
-// Post category selector
+
 document.querySelectorAll('.post-cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.post-cat-btn').forEach(b => b.classList.remove('active'));
@@ -342,7 +342,7 @@ document.querySelectorAll('.post-cat-btn').forEach(btn => {
     });
 });
 
-// Char counters
+
 document.getElementById('post-title').addEventListener('input', function() {
     document.getElementById('title-count').textContent = this.value.length;
 });
@@ -350,7 +350,7 @@ document.getElementById('post-body').addEventListener('input', function() {
     document.getElementById('body-count').textContent = this.value.length;
 });
 
-// Submit Post
+
 document.getElementById('post-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('shiv_token');
@@ -384,18 +384,18 @@ document.getElementById('post-form').addEventListener('submit', async (e) => {
     btn.textContent = 'TRANSMIT';
 });
 
-// ─── Init ──────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
     loadPosts();
 
-    // Auth state
+    
     const token = localStorage.getItem('shiv_token');
     if (token) {
         const icon = document.querySelector('#nav-person span');
         if (icon) icon.textContent = 'account_circle';
     }
 
-    // Custom cursor
+    
     const dot = document.querySelector('.cursor-dot');
     const outline = document.querySelector('.cursor-outline');
     let mx=0,my=0,ox=0,oy=0;

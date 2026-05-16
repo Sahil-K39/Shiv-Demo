@@ -14,7 +14,7 @@
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   ::-webkit-scrollbar { display: none; }
   
-  /* Premium UI Enhancements */
+  
   .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
   .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
   @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
@@ -109,7 +109,7 @@
   document.addEventListener('DOMContentLoaded', () => {
 
 
-    // Custom Cursor
+    
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
     let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
@@ -129,7 +129,7 @@
       elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
     });
 
-    // Color Selector Logic
+    
     const colorBtns = document.querySelectorAll('.color-btn');
     const colorLabel = document.getElementById('color-label');
     let selectedColor = "VOID BLACK";
@@ -144,9 +144,9 @@
       });
     });
 
-    // Size Selector Logic
+    
     const sizeBtns = document.querySelectorAll('.size-btn');
-    let selectedSize = "M"; // Default
+    let selectedSize = "M"; 
     sizeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         sizeBtns.forEach(b => {
@@ -159,7 +159,7 @@
       });
     });
 
-    // Add to Cart Logic
+    
     const addToBagBtn = document.getElementById('add-to-bag-btn');
     const addToBagText = document.getElementById('add-to-bag-text');
     addToBagBtn.addEventListener('click', (e) => {
@@ -167,7 +167,7 @@
         addToBagText.innerText = "ADDING TO VOID...";
         
         const product = {
-            id: 101, // Mock ID
+            id: 101, 
             name: "PULSAR JACKET",
             price: 1250.00,
             color: selectedColor,

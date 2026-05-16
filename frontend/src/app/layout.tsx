@@ -20,19 +20,19 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className="antialiased flex flex-col min-h-screen">
-        {/* Noise texture overlay */}
+        {}
         <div className="noise-overlay" />
 
-        {/* Global navigation */}
+        {}
         <Navbar />
 
-        {/* Slide-out cart */}
+        {}
         <CartDrawer />
 
-        {/* Page content */}
+        {}
         <PageTransition>{children}</PageTransition>
 
-        {/* Global footer */}
+        {}
         <Footer />
       </body>
     </html>

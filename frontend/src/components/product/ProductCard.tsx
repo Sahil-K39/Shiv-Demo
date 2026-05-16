@@ -1,16 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Product Card Component
- * ProductCard.tsx — High-end fashion product card with GSAP + Framer Motion
- *
- * Features:
- *  - Magnetic tilt effect on hover (GSAP)
- *  - Image scale-up reveal on viewport enter (Framer Motion)
- *  - Staggered text animations
- *  - "Quick Add" slide-up overlay
- *  - Brutalist, neo-primitive aesthetic
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -39,7 +27,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const images = getProductImages(product);
   const sizes = parseList(product.sizes);
 
-  // ── GSAP: Magnetic Tilt Effect ──────────────────────────────────
+  
   useGSAP(() => {
     const card = cardRef.current;
     if (!card) return;
@@ -63,7 +51,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         ease: "power2.out",
       });
 
-      // Parallax the image slightly against the tilt
+      
       if (imageRef.current) {
         gsap.to(imageRef.current, {
           x: ((x - centerX) / centerX) * 10,
@@ -100,7 +88,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     };
   }, { scope: cardRef });
 
-  // ── Framer Motion Variants ──────────────────────────────────────
+  
   const cardVariants: Variants = {
     hidden: { opacity: 0, y: 60 },
     visible: {
@@ -108,7 +96,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       y: 0,
       transition: {
         duration: 0.8,
-        delay: index * 0.1, // Stagger based on grid position
+        delay: index * 0.1, 
         ease: smoothEase,
       },
     },
@@ -152,9 +140,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link href={`/product/${product.slug}`} className="block">
-        {/* ── Image Container ────────────────────────────────────── */}
+        {}
         <div className="relative mb-4 aspect-[3/4] overflow-hidden border border-black/10 bg-white">
-          {/* Image with zoom reveal */}
+          {}
           <motion.div
             ref={imageRef}
             variants={imageVariants}
@@ -185,7 +173,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             />
           )}
 
-          {/* Hover gradient overlay */}
+          {}
           <motion.div
             className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
             initial={{ opacity: 0 }}
@@ -193,7 +181,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             transition={{ duration: 0.4 }}
           />
 
-          {/* Featured badge */}
+          {}
           {product.featured && (
             <div className="absolute top-3 left-3 z-10">
               <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
@@ -202,7 +190,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           )}
 
-          {/* Quick-view sizes overlay (slides up on hover) */}
+          {}
           <motion.div
             ref={overlayRef}
             className="absolute bottom-0 left-0 right-0 p-4 z-10"
@@ -228,7 +216,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           </motion.div>
 
-          {/* Scan lines texture overlay */}
+          {}
           <div
             className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
             style={{
@@ -238,9 +226,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           />
         </div>
 
-        {/* ── Product Info ──────────────────────────────────────── */}
+        {}
         <div className="space-y-2 px-1 pb-1">
-          {/* Category tag */}
+          {}
           <motion.p
             custom={0}
             variants={textVariants}
@@ -251,7 +239,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             {product.category} / {product.collection}
           </motion.p>
 
-          {/* Product name */}
+          {}
           <motion.h3
             custom={1}
             variants={textVariants}
@@ -262,7 +250,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             {product.name}
           </motion.h3>
 
-          {/* Price with hover animation */}
+          {}
           <motion.div
             custom={2}
             variants={textVariants}
@@ -280,7 +268,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             )}
           </motion.div>
 
-          {/* Animated underline on hover */}
+          {}
           <motion.div
             className="h-[1px] bg-bone/20 origin-left"
             initial={{ scaleX: 0 }}

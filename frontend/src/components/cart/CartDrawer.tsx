@@ -1,9 +1,4 @@
-/*
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * SHIV SHAKTI PROJECT — Slide-Out Cart
- * CartDrawer.tsx — Animated side panel cart with Framer Motion
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- */
+
 
 "use client";
 
@@ -21,7 +16,7 @@ export default function CartDrawer() {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {}
           <motion.div
             className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[200]"
             initial={{ opacity: 0 }}
@@ -30,7 +25,7 @@ export default function CartDrawer() {
             onClick={closeCart}
           />
 
-          {/* Drawer panel */}
+          {}
           <motion.div
             className="fixed top-0 right-0 h-full w-full max-w-[480px] bg-white border-l border-black/5 z-[201] flex flex-col"
             initial={{ x: "100%" }}
@@ -38,7 +33,7 @@ export default function CartDrawer() {
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
           >
-            {/* Header */}
+            {}
             <div className="flex items-center justify-between p-8 border-b border-black/5">
               <div>
                 <h2 className="text-[18px] tracking-[0.15em] uppercase font-light text-black">
@@ -57,7 +52,7 @@ export default function CartDrawer() {
               </button>
             </div>
 
-            {/* Items list */}
+            {}
             <div className="flex-1 overflow-y-auto p-8 space-y-6">
               {isLoading && (
                 <div className="flex justify-center py-16">
@@ -87,7 +82,7 @@ export default function CartDrawer() {
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     className="flex gap-4 pb-6 border-b border-black/5"
                   >
-                    {/* Product image */}
+                    {}
                     <div className="w-20 h-28 bg-ash flex-shrink-0 overflow-hidden">
                       <Image
                         src={getCartItemImage(item.images)}
@@ -98,7 +93,7 @@ export default function CartDrawer() {
                       />
                     </div>
 
-                    {/* Product details */}
+                    {}
                     <div className="flex-1 flex flex-col justify-between min-w-0">
                       <div>
                         <h4 className="text-[12px] tracking-[0.1em] uppercase text-black font-light truncate">
@@ -110,7 +105,7 @@ export default function CartDrawer() {
                       </div>
 
                       <div className="flex items-center justify-between mt-2">
-                        {/* Quantity controls */}
+                        {}
                         <div className="flex items-center border border-black/10">
                           <button
                             onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
@@ -131,12 +126,12 @@ export default function CartDrawer() {
                           </button>
                         </div>
 
-                        {/* Price */}
+                        {}
                         <span className="text-[12px] tracking-[0.1em] text-black/70">
                           ${(item.price * item.quantity).toLocaleString()}
                         </span>
 
-                        {/* Remove */}
+                        {}
                         <button
                           onClick={() => removeItem(item.id)}
                           className="text-[10px] tracking-[0.15em] uppercase text-gray-500 hover:text-red-600 transition-colors"
@@ -150,7 +145,7 @@ export default function CartDrawer() {
               </AnimatePresence>
             </div>
 
-            {/* Footer — Total + Checkout */}
+            {}
             {items.length > 0 && (
               <div className="p-8 border-t border-black/5 space-y-4 bg-white">
                 <div className="flex justify-between items-center">

@@ -7,18 +7,18 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// InitDB opens the SQLite database and runs schema migrations.
+
 func InitDB(path string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", path+"?_journal_mode=WAL&_busy_timeout=5000")
 	if err != nil {
 		return nil, err
 	}
 
-	// Enable WAL mode for concurrent read/write performance
+	
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(5)
 
-	// Run schema migrations
+	
 	if err := migrate(db); err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func InitDB(path string) (*sql.DB, error) {
 	return db, nil
 }
 
-// migrate creates all required tables if they don't exist.
+
 func migrate(db *sql.DB) error {
 	schema := `
 	-- Users table
@@ -124,14 +124,14 @@ func migrate(db *sql.DB) error {
 
 	_, err := db.Exec(schema)
 
-	// Add new columns if migrating from an older schema version
+	
 	db.Exec("ALTER TABLE products ADD COLUMN sale_price REAL DEFAULT 0")
 	db.Exec("ALTER TABLE products ADD COLUMN is_on_sale BOOLEAN DEFAULT 0")
 
 	return err
 }
 
-// SeedProducts populates the catalogue with initial garments if empty.
+
 func SeedProducts(db *sql.DB) {
 	var count int
 	db.QueryRow("SELECT COUNT(*) FROM products").Scan(&count)

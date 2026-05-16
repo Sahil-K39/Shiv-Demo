@@ -149,7 +149,7 @@
         .secondary-image {
             display: none;
         }
-        /* Custom scrollbar for webkit */
+        
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -184,13 +184,13 @@
     .animate-fade-in {
         animation: fadeIn 1s ease-out forwards;
     }
-    /* Smooth transitions for all interactive elements */
+    
     a, button, input, .group, article {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 </style></head>
 <body class="bg-background text-primary font-body-primary min-h-screen flex flex-col antialiased">
-<!-- TopNavBar -->
+
 <header class="fixed top-0 w-full h-[60px] border-b border-black bg-white flex justify-between items-center px-10 z-50">
 <div class="flex items-center gap-8">
 <span class="font-logo text-logo text-black uppercase">SHIV SHAKTI PROJECT</span>
@@ -214,9 +214,9 @@
 </button>
 </div>
 </header>
-<!-- Main Content -->
+
 <main class="flex-grow pt-[60px] w-full flex flex-col md:flex-row">
-<!-- Filters Sidebar (Desktop) -->
+
 <aside class="hidden md:block w-64 border-r border-black p-10 flex-shrink-0 sticky top-[60px] h-[calc(100vh-60px)] overflow-y-auto animate-fade-in">
 <h2 class="font-nav-ui text-nav-ui mb-8 text-black">FILTERS</h2>
 <div class="mb-8 border-b border-black pb-4">
@@ -259,22 +259,22 @@
 </div>
 </div>
 </aside>
-<!-- Product Grid -->
+
 <div class="flex-grow bg-white">
-<!-- Mobile Filter Bar -->
+
 <div class="md:hidden w-full border-b border-black p-4 flex justify-between items-center bg-white sticky top-[60px] z-40">
 <span class="font-nav-ui text-nav-ui text-black">DEMOMAN / OUTERWEAR</span>
 <button class="font-nav-ui text-nav-ui text-black border border-black px-4 py-2 hover:bg-black hover:text-white transition-all duration-300 uppercase">FILTERS</button>
 </div>
 <div class="p-0 md:p-10 w-full bg-white">
-<!-- Grid Headers -->
+
 <div class="hidden md:flex justify-between items-end mb-8 border-b border-black pb-4 px-4 animate-fade-in-up">
 <h1 class="font-hero-heading text-hero-heading text-black uppercase">DEMOMAN</h1>
 <span class="font-nav-ui text-nav-ui text-black">124 ITEMS</span>
 </div>
-<!-- 4 Column Grid -->
+
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter bg-black border border-black">
-<!-- Product 1 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.1s;">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model wearing a stark, minimalist black architectural coat standing in a completely dark, brutalist studio. The lighting is harsh and directional, emphasizing the geometric cut and matte texture of the garment. The mood is cold, avant-garde, and post-apocalyptic. High contrast black and white aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn8yffiVzDLW6jgfPtJ_u1jDJiNuALQQjhWnvHfCHRjPkd4hCpUNLvJAuUilBJqWeY2_KT7cetSyJp6P9Vk04jLx-NR2B65FT2EbW3me9Z3-FsFF66j1jk0zERMKjKl76RvUWjfcv9Re3MXb4Beq0uUhBDVQ7TlaugQ8KKrBWmuHpVSAxMtymSUk6UOa-aU7EadvgnKaQTJXoLBvE_3hwokdJQTZ7PuzRCW8CXlX_mvD-671yC2ziQecw1WJskCjduRTulN4vq0u6b"/>
@@ -285,7 +285,7 @@
 <p class="font-price-accent text-price-accent text-black">$1,250</p>
 </div>
 </article>
-<!-- Product 2 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.2s;">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A man posing in a heavily structured, oversized black bomber jacket with geometric panels. The setting is a sparse concrete room with deep, impenetrable shadows. The sharp lines of the jacket contrast with the minimal environment. The aesthetic is strictly monochrome, emphasizing form and silhouette over detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbYUX1CxOPaoXDUNUMN30cZuFFe-zUpLE56CetCw4wY-cflI4VkbqoO1So0i0tYwpy8oKNv3Qhz7mODGkt1Mee5evufPBjWfNP8VvUV-rHayjfJTnaksIN4t8xj-1tGEupxAQ1vvs6q7kqes-RQcWbJRl-ZEohChyg0ZEug-xqsBnhtb8KOoDO_swng2FjOKrJKvbdc6L__CMKeGVMplyPuWLeal5r-KMaFOmH39eg8-djtXq5owPn6fCJVbS7wPxIkUtTg5wJUwVE"/>
@@ -296,7 +296,7 @@
 <p class="font-price-accent text-price-accent text-black">$980</p>
 </div>
 </article>
-<!-- Product 3 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.3s;">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A full body shot of a model wearing stiff, wide-leg black trousers that stand away from the body like armor. The lighting is low-key, creating a sense of isolation in a vast black space. The trousers feature sharp, ironed-in creases that resemble folded paper or brutalist architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjNQsXOWarv7hKPy-i0pO5-Yx-mZ294BNl7DMFft7TscBKrczf7_0ApqLlgOcTQXU4MetAj9oSupu6d-axzuEzXk7RASJlWY0OOcqdB77fMokju7CecosHfqisUvKbjdv2hc3w32YLk2trrhHfD4PMpPtL324xGtTPqIdA_5L5PkF_5hsTYU0hbx5Yf2_GDzOdjuhCZ4ZR1LD5FpskN43zb7HIcpFe_QxlRJBCk2AZgkfxpHytngfNszqyahaBpOXLFiyzO0GrY85F"/>
@@ -307,7 +307,7 @@
 <p class="font-price-accent text-price-accent text-black">$650</p>
 </div>
 </article>
-<!-- Product 4 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.4s;">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model wearing a rigid, collarless black shirt with sharp, angular shoulders. The portrait is tightly cropped, set against an endless black void. High-contrast lighting highlights the stark minimalism of the design, rejecting any softness. The mood is severe, reflecting a brutalist fashion philosophy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC39fXUoC21POo0Ngnbf0kaccpMH6EZGXTXy5rieEHqP6Jbd8oQ9KDf-2_9qRnxfox1UbyFzR7Mkv1Zi0oqSsqYbwouX-ZhVC0OxupNfJii2IT32OsWzAa5gb6U8GQ7RYSgKh3NAzh5WUxQMMmyKFA7DXG1nkoL2jCvgJNdeAktPzM4KYmxAHnRG3L-zrkLLi_2TbMs4X3t38P-Abo0fLnw5l1KZf5gsch-T2466mhN-ydsriXJvi34Fv3kEQ2VOF3JM4n-6fQ1ELPX"/>
@@ -318,7 +318,7 @@
 <p class="font-price-accent text-price-accent text-black">$420</p>
 </div>
 </article>
-<!-- Product 5 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A figure standing in the shadows wearing a heavy, elongated black sweater with distressed, raw-edge finishing. The silhouette is imposing and columnar. The studio is pitch black except for a harsh spotlight revealing the brutal texture of the knitwear. Post-apocalyptic minimalism in high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJoBpQ9KZapWSlMukY8Z_cTGMLHvm5vdN4t2WPBl8P-QSwkZyHhOfwycviJxy4E8N9BCgVB2m3WfVoNxaZmbMxQ1gyfqK5go5i6GwmIoXTeO__ZWBxz8tG4lWunAFu6bAvLdRXHzWllkRYHW6j3AYHOv624bBQxdx7kyjN6IZzCfKZP0jmQKMXe60WZQi7ulN2f6wf6pBxg5uhStDArZqHBRIGYs6ZJHTzeueRHv4-fLTRO4qRtg_F-g-e_K7OwR9c0huyj2JJV56q"/>
@@ -329,7 +329,7 @@
 <p class="font-price-accent text-price-accent text-black">$890</p>
 </div>
 </article>
-<!-- Product 6 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A model wearing severe, black leather combat boots with thick, architectural geometric soles. The boots are presented against a stark concrete floor and black backdrop. The lighting is intensely focused, creating deep, sharp shadows that highlight the aggressive, brutalist design of the footwear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYe5V8TcPz_QdDgPHMAT5HRotjFnhUjf8C_R33uPhIr_SwUeWg2pAan0PWr0NoTM9c4GXdfCl_RTKQYlqrEFd64HzSAPa6qrBqjAtgkDO8II2BYoa7rgV-_pQciJeFcqJxx8xtKGvy9ZFcmmQLk5Tx0wIrjSFVCcCZLojJZXTU4w_NDoZ7G0Ngl8Rantp55euX2Yl0q39K_Op9v6mu5M5KUhkstCmdYWsXADQFZI8fhlrvQ1iGOu6vYUhOKe2RtOgfX9PHNWUCkOLt"/>
@@ -340,7 +340,7 @@
 <p class="font-price-accent text-price-accent text-black">$1,100</p>
 </div>
 </article>
-<!-- Product 7 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A man in a sleek, completely seamless black turtleneck. The garment appears to merge with his skin, creating a stark, monolithic form. The environment is entirely black, with only a thin sliver of stark white rim light outlining his profile. The mood is futuristic and deeply secretive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu8fAThggkJWRHeX7zZSV5c_Vux9nda7m_q--KBUaasuV7iTanBLJUs1Y6pT6bW0nF2jVXhLXFvVZaKpdFKaAdD2CrGoY9Cpmbkc9xyztGkL_cp3rN7ptQieMnELOTRplEgrQSQHjGpeSw_HD0XhsKNqntoHDJMzmR4WDlMw4cNyyq0R-Uzl8H9KTvutRyG1Wflp25NUcFQ_iLCDJRHHN7_oO_BvEEzXHpNnUbK8SheaJJK6K_FxGTkhbs_ojGWvP0ffQ3c5BAAW2m"/>
@@ -351,7 +351,7 @@
 <p class="font-price-accent text-price-accent text-black">$380</p>
 </div>
 </article>
-<!-- Product 8 -->
+
 <article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
 <div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
 <img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model draped in a massive, sweeping black wool cape that falls to the floor in heavy, rigid folds. The lighting is overhead and dramatic, casting deep shadows over the face and emphasizing the imposing, architectural silhouette of the cape. The setting is an infinite black void." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCce9yTPRlJRc3sn1F-jK7fecq3y0iPwS4bc-b3imhgfRbxOU-9pIeaZIeIdJHG0KjfhTKlxgyzth9iamgseAvlz0a-yBPDCSaXS2z40MrWpIVnqajk9VlAV9PcAucaoQxBB3Pa_soEYBZVx7NfzGE_AOVm4h6X9fOfAAbHpIkxa1XC1Mn9yO-s0smxaBSEYoPmr87Gev0mU7JSQCN1dzk4RjEU7JGicoo6J0i_HLCbZySwvG6C3KQ-fSp-T6Kavnbyp_zejMZOOV_M"/>
@@ -363,7 +363,7 @@
 </div>
 </article>
 </div>
-<!-- Load More / Infinite Scroll Indicator -->
+
 <div class="w-full flex justify-center py-20 bg-white">
 <button class="border border-black bg-transparent text-black font-nav-ui text-nav-ui px-12 py-4 hover:bg-black hover:text-white transition-all duration-300 uppercase transition-all duration-500">
                         LOAD MORE
@@ -372,7 +372,7 @@
 </div>
 </div>
 </main>
-<!-- Footer -->
+
 <footer class="w-full border-t border-black pt-20 pb-10 bg-white mt-auto">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-10 px-10 max-w-full">
 <div class="flex flex-col gap-4 font-nav-ui text-nav-ui uppercase">

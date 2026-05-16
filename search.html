@@ -11,34 +11,34 @@
     body { background-color: #050505; color: #FFFFFF; font-family: 'Jost', sans-serif; overflow-x: hidden; }
     ::-webkit-scrollbar { display: none; }
     
-    /* Custom Cursors */
+    
     .cursor-dot { width: 6px; height: 6px; background: #FFF; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; }
     .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
     @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
     
-    /* Mouse Spotlight */
+    
     #spotlight { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; background: radial-gradient(circle 600px at var(--x) var(--y), rgba(255,255,255,0.03), transparent 80%); }
     
-    /* Input Styling */
+    
     input[type="text"]::-webkit-search-cancel-button { -webkit-appearance: none; }
     input[type="text"]:focus + .input-border { transform: scaleX(1); }
     
-    /* Animations */
+    
     @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
     .animate-fade-up { opacity: 0; animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.3s; } .delay-3 { animation-delay: 0.5s; }
 </style>
 </head>
 <body class="bg-[#050505] text-white min-h-screen flex flex-col antialiased selection:bg-white selection:text-black">
-<!-- Ambient Textures -->
+
 <div id="spotlight"></div>
 <div class="pointer-events-none fixed inset-0 z-[1] opacity-[0.08] mix-blend-screen" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
 
-<!-- Cursors -->
+
 <div class="cursor-dot hidden md:block"></div>
 <div class="cursor-outline hidden md:block"></div>
 
-<!-- Header -->
+
 <header class="w-full h-[80px] flex justify-between items-center px-10 z-50 relative">
 <a href="index.html" class="flex items-center h-full magnetic transition-transform duration-300 ease-out inline-block filter invert opacity-80 hover:opacity-100">
     <img src="Shiv%20Sakti%20UI%20&%20Logo/horizontal_logo.png" alt="SHIV SHAKTI PROJECT" class="h-12 object-contain" />
@@ -48,16 +48,16 @@
 </a>
 </header>
 
-<!-- Main Interface -->
+
 <main class="w-full flex-grow flex flex-col pt-20 px-6 md:px-20 relative z-10 max-w-[1600px] mx-auto">
     
-    <!-- Hero Input -->
+    
     <div class="relative w-full mb-32 animate-fade-up delay-1">
         <input type="text" placeholder="TYPE TO INITIATE..." class="w-full bg-transparent border-none outline-none text-[40px] md:text-[80px] lg:text-[120px] font-light uppercase tracking-tighter text-white placeholder-white/10 focus:ring-0 px-0" autofocus>
         <div class="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-white/40 to-transparent scale-x-0 origin-left transition-transform duration-[1500ms] ease-out input-border"></div>
     </div>
 
-    <!-- Visual Curations -->
+    
     <div class="w-full flex-grow flex flex-col justify-end pb-20">
         <div class="flex justify-between items-end mb-10 border-b border-white/10 pb-4 animate-fade-up delay-2">
             <h2 class="text-[10px] tracking-[0.4em] uppercase text-white/40">CURATED ARCHIVES</h2>
@@ -65,7 +65,7 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 animate-fade-up delay-3">
-            <!-- Card 1 -->
+            
             <a href="shakti.html" class="group relative aspect-[4/5] md:aspect-square overflow-hidden bg-white/5 border border-white/10 cursor-pointer magnetic-card">
                 <img src="assets/images/shakti_look_1_1778314460992.png" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1500ms] ease-out" />
                 <div class="absolute inset-0 p-8 flex flex-col justify-between z-10 pointer-events-none">
@@ -78,7 +78,7 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 group-hover:opacity-0 transition-opacity duration-1000"></div>
             </a>
             
-            <!-- Card 2 -->
+            
             <a href="shiva.html" class="group relative aspect-[4/5] md:aspect-square overflow-hidden bg-white/5 border border-white/10 cursor-pointer magnetic-card">
                 <img src="assets/images/shiva_look_1_1778314931006.png" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1500ms] ease-out" />
                 <div class="absolute inset-0 p-8 flex flex-col justify-between z-10 pointer-events-none">
@@ -91,7 +91,7 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 group-hover:opacity-0 transition-opacity duration-1000"></div>
             </a>
             
-            <!-- Card 3 -->
+            
             <a href="lookbook.html" class="group relative aspect-[4/5] md:aspect-square overflow-hidden bg-white/5 border border-white/10 cursor-pointer magnetic-card">
                 <img src="assets/images/vision_look_2_1778331975616.png" class="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[1500ms] ease-out" />
                 <div class="absolute inset-0 p-8 flex flex-col justify-between z-10 pointer-events-none">
@@ -109,14 +109,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Spotlight Effect
+        
         const spotlight = document.getElementById('spotlight');
         document.body.addEventListener('mousemove', e => {
             spotlight.style.setProperty('--x', e.clientX + 'px');
             spotlight.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // Custom Cursors
+        
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
@@ -124,7 +124,7 @@
         const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
         animateCursor();
 
-        // Magnetic Physics
+        
         document.querySelectorAll('a, button, input, .magnetic').forEach(elem => {
             if(elem.classList.contains('magnetic')) {
                 elem.addEventListener('mousemove', (e) => {
@@ -137,7 +137,7 @@
             elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
         });
         
-        // Force input line animation on load
+        
         setTimeout(() => {
             document.querySelector('input').focus();
         }, 500);

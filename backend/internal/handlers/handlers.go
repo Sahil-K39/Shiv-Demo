@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AUTH HANDLER
+
 
 type AuthHandler struct {
 	service *auth.Service
@@ -22,8 +22,8 @@ func NewAuthHandler(service *auth.Service) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
-// Register creates a new user account.
-// POST /api/auth/register
+
+
 func (h *AuthHandler) Register(c *gin.Context) {
 	var input models.RegisterInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -44,7 +44,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Generate JWT and set HttpOnly cookie
+	
 	token, err := h.service.GenerateToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
@@ -58,8 +58,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	})
 }
 
-// Login authenticates a user and issues a session.
-// POST /api/auth/login
+
+
 func (h *AuthHandler) Login(c *gin.Context) {
 	var input models.LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -92,15 +92,15 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	})
 }
 
-// Logout clears the session cookie.
-// POST /api/auth/logout
+
+
 func (h *AuthHandler) Logout(c *gin.Context) {
 	c.SetCookie("shiv_session", "", -1, "/", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
 
-// Me returns the current authenticated user.
-// GET /api/auth/me
+
+
 func (h *AuthHandler) Me(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 	user, err := h.service.GetUserByID(userID)
@@ -111,21 +111,21 @@ func (h *AuthHandler) Me(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// setSessionCookie sets a secure HttpOnly cookie with the JWT.
+
 func setSessionCookie(c *gin.Context, token string) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie(
-		"shiv_session", // Cookie name
-		token,          // JWT value
-		86400,          // 24 hours in seconds
-		"/",            // Available on all paths
-		"",             // Domain (empty = current domain)
-		false,          // Secure flag (true in production with HTTPS)
-		true,           // HttpOnly — prevents JavaScript access (XSS protection)
+		"shiv_session", 
+		token,          
+		86400,          
+		"/",            
+		"",             
+		false,          
+		true,           
 	)
 }
 
-// PRODUCT HANDLER
+
 
 type ProductHandler struct {
 	db *sql.DB
@@ -135,8 +135,8 @@ func NewProductHandler(db *sql.DB) *ProductHandler {
 	return &ProductHandler{db: db}
 }
 
-// ListAll returns all products, optionally filtered by query params.
-// GET /api/products
+
+
 func (h *ProductHandler) ListAll(c *gin.Context) {
 	rows, err := h.db.Query(
 		"SELECT id, name, slug, description, price, sale_price, is_on_sale, currency, category, collection, sizes, colors, images, in_stock, featured, created_at FROM products ORDER BY featured DESC, created_at DESC",
@@ -162,8 +162,8 @@ func (h *ProductHandler) ListAll(c *gin.Context) {
 	})
 }
 
-// GetByID returns a single product by ID.
-// GET /api/products/:id
+
+
 func (h *ProductHandler) GetByID(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -186,8 +186,8 @@ func (h *ProductHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, p)
 }
 
-// GetByCategory returns products filtered by category.
-// GET /api/products/category/:category
+
+
 func (h *ProductHandler) GetByCategory(c *gin.Context) {
 	category := c.Param("category")
 
@@ -212,8 +212,8 @@ func (h *ProductHandler) GetByCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"products": products, "total": len(products)})
 }
 
-// CreateProduct adds a new product to the catalogue.
-// POST /api/admin/products
+
+
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	var input models.ProductInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -235,8 +235,8 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Product created", "product_id": id})
 }
 
-// UpdateProduct updates an existing product.
-// PUT /api/admin/products/:id
+
+
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -264,8 +264,8 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Product updated"})
 }
 
-// DeleteProduct removes a product from the catalogue.
-// DELETE /api/admin/products/:id
+
+
 func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -282,7 +282,7 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Product deleted"})
 }
 
-// CART HANDLER
+
 
 type CartHandler struct {
 	db *sql.DB
@@ -292,8 +292,8 @@ func NewCartHandler(db *sql.DB) *CartHandler {
 	return &CartHandler{db: db}
 }
 
-// GetCart returns all items in the user's cart with product details.
-// GET /api/cart
+
+
 func (h *CartHandler) GetCart(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
@@ -340,8 +340,8 @@ func (h *CartHandler) GetCart(c *gin.Context) {
 	})
 }
 
-// AddItem adds a product to the user's cart.
-// POST /api/cart/add
+
+
 func (h *CartHandler) AddItem(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
@@ -351,7 +351,7 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 		return
 	}
 
-	// Verify product exists and is in stock
+	
 	var inStock bool
 	err := h.db.QueryRow("SELECT in_stock FROM products WHERE id = ?", input.ProductID).Scan(&inStock)
 	if err == sql.ErrNoRows {
@@ -363,7 +363,7 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 		return
 	}
 
-	// Upsert: if item exists with same size/color, increment quantity
+	
 	_, err = h.db.Exec(`
 		INSERT INTO cart_items (user_id, product_id, quantity, size, color)
 		VALUES (?, ?, ?, ?, ?)
@@ -379,8 +379,8 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart"})
 }
 
-// UpdateItem changes the quantity of a cart item.
-// PUT /api/cart/update
+
+
 func (h *CartHandler) UpdateItem(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
@@ -404,8 +404,8 @@ func (h *CartHandler) UpdateItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Cart updated"})
 }
 
-// RemoveItem deletes a specific item from the cart.
-// DELETE /api/cart/remove/:itemId
+
+
 func (h *CartHandler) RemoveItem(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 	itemID, _ := strconv.ParseInt(c.Param("itemId"), 10, 64)
@@ -414,7 +414,7 @@ func (h *CartHandler) RemoveItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Item removed from cart"})
 }
 
-// ORDER HANDLER
+
 
 type OrderHandler struct {
 	db *sql.DB
@@ -424,12 +424,12 @@ func NewOrderHandler(db *sql.DB) *OrderHandler {
 	return &OrderHandler{db: db}
 }
 
-// CreateOrder converts the user's cart into a confirmed order.
-// POST /api/checkout
+
+
 func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
-	// Get cart items with product details
+	
 	rows, err := h.db.Query(`
 		SELECT ci.product_id, ci.quantity, ci.size, ci.color, p.name, p.price
 		FROM cart_items ci JOIN products p ON ci.product_id = p.id
@@ -464,14 +464,14 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// Begin transaction for atomic order creation
+	
 	tx, err := h.db.Begin()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "transaction_failed"})
 		return
 	}
 
-	// Create order record
+	
 	result, err := tx.Exec(
 		"INSERT INTO orders (user_id, total_price, status, created_at) VALUES (?, ?, 'confirmed', ?)",
 		userID, total, time.Now(),
@@ -484,7 +484,7 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 
 	orderID, _ := result.LastInsertId()
 
-	// Insert order line items
+	
 	for _, item := range items {
 		_, err = tx.Exec(
 			"INSERT INTO order_items (order_id, product_id, name, price, quantity, size, color) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -497,10 +497,10 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		}
 	}
 
-	// Clear the user's cart
+	
 	tx.Exec("DELETE FROM cart_items WHERE user_id = ?", userID)
 
-	// Commit the transaction
+	
 	if err := tx.Commit(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "commit_failed"})
 		return
@@ -514,8 +514,8 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	})
 }
 
-// ListOrders returns the user's order history.
-// GET /api/orders
+
+
 func (h *OrderHandler) ListOrders(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
@@ -546,7 +546,7 @@ func (h *OrderHandler) ListOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"orders": orders})
 }
 
-// COMMUNITY HANDLER
+
 
 type CommunityHandler struct {
 	db *sql.DB
@@ -556,8 +556,8 @@ func NewCommunityHandler(db *sql.DB) *CommunityHandler {
 	return &CommunityHandler{db: db}
 }
 
-// ListPosts returns community posts, optionally filtered by category.
-// GET /api/community/posts
+
+
 func (h *CommunityHandler) ListPosts(c *gin.Context) {
 	category := c.Query("category")
 
@@ -589,8 +589,8 @@ func (h *CommunityHandler) ListPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, posts)
 }
 
-// CreatePost creates a new community transmission.
-// POST /api/community/post
+
+
 func (h *CommunityHandler) CreatePost(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 	email := c.GetString("email")
@@ -617,8 +617,8 @@ func (h *CommunityHandler) CreatePost(c *gin.Context) {
 	})
 }
 
-// LikePost increments the like count on a post.
-// POST /api/community/like
+
+
 func (h *CommunityHandler) LikePost(c *gin.Context) {
 	userID := c.GetInt64("user_id")
 
@@ -630,7 +630,7 @@ func (h *CommunityHandler) LikePost(c *gin.Context) {
 		return
 	}
 
-	// Enforce one like per user per post
+	
 	_, err := h.db.Exec(
 		"INSERT INTO post_likes (user_id, post_id) VALUES (?, ?)",
 		userID, input.PostID,

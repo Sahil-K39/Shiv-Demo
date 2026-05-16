@@ -99,9 +99,9 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        /* Overriding base background to ensure absolute white per instructions */
+        
         body { background-color: #FFFFFF; color: #000000; }
-        /* Hide scrollbar for brutalist aesthetic */
+        
         ::-webkit-scrollbar { display: none; }
         * { border-radius: 0px !important; }
     </style>
@@ -144,12 +144,12 @@
     transform: scale(1.05);
   }
 
-  /* Premium UI Enhancements */
+  
   .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
   .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
   @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
 
-  /* Advanced Reveals */
+  
   .image-curtain { clip-path: inset(100% 0 0 0); transition: clip-path 1.5s cubic-bezier(0.77,0,0.175,1); }
   .image-curtain.active { clip-path: inset(0 0 0 0); }
   
@@ -159,15 +159,15 @@
 
 </head>
 <body class="antialiased font-body-primary text-body-primary">
-<!-- Noise Overlay for Cinematic Texture -->
+
 <div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.04] mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
-<!-- Custom Cursor Elements -->
+
 <div class="cursor-dot hidden md:block"></div>
 <div class="cursor-outline hidden md:block"></div>
 
-<!-- TopNavBar (Shared Component) -->
+
 <nav class="bg-white/60 backdrop-blur-2xl text-black fixed top-0 w-full h-[80px] border-b border-black/5 flex justify-between items-center px-10 z-50 transition-all duration-500 hover:bg-white/95">
-<!-- Brand Logo -->
+
 <a href="index.html" class="flex items-center h-full magnetic transition-transform duration-300 ease-out inline-block">
     <img src="Shiv%20Sakti%20UI%20&%20Logo/horizontal_logo.png" alt="SHIV SHAKTI PROJECT" class="h-12 mix-blend-multiply object-contain" />
 </a>
@@ -179,7 +179,7 @@
 <a class="text-gray-400 hover:text-black transition-colors duration-300" href="lookbook.html">VISIONS</a>
 <a class="text-gray-400 hover:text-black transition-colors duration-300" href="community.html">COUNCIL</a>
 </div>
-<!-- Trailing Icons -->
+
 <div class="flex items-center gap-6">
 <a href="search.html" class="text-gray-500 hover:text-black transition-colors duration-300 flex items-center justify-center magnetic inline-block">
 <span class="material-symbols-outlined" data-icon="search">search</span>
@@ -192,9 +192,9 @@
 </a>
 </div>
 </nav>
-<!-- Main Content Canvas -->
+
 <main class="w-full flex flex-col pt-[60px]">
-<!-- Hero Section -->
+
 <section class="relative w-full h-[calc(100vh-60px)] bg-white overflow-hidden flex items-end p-container-margin border-b border-black">
 <div class="absolute inset-0 w-full h-full overflow-hidden">
     <img class="hero-parallax absolute inset-0 w-full h-[120%] object-cover opacity-90 -top-[10%]" data-alt="A high-contrast, cinematic fashion editorial shot set in a brutalist, concrete environment devoid of organic life." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYITombMqMTWsO-VPYQmMedJid7Ae7xjg2xB3PysBDOyLA_G6Jg0DU4NxqeHIzgXTS1GNTo_tqSIG2-0EHYn4eT44HPHRhLhz1Styf4XMoHwejj8FPNwamgazf6M-94fBrt0xGWcoewa_JeNcc5xKMFrbx_flBSdU1VKpfw-yDsRQCAuTX41A1zkvFNZLGauAbGf68bzioc3KFU3FhUqs6jhEvfsSCVnh4fTZly5YepS8vg69Q2aD7yz_XfNk87Rg5x6z4YQY2opPv"/>
@@ -209,15 +209,15 @@
                 </a>
 </div>
 </section>
-<!-- Marquee Announcement -->
+
 <div class="w-full h-[120px] bg-black flex items-center overflow-hidden border-b border-black select-none">
 <div class="whitespace-nowrap font-hero-heading text-[80px] uppercase px-4 animate-marquee" style="-webkit-text-stroke: 1px rgba(255,255,255,0.5); color: transparent;">
                 FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / ENTER THE VOID. / NEW ARRIVALS MAN &amp; WOMAN. / FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / ENTER THE VOID. / NEW ARRIVALS MAN &amp; WOMAN.
             </div>
 </div>
-<!-- Split Collection -->
+
 <section class="w-full grid grid-cols-1 md:grid-cols-2 gap-grid-gutter bg-black mt-grid-gutter border-b border-black">
-<!-- Woman -->
+
 <a class="relative aspect-[3/4] bg-white group block overflow-hidden reveal" href="shop.html">
 <div class="w-full h-full image-curtain">
     <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1500ms] ease-out group-hover:scale-110" data-alt="A striking portrait of a female model embodying a post-apocalyptic minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA82pbFN-PTMLrM1UN0IkT3FyYK8urbUrD3XtHbodTIQt-6bKWw5RbLvyeucy_l9Mzkbjs3jSU_gNaEcBWqfc-4DqAy-ybSFfMizyl61zIRd6_veL4fzGd1BnWAKhAF_oym7JU1mzYw963DTHv6FTRXLCdo9G__Rz24TE4VInrL__zLYyzOCqNgLLj1yl0PcTzBTw7GOC7owPFQqLRHmjByGpENgMWY3Pe4al52Ct7jOCwlFZLi2rkiKkOX-onefVDW8ffFH4z-xeCb"/>
@@ -226,7 +226,7 @@
 <h2 class="font-hero-heading text-[50px] md:text-[70px] text-white uppercase tracking-[0.2em] mix-blend-difference drop-shadow-2xl">SHAKTI</h2>
 </div>
 </a>
-<!-- Man -->
+
 <a class="relative aspect-[3/4] bg-white group block overflow-hidden reveal stagger-item-2" href="shiva.html">
 <div class="w-full h-full image-curtain">
     <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1500ms] ease-out group-hover:scale-110" data-alt="A full-length editorial photograph of a male figure in an industrial, dystopian setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8D75C5r_ob1kjQXocCUpaR4jtSzMiDfaE8h-gPc1UxScESCDGpzWnYWHcUhJnijaHMue1ic1QLmxVIGYEaBve4GtocR-RyVKyVYMhCkOsbrkvNkuzvvfsrM78CNnccNcidUHiayKFTXiMcQWO_wM7muqdADPmZLjBhirGWEIuPdIkae6NFt5R1pdDyI26HT61D93r1DSkJgx3Ru9S2OR_TAErEHrQ7HL6yzb_nEa2K0Bh-8uNywa9CXw2toAZzBtayoFzPG4ZERgi"/>
@@ -236,13 +236,13 @@
 </div>
 </a>
 </section>
-<!-- New Arrivals 4-Column Grid -->
+
 <section class="w-full py-section-gap flex flex-col gap-10 border-b border-black">
 <div class="w-full px-container-margin text-center">
 <h3 class="font-logo text-2xl text-black uppercase tracking-[0.1em] reveal">NEW ARRIVALS</h3>
 </div>
 <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-grid-gutter bg-black px-grid-gutter">
-<!-- Product 1 -->
+
 <a class="flex flex-col bg-white group relative reveal stagger-item-1" href="product.html">
 <div class="relative aspect-[2/3] w-full overflow-hidden bg-white">
 <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0" data-alt="A front-facing studio shot of a deconstructed avant-garde jacket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvJutcEfLq0s6PbsczdDcwZu-UI59YMLupVB1PD2ExNWMbGed2B2j668sXsLqy61CyRLp9AQXAWtnSgx57ff35liipW6nre-AxT0R0xrYKIBlb_0JCqZ23AB5ONr5ZXh1sR5TPiJHJpOxLlDfwz1y0Q4oMBwSpCZWXwMPCF-wRRqFXEl-9YKtXBoCy4lfyoqRjL1rrZ05QEL9aFghjzRJyxEcM-odPiYarf3vZ0AWo1iZbiv8m4oCLBq82Rdhkgac9p9yH34FPy1Gy"/>
@@ -253,7 +253,7 @@
 <span class="font-price-accent text-price-accent text-black">$ 1,250</span>
 </div>
 </a>
-<!-- Product 2 -->
+
 <a class="flex flex-col bg-white group relative reveal stagger-item-2" href="product.html">
 <div class="relative aspect-[2/3] w-full overflow-hidden bg-white">
 <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0" data-alt="A front-facing studio shot of heavy trousers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAygwWWzTZb2OCUDquBXAoI-5QSWIKxKuZKXigLqg6qy2LRrJd6VhZzVJv4X2hEkWdrBiXrDenXZRf1g2gAEqMTwm3MB6EL3pcoTZM41ThOr4T3NXPcuSLoCdUmg13yMVvi4P1TKYdulxZiMv1jo7TGMZatQXUyIKzEsoKPnDkXUBJfu_27_dYmVGwGm83BnrbKSNBchwzFaQ6qLKvee8O-Edge5fSfjGEx4eZoifzbHBMSRNaPy2U5Uf_UQxcoeODUngMaDNosNOdK"/>
@@ -264,7 +264,7 @@
 <span class="font-price-accent text-price-accent text-black">$ 890</span>
 </div>
 </a>
-<!-- Product 3 -->
+
 <a class="flex flex-col bg-white group relative hidden lg:flex reveal stagger-item-3" href="product.html">
 <div class="relative aspect-[2/3] w-full overflow-hidden bg-white">
 <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0" data-alt="Knit tunic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8LKdGKIG5xWoV9sC2O0MPReErXRM46wYaK5Uz-d8ASJ4HnRtNx8Ek1YycWBXy_zGvXklcicsWORKvp0yT-eVMEUhdgTJdyzwhppO0eIQqO5rVnu3UyHEGEz_b4CVPKDvLHjBVmqZhnTG3dU8iu6jXyRPUhvYC_HZbyEI-GJeD91ECxwFHsdLSQQ81TnXmQfHO4EsGxyivdF7c6RxwbFSsFard6dAFALtG6o7DjfYyaFvofQX1JWw4TLxpeAL6x7NVDbhjpQX2mJl3"/>
@@ -275,7 +275,7 @@
 <span class="font-price-accent text-price-accent text-black">$ 650</span>
 </div>
 </a>
-<!-- Product 4 -->
+
 <a class="flex flex-col bg-white group relative hidden lg:flex reveal stagger-item-4" href="product.html">
 <div class="relative aspect-[2/3] w-full overflow-hidden bg-white">
 <img class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0" data-alt="Boots" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATr3XlkYX2ie3vjUR-rHaPEmwkgb35wK1g2u4nuxwukgauVUrTymLasRB3lef_x1zWZZXStaoYTX2_w7hMO78xXLIjoFeVlSDv9kDEARhwHoaQnWb3K257ls8jc_fR5GaJeZdDU_MW2LMqQBbHxA0ETxB1h42Ov66CSEgLBStu23pE982Gxzecy2AaD5V2Ax9D7AqFZutp_oxbm_Ht3zkPZVMC1sYoqxCy-FajiDV-wv6JArBxN9ifpSx9In9HJhHMpF1IDRd1S1ZH"/>
@@ -294,7 +294,7 @@
                 </a>
 </div>
 </section>
-<!-- Lookbook Editorial Section -->
+
 <section class="w-full py-section-gap bg-white flex flex-col items-center border-b border-black">
 <div class="w-full max-w-[1600px] px-container-margin grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 <div class="lg:col-span-5 flex flex-col gap-8 order-2 lg:order-1">
@@ -312,7 +312,7 @@
 </div>
 </div>
 </section>
-<!-- Minimal Newsletter Signup -->
+
 <section class="w-full py-[120px] flex justify-center items-center bg-white border-b border-black">
 <div class="w-full max-w-md px-container-margin flex flex-col gap-6 items-center reveal">
 <label class="font-nav-ui text-nav-ui text-black uppercase tracking-[0.2em] reveal" for="newsletter">SUBSCRIBE TO THE VOID</label>
@@ -326,32 +326,32 @@
 </div>
 </section>
 </main>
-<!-- Footer (Shared Component) -->
+
 <footer class="bg-white text-black w-full pt-20 pb-10 grid grid-cols-1 md:grid-cols-4 gap-10 px-10 max-w-full z-10 relative">
-<!-- Brand (Hidden per JSON) -->
+
 <div class="hidden">SHIV SHAKTI PROJECT</div>
-<!-- Links Area 1 -->
+
 <div class="flex flex-col gap-4">
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">SHIPPING</a>
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">RETURNS</a>
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">CONTACT</a>
 </div>
-<!-- Links Area 2 -->
+
 <div class="flex flex-col gap-4">
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">LEGAL</a>
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">PRIVACY</a>
 <a class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500 hover:text-black underline transition-colors duration-300" href="#">TERMS</a>
 </div>
-<!-- Empty columns for grid layout -->
+
 <div class="hidden md:block"></div>
-<!-- Copyright -->
+
 <div class="flex items-end md:justify-end">
 <span class="font-nav-ui uppercase tracking-[0.15em] text-[10px] font-light text-gray-500">© 2024 SHIV SHAKTI PROJECT</span>
 </div>
 </footer>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Custom Cursor Logic
+    
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
     let mouseX = 0, mouseY = 0;
@@ -379,7 +379,7 @@
     };
     animateCursor();
 
-    // Hover targets
+    
     document.querySelectorAll('a, button, .hover-target').forEach(el => {
       el.addEventListener('mouseenter', () => {
         if(cursorOutline) {
@@ -397,7 +397,7 @@
       });
     });
 
-    // Parallax Logic
+    
     const heroImage = document.querySelector('.hero-parallax');
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
@@ -406,7 +406,7 @@
       }
     });
 
-    // Magnetic Links Logic
+    
     document.querySelectorAll('.magnetic').forEach(elem => {
       elem.addEventListener('mousemove', (e) => {
         const pos = elem.getBoundingClientRect();
@@ -419,7 +419,7 @@
       });
     });
 
-    // Intersection Observer for Reveals
+    
     const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -433,10 +433,10 @@
 
 
     
-    // Trigger reveals immediately
+    
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Newsletter Subscribe
+    
     const nlBtn = document.getElementById('newsletter-btn');
     if(nlBtn) {
       nlBtn.addEventListener('click', async () => {
@@ -455,7 +455,7 @@
       });
     }
 
-    // Auth State - Show user icon as logged in
+    
     const token = localStorage.getItem('shiv_token');
     if(token) {
       const personLink = document.querySelector('a[href="login.html"]');
