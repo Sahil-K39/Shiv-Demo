@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SHIV SHAKTI - VISIONS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #FFFFFF; color: #000000; font-family: 'Jost', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    ::-webkit-scrollbar { display: none; }
+    
+    /* Premium UI Enhancements */
+    .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
+    .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
+
+    .reveal-element { opacity: 0; transform: translateY(50px); transition: opacity 1.5s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1); will-change: opacity, transform; }
+    .reveal-element.is-revealed { opacity: 1; transform: translateY(0); }
+    .image-fade { transition: opacity 2s cubic-bezier(0.215, 0.61, 0.355, 1), transform 2s cubic-bezier(0.215, 0.61, 0.355, 1); }
+    
+    .image-curtain { clip-path: inset(100% 0 0 0); transition: clip-path 1.5s cubic-bezier(0.77,0,0.175,1); }
+    .image-curtain.is-revealed { clip-path: inset(0 0 0 0); }
+</style>
+
+</head>
+<body class="bg-white text-black antialiased overflow-x-hidden selection:bg-black selection:text-white">
+<div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.04] mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+<div class="cursor-dot hidden md:block"></div>
+<div class="cursor-outline hidden md:block"></div>
+
+<nav class="bg-white/60 backdrop-blur-2xl text-black fixed top-0 w-full h-[80px] border-b border-black/5 flex justify-between items-center px-10 z-50 transition-all duration-500 hover:bg-white/95">
+<a href="index.html" class="flex items-center h-full">
+    <img src="Shiv%20Sakti%20UI%20&%20Logo/horizontal_logo.png" alt="SHIV SHAKTI PROJECT" class="h-12 mix-blend-multiply object-contain" />
+</a>
+<div class="hidden md:flex gap-8 items-center h-full text-[11px] font-medium tracking-[0.2em] uppercase">
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shop.html">SHAKTI</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shiva.html">SHIVA</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="index.html">COLLECTIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="revelations.html">REVELATIONS</a>
+<a class="text-black border-b border-black pb-1" href="lookbook.html">VISIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="community.html">COUNCIL</a>
+</div>
+<div class="flex items-center gap-6">
+<a href="search.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">search</span></a>
+<a href="login.html" class="text-gray-400 hover:text-black transition-colors duration-300 hidden md:flex"><span class="material-symbols-outlined">person</span></a>
+<a href="cart.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">shopping_bag</span></a>
+</div>
+</nav>
+
+<main class="w-full pt-[80px]">
+<section class="relative w-full h-[100vh] bg-white flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 w-full h-full image-curtain reveal-element">
+<img class="w-full h-full object-cover grayscale opacity-70 hero-parallax" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC12-h8hmc9CL4mgUP-hMJeXUf4f7YV8WDoXT02otD-5PiU1o_ohP7-VDu1QbzVZUgGXdvJmHg0RFtm9ijsYPlPc9x5EAz7te1MvpB86P5Yr6MgYCEDxxiopGMQIZVQ3o3MmOAui5UfCYHxU5aMgcZyUEnYenoHP5nZn1Tflk6o3V7rpMAI3Sud2ssrnkM-MFQySsHZuZFVfG7f-nfqiJbu9Db9T0mB-LrUtJWg0K2pLUkwfeZK1f95PCSZ3gax66lcwLLvcDhf5Khx" alt="Hero"/>
+</div>
+<div class="relative z-10 flex flex-col items-center text-center reveal-element" style="transition-delay: 0.5s;">
+<h1 class="text-[80px] md:text-[140px] font-light leading-[1] tracking-[0.2em] uppercase text-white mix-blend-difference">VISIONS</h1>
+<p class="text-[14px] tracking-[0.3em] uppercase mt-12 text-white mix-blend-difference">Act I / The Descent / Volume.04</p>
+</div>
+</section>
+
+<section class="w-full mt-32 px-0">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-1 bg-black border-t border-b border-black">
+<div class="lg:col-span-7 bg-white h-[90vh] overflow-hidden image-curtain reveal-element">
+<img class="w-full h-full object-cover grayscale opacity-90 transition-transform duration-[2000ms] hover:scale-105 hover:grayscale-0" src="assets/images/vision_look_1_1778331961264.png" alt="Look 1"/>
+</div>
+<div class="lg:col-span-5 flex flex-col gap-1 bg-black h-[90vh]">
+<div class="h-[60%] bg-white overflow-hidden image-curtain reveal-element" style="transition-delay: 0.2s;">
+<img class="w-full h-full object-cover grayscale opacity-90 transition-transform duration-[2000ms] hover:scale-105 hover:grayscale-0" src="assets/images/vision_look_2_1778331975616.png" alt="Detail"/>
+</div>
+<div class="h-[40%] bg-white flex items-center p-16">
+<p class="text-[16px] leading-relaxed reveal-element">Stripped of ornamentation. Forms built to withstand the vacuum. The architecture of the void. We reject color to expose the absolute finality of the cut.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="w-full py-32 flex justify-center items-center px-10 bg-white reveal-element">
+<div class="max-w-4xl text-center">
+<h2 class="uppercase mb-12 tracking-widest text-[40px] font-light leading-[1.2]">Structural Integrity</h2>
+<div class="w-24 h-[1px] bg-black mx-auto mb-12"></div>
+<p class="leading-[2] text-[20px] font-light text-gray-600">The Council of Light collection explores the intersection of raw material and human geometry. By eliminating color, we force the eye to recognize form, silhouette, and the uncompromising nature of our construction. It is a uniform for the new desolate landscape.</p>
+</div>
+</section>
+
+<section class="w-full px-0">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-1 bg-black border-t border-b border-black">
+<div class="bg-white h-[100vh] overflow-hidden image-curtain reveal-element">
+<img class="w-full h-full object-cover grayscale opacity-90 transition-transform duration-[2000ms] hover:scale-105 hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrARY0d_WwKfMEW-HH1P5YCc4jrfRLgkaaguaKOoOq64EGOiGd5MR414ZnW-tFxd_hW5c-0PDrJ1ZL3ir4XFq2r2ZMrclhpmavEjEeVravZm1lQczl0p-hFHu63TZjzfTBz1_svTIuYDr1nJJlZRg_EOy5sftnQQ-4wjnW23c6pGVDPudVuCvst6Ugtu809dwAm0Xd4nP0FkqervHwagn66gtI3gzZzOT2Z_v252RbB1eeiWw6AilhEgkU3d0-7wzjXTz1RT1e1kRb" alt="Look 2"/>
+</div>
+<div class="bg-white h-[100vh] overflow-hidden image-curtain reveal-element" style="transition-delay: 0.2s;">
+<img class="w-full h-full object-cover grayscale opacity-90 transition-transform duration-[2000ms] hover:scale-105 hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQNz9j8bUefxUpr3A-lk_SBRMP22TA2XKgQ_qOVBSh0uobmgHRvkwYlcyPY7eAKZkPvxavO8pnxIP-8ToQW3Cm1FKlKRyT0YUaFvu4oH7p7GJBFB_xNnq9EeYGUMMeb9PBXHHtkhhenpY99wX27vCxRPbJc201s8aow_RiceclesQgO91gnuxtOIaWgDvrJ2MOFlxEWQ5XuLBC3UJXMhO9zoCptnkwL696AdStgQvZYTE7Tmokg-aJLCstRwsIzHsTYAw805WG1R5z" alt="Look 3"/>
+</div>
+</div>
+</section>
+
+<section class="w-full mt-32 mb-32 h-[90vh] relative overflow-hidden bg-white">
+<div class="absolute inset-0 w-full h-full image-curtain reveal-element">
+<img class="w-full h-[120%] object-cover grayscale opacity-80 hero-parallax -top-[10%]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOzU88eBsTGPmm3ThpQALzCs5tm1YlUJU5uLFcjssb-wwkrC7OVrWSOddQ1xUkCv233XI8en6b8YxKMTVS1dAE2gnUCAg3vUECnRIx8dzXw8DKX0aXEAA7aFhcd4NEVqx3Hz5I67b0v_HGSlTunIYHm-QUAaQ6TPdcVckelBzwvb8M3nysmiqXjjtCZQL-d3hYlsLO3U-HNKJN6INR5Pvy3ZM4Fc1KBslQ08Nsq6eNvuFzlN7KBF9psBaf81zQREA2M9wZe9m_cYte" alt="Finale"/>
+</div>
+<div class="absolute bottom-12 right-12 reveal-element" style="transition-delay: 0.3s;">
+<p class="text-[11px] tracking-[0.2em] uppercase text-white mix-blend-difference">End of Sequence</p>
+</div>
+</section>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; if(cursorDot) { cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; } });
+        const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
+        animateCursor();
+
+        document.querySelectorAll('a, button, .magnetic, .hover-target').forEach(elem => {
+        if(elem.classList.contains('magnetic')) {
+            elem.addEventListener('mousemove', (e) => {
+            const pos = elem.getBoundingClientRect();
+            elem.style.transform = `translate(${(e.clientX - pos.left - pos.width/2) * 0.3}px, ${(e.clientY - pos.top - pos.height/2) * 0.3}px)`;
+            });
+            elem.addEventListener('mouseleave', () => { elem.style.transform = `translate(0px, 0px)`; });
+        }
+        elem.addEventListener('mouseenter', () => { if(cursorOutline) { cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px'; cursorOutline.style.backgroundColor = 'rgba(255,255,255,0.05)'; } });
+        elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
+        });
+
+        // Parallax
+        const heroImages = document.querySelectorAll('.hero-parallax');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            heroImages.forEach(img => {
+                img.style.transform = `translateY(${scrolled * 0.2}px)`;
+            });
+        });
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-element').forEach(el => observer.observe(el));
+        setTimeout(() => {
+            document.querySelectorAll('.reveal-element').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight && rect.bottom >= 0) el.classList.add('is-revealed');
+            });
+        }, 100);
+    });
+</script>
+</body></html>

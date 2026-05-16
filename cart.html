@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cart - SHIV SHAKTI</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+  body { background-color: #FFFFFF; color: #000000; font-family: 'Jost', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  ::-webkit-scrollbar { display: none; }
+
+  /* Premium UI Enhancements */
+  .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white; }
+  .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+  @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
+  
+  @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-slide-up { opacity: 0; animation: slideInUp 0.8s ease-out forwards; }
+  .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; }
+</style>
+
+</head>
+<body class="bg-white text-black antialiased">
+<div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.04] mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+<div class="cursor-dot hidden md:block"></div>
+<div class="cursor-outline hidden md:block"></div>
+
+<nav class="bg-white/60 backdrop-blur-2xl text-black fixed top-0 w-full h-[80px] border-b border-black/5 flex justify-between items-center px-10 z-50 transition-all duration-500 hover:bg-white/95">
+<a href="index.html" class="flex items-center h-full">
+    <img src="Shiv%20Sakti%20UI%20&%20Logo/horizontal_logo.png" alt="SHIV SHAKTI PROJECT" class="h-12 mix-blend-multiply object-contain" />
+</a>
+<div class="hidden md:flex gap-8 items-center h-full text-[11px] font-medium tracking-[0.2em] uppercase">
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shop.html">SHAKTI</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shiva.html">SHIVA</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="index.html">COLLECTIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="revelations.html">REVELATIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="lookbook.html">VISIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="community.html">COUNCIL</a>
+</div>
+<div class="flex items-center gap-6">
+<a href="search.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">search</span></a>
+<a href="login.html" class="text-gray-400 hover:text-black transition-colors duration-300 hidden md:flex"><span class="material-symbols-outlined">person</span></a>
+<a href="cart.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">shopping_bag</span></a>
+</div>
+</nav>
+
+<main class="w-full min-h-screen pt-[120px] pb-20 px-4 md:px-10 lg:px-20">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
+<div class="flex-grow w-full bg-white p-6 md:p-12 lg:p-20 overflow-y-auto">
+<div class="flex justify-between items-end mb-12 border-b border-black/10 pb-4 animate-fade-in-up">
+<h1 class="text-[40px] md:text-[60px] font-light leading-[1.1] tracking-[0.3em] uppercase">THE VOID</h1>
+<span class="text-[11px] tracking-[0.2em] text-gray-500 hidden md:inline">SECURE CHECKOUT</span>
+</div>
+<div id="cart-items-container" class="flex flex-col gap-8 w-full max-w-4xl animate-fade-in-up" style="animation-delay: 0.1s;">
+    <!-- Items dynamically injected here -->
+</div>
+</div>
+<aside class="w-full lg:w-[400px] bg-black text-white p-10 flex flex-col justify-between flex-shrink-0 animate-fade-in-up" style="animation-delay: 0.2s;">
+<div>
+<h2 class="text-[14px] font-medium tracking-[0.2em] mb-10 uppercase border-b border-white/20 pb-4">ORDER SUMMARY</h2>
+<div class="flex justify-between text-[12px] tracking-[0.1em] mb-6 text-gray-400">
+<span>SUBTOTAL</span>
+<span id="summary-subtotal">$0.00</span>
+</div>
+<div class="flex justify-between text-[12px] tracking-[0.1em] mb-6 text-gray-400">
+<span>SHIPPING</span>
+<span>COMPLIMENTARY</span>
+</div>
+<div class="flex justify-between text-[16px] tracking-[0.1em] mb-10 font-medium border-t border-white/20 pt-6">
+<span>TOTAL</span>
+<span id="summary-total">$0.00</span>
+</div>
+</div>
+<div>
+<button id="checkout-btn" class="relative overflow-hidden group w-full border border-white text-white bg-transparent px-10 py-5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-500 rounded-none flex justify-center items-center magnetic">
+<span id="checkout-btn-text" class="relative z-10 group-hover:text-black transition-colors duration-500">INITIATE CHECKOUT</span>
+<div class="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+</button>
+<p class="text-[10px] tracking-widest text-gray-500 mt-6 text-center uppercase leading-loose">SECURE ENCRYPTED TRANSMISSION<br/>ALL TAXES INCLUDED.</p>
+</div>
+</aside>
+</div>
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Custom Cursor
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
+    window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; if(cursorDot) { cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; } });
+    const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
+    animateCursor();
+
+    document.querySelectorAll('a, button, .magnetic').forEach(elem => {
+      if(elem.classList.contains('magnetic')) {
+        elem.addEventListener('mousemove', (e) => {
+          const pos = elem.getBoundingClientRect();
+          elem.style.transform = `translate(${(e.clientX - pos.left - pos.width/2) * 0.3}px, ${(e.clientY - pos.top - pos.height/2) * 0.3}px)`;
+        });
+        elem.addEventListener('mouseleave', () => { elem.style.transform = `translate(0px, 0px)`; });
+      }
+      elem.addEventListener('mouseenter', () => { if(cursorOutline) { cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px'; cursorOutline.style.backgroundColor = 'rgba(255,255,255,0.05)'; } });
+      elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
+    });
+
+    // Cart Logic
+    const cartContainer = document.getElementById('cart-items-container');
+    const subtotalEl = document.getElementById('summary-subtotal');
+    const totalEl = document.getElementById('summary-total');
+    let cart = JSON.parse(localStorage.getItem('shiv_cart') || '[]');
+
+    const renderCart = () => {
+        cartContainer.innerHTML = '';
+        let total = 0;
+
+        if(cart.length === 0) {
+            cartContainer.innerHTML = '<p class="text-[14px] tracking-[0.2em] text-gray-500 uppercase mt-10">THE VOID IS EMPTY.</p>';
+            subtotalEl.innerText = '$0.00';
+            totalEl.innerText = '$0.00';
+            return;
+        }
+
+        cart.forEach((item, index) => {
+            total += (item.price * item.quantity);
+            const itemHTML = `
+            <div class="flex gap-6 border border-black/10 p-4 relative group">
+                <button onclick="removeItem(${index})" class="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"><span class="material-symbols-outlined text-sm">close</span></button>
+                <div class="w-32 aspect-[3/4] bg-gray-100 flex-shrink-0">
+                <img class="w-full h-full object-cover grayscale mix-blend-multiply" src="${item.image}" alt="Item"/>
+                </div>
+                <div class="flex flex-col justify-between flex-grow py-2">
+                <div>
+                <h3 class="text-[14px] md:text-[18px] tracking-[0.2em] uppercase font-medium">${item.name}</h3>
+                <p class="text-[11px] tracking-[0.1em] text-gray-500 mt-2">SIZE: ${item.size} / COLOR: ${item.color}</p>
+                </div>
+                <div class="flex justify-between items-end">
+                <div class="flex items-center border border-black/20 w-max">
+                <button onclick="updateQuantity(${index}, -1)" class="px-3 py-1 hover:bg-black hover:text-white transition-colors">-</button>
+                <span class="px-4 text-[12px]">${item.quantity}</span>
+                <button onclick="updateQuantity(${index}, 1)" class="px-3 py-1 hover:bg-black hover:text-white transition-colors">+</button>
+                </div>
+                <span class="text-[14px] tracking-[0.1em] font-medium">$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+                </div>
+            </div>`;
+            cartContainer.innerHTML += itemHTML;
+        });
+
+        subtotalEl.innerText = `$${total.toFixed(2)}`;
+        totalEl.innerText = `$${total.toFixed(2)}`;
+    };
+
+    window.removeItem = (index) => {
+        cart.splice(index, 1);
+        localStorage.setItem('shiv_cart', JSON.stringify(cart));
+        renderCart();
+    };
+
+    window.updateQuantity = (index, delta) => {
+        if(cart[index].quantity + delta > 0) {
+            cart[index].quantity += delta;
+            localStorage.setItem('shiv_cart', JSON.stringify(cart));
+            renderCart();
+        }
+    };
+
+    renderCart();
+
+    // Checkout Logic
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const checkoutText = document.getElementById('checkout-btn-text');
+    
+    checkoutBtn.addEventListener('click', async () => {
+        if(cart.length === 0) return;
+        const token = localStorage.getItem('shiv_token');
+        if(!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        checkoutText.innerText = "TRANSMITTING ORDER...";
+        
+        const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+        
+        try {
+            const res = await fetch('http://127.0.0.1:8000/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, items: cart.map(i => ({product_id: i.id, quantity: i.quantity, size: i.size, color: i.color})), total_amount: total })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                checkoutText.innerText = "ORDER ACCEPTED";
+                localStorage.removeItem('shiv_cart');
+                setTimeout(() => {
+                    cart = [];
+                    renderCart();
+                    checkoutText.innerText = "INITIATE CHECKOUT";
+                }, 2000);
+            } else {
+                checkoutText.innerText = "UNAUTHORIZED / LOGIN REQUIRED";
+                setTimeout(() => window.location.href = 'login.html', 1500);
+            }
+        } catch (error) {
+            checkoutText.innerText = "SERVER DISCONNECTED";
+            setTimeout(() => checkoutText.innerText = "INITIATE CHECKOUT", 2000);
+        }
+    });
+  });
+</script>
+</body></html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SHIV SHAKTI PROJECT - DEMOMAN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-secondary-container": "#626262",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "tertiary-container": "#1b1b1b",
+                        "surface-variant": "#e2e2e2",
+                        "on-primary-fixed": "#1b1b1b",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#848484",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "primary": "#000000",
+                        "on-primary-container": "#848484",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-container": "#e1dfdf",
+                        "on-surface": "#1b1b1b",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "surface": "#f9f9f9",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-background": "#1b1b1b",
+                        "inverse-primary": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "outline": "#7e7576",
+                        "background": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-container-low": "#f3f3f3",
+                        "on-secondary-fixed-variant": "#464747",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "secondary": "#5e5e5e",
+                        "surface-tint": "#5e5e5e",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-surface-variant": "#4c4546",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "section-padding": "120px",
+                        "container-margin": "40px",
+                        "element-gap": "24px",
+                        "unit": "4px",
+                        "gutter": "1px"
+                    },
+                    "fontFamily": {
+                        "price-accent": [
+                            "Jost"
+                        ],
+                        "nav-ui": [
+                            "Jost"
+                        ],
+                        "logo": [
+                            "Jost"
+                        ],
+                        "hero-heading": [
+                            "Jost"
+                        ],
+                        "body-primary": [
+                            "Jost"
+                        ]
+                    },
+                    "fontSize": {
+                        "price-accent": [
+                            "14px",
+                            {
+                                "letterSpacing": "0.1em",
+                                "fontWeight": "400"
+                            }
+                        ],
+                        "nav-ui": [
+                            "11px",
+                            {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.2em",
+                                "fontWeight": "500"
+                            }
+                        ],
+                        "logo": [
+                            "18px",
+                            {
+                                "letterSpacing": "0.25em",
+                                "fontWeight": "700"
+                            }
+                        ],
+                        "hero-heading": [
+                            "72px",
+                            {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "0.3em",
+                                "fontWeight": "300"
+                            }
+                        ],
+                        "body-primary": [
+                            "14px",
+                            {
+                                "lineHeight": "1.6",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "400"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+        }
+        .product-image-container:hover .primary-image {
+            display: none;
+        }
+        .product-image-container:hover .secondary-image {
+            display: block;
+        }
+        .secondary-image {
+            display: none;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+    </style>
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+    .animate-fade-in {
+        animation: fadeIn 1s ease-out forwards;
+    }
+    /* Smooth transitions for all interactive elements */
+    a, button, input, .group, article {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+</style></head>
+<body class="bg-background text-primary font-body-primary min-h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[60px] border-b border-black bg-white flex justify-between items-center px-10 z-50">
+<div class="flex items-center gap-8">
+<span class="font-logo text-logo text-black uppercase">SHIV SHAKTI PROJECT</span>
+<nav class="hidden md:flex gap-6 font-nav-ui text-nav-ui uppercase">
+<a class="text-gray-500 hover:text-black transition-none" href="#">DEMOWOMAN</a>
+<a class="text-black border-b border-black pb-1" href="#">DEMOMAN</a>
+<a class="text-gray-500 hover:text-black transition-none" href="#">BAZACOLLECTIONS</a>
+<a class="text-gray-500 hover:text-black transition-none" href="#">BAZANEWS</a>
+<a class="text-gray-500 hover:text-black transition-none" href="#">LOOKBOOK</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 text-black">
+<button aria-label="Search" class="hover:text-gray-600 transition-none">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button aria-label="Profile" class="hover:text-gray-600 transition-none">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+<button aria-label="Cart" class="hover:text-gray-600 transition-none">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-[60px] w-full flex flex-col md:flex-row">
+<!-- Filters Sidebar (Desktop) -->
+<aside class="hidden md:block w-64 border-r border-black p-10 flex-shrink-0 sticky top-[60px] h-[calc(100vh-60px)] overflow-y-auto animate-fade-in">
+<h2 class="font-nav-ui text-nav-ui mb-8 text-black">FILTERS</h2>
+<div class="mb-8 border-b border-black pb-4">
+<h3 class="font-nav-ui text-nav-ui mb-4 text-black">CATEGORY</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="appearance-none w-4 h-4 border border-black checked:bg-black checked:border-black focus:ring-0 bg-transparent transition-all duration-300" type="checkbox"/>
+<span class="font-body-primary text-body-primary text-black transition-all duration-300 uppercase">OUTERWEAR</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="appearance-none w-4 h-4 border border-black checked:bg-black checked:border-black focus:ring-0 bg-transparent transition-all duration-300" type="checkbox"/>
+<span class="font-body-primary text-body-primary text-gray-600 group-hover:text-black transition-all duration-300 uppercase">TOPS</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="appearance-none w-4 h-4 border border-black checked:bg-black checked:border-black focus:ring-0 bg-transparent transition-all duration-300" type="checkbox"/>
+<span class="font-body-primary text-body-primary text-gray-600 group-hover:text-black transition-all duration-300 uppercase">BOTTOMS</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="appearance-none w-4 h-4 border border-black checked:bg-black checked:border-black focus:ring-0 bg-transparent transition-all duration-300" type="checkbox"/>
+<span class="font-body-primary text-body-primary text-gray-600 group-hover:text-black transition-all duration-300 uppercase">FOOTWEAR</span>
+</label>
+</div>
+</div>
+<div class="mb-8 border-b border-black pb-4">
+<h3 class="font-nav-ui text-nav-ui mb-4 text-black">SIZE</h3>
+<div class="flex flex-wrap gap-2">
+<button class="w-8 h-8 border border-black flex items-center justify-center font-nav-ui text-nav-ui hover:bg-black hover:text-white transition-all duration-300 text-black bg-transparent">S</button>
+<button class="w-8 h-8 border border-black flex items-center justify-center font-nav-ui text-nav-ui text-white bg-black transition-all duration-300">M</button>
+<button class="w-8 h-8 border border-black flex items-center justify-center font-nav-ui text-nav-ui hover:bg-black hover:text-white transition-all duration-300 text-black bg-transparent">L</button>
+<button class="w-8 h-8 border border-black flex items-center justify-center font-nav-ui text-nav-ui hover:bg-black hover:text-white transition-all duration-300 text-black bg-transparent">XL</button>
+</div>
+</div>
+<div class="mb-8">
+<h3 class="font-nav-ui text-nav-ui mb-4 text-black">COLOR</h3>
+<div class="flex flex-wrap gap-2">
+<button class="w-6 h-6 border border-black bg-black rounded-none transition-all duration-300"></button>
+<button class="w-6 h-6 border border-black bg-zinc-600 rounded-none hover:border-black transition-all duration-300"></button>
+<button class="w-6 h-6 border border-black bg-zinc-300 rounded-none hover:border-black transition-all duration-300"></button>
+<button class="w-6 h-6 border border-black bg-white rounded-none transition-all duration-300"></button>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-grow bg-white">
+<!-- Mobile Filter Bar -->
+<div class="md:hidden w-full border-b border-black p-4 flex justify-between items-center bg-white sticky top-[60px] z-40">
+<span class="font-nav-ui text-nav-ui text-black">DEMOMAN / OUTERWEAR</span>
+<button class="font-nav-ui text-nav-ui text-black border border-black px-4 py-2 hover:bg-black hover:text-white transition-all duration-300 uppercase">FILTERS</button>
+</div>
+<div class="p-0 md:p-10 w-full bg-white">
+<!-- Grid Headers -->
+<div class="hidden md:flex justify-between items-end mb-8 border-b border-black pb-4 px-4 animate-fade-in-up">
+<h1 class="font-hero-heading text-hero-heading text-black uppercase">DEMOMAN</h1>
+<span class="font-nav-ui text-nav-ui text-black">124 ITEMS</span>
+</div>
+<!-- 4 Column Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter bg-black border border-black">
+<!-- Product 1 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.1s;">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model wearing a stark, minimalist black architectural coat standing in a completely dark, brutalist studio. The lighting is harsh and directional, emphasizing the geometric cut and matte texture of the garment. The mood is cold, avant-garde, and post-apocalyptic. High contrast black and white aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn8yffiVzDLW6jgfPtJ_u1jDJiNuALQQjhWnvHfCHRjPkd4hCpUNLvJAuUilBJqWeY2_KT7cetSyJp6P9Vk04jLx-NR2B65FT2EbW3me9Z3-FsFF66j1jk0zERMKjKl76RvUWjfcv9Re3MXb4Beq0uUhBDVQ7TlaugQ8KKrBWmuHpVSAxMtymSUk6UOa-aU7EadvgnKaQTJXoLBvE_3hwokdJQTZ7PuzRCW8CXlX_mvD-671yC2ziQecw1WJskCjduRTulN4vq0u6b"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Close up detail shot of the minimalist black architectural coat, showing the complex asymmetrical zipper and raw hem finishing. The texture of the heavy, stiff fabric is highlighted by stark, single-source lighting. The overall feel is industrial, uncompromising, and highly structured within a void-like black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXcHCI8kegWffLsQuliSM20mLFz_-oV1Eb5MclfwoN32WTTeLoOeTf8o9wFJybNrI5Ew0UHqoj747PAJD6HBa0HE7AzXZdmVKK_rXitkPUSrLa3TkUFmEZ8RC30hbVUlksolPX1rBTkiqbUjzSq3Sy0HAEKL-nNJ3IjN9RkwGcT3m_YoF13Jml4kNDhFTA4SgLMiqR8csVFNt99iLW6HT0rHrjZPfFt4stJaGAVqcRFAUXRQiGwDyepL8DNNTQD2m4ccH78V_cp1jC"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">OBSIDIAN TRENCH</h2>
+<p class="font-price-accent text-price-accent text-black">$1,250</p>
+</div>
+</article>
+<!-- Product 2 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A man posing in a heavily structured, oversized black bomber jacket with geometric panels. The setting is a sparse concrete room with deep, impenetrable shadows. The sharp lines of the jacket contrast with the minimal environment. The aesthetic is strictly monochrome, emphasizing form and silhouette over detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbYUX1CxOPaoXDUNUMN30cZuFFe-zUpLE56CetCw4wY-cflI4VkbqoO1So0i0tYwpy8oKNv3Qhz7mODGkt1Mee5evufPBjWfNP8VvUV-rHayjfJTnaksIN4t8xj-1tGEupxAQ1vvs6q7kqes-RQcWbJRl-ZEohChyg0ZEug-xqsBnhtb8KOoDO_swng2FjOKrJKvbdc6L__CMKeGVMplyPuWLeal5r-KMaFOmH39eg8-djtXq5owPn6fCJVbS7wPxIkUtTg5wJUwVE"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Back view of the oversized black bomber jacket, revealing intricate, rigid strap details reminiscent of tactical gear but stripped down to pure minimalist form. The lighting catches the matte metallic hardware against the absolute black fabric. The atmosphere is intense, technical, and emotionally detached." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8Dypa-BwnBm2H2IzCrH1iiFp4pv9RiGk1BniO7uyHEHTJcRO7wbqTjKsK7ULW3UsxlEFFcDT91vgSCp_j8-Vo44gCqGYJjK3kF7Omf-Z0_-FqUQaDTEJf493d9Uu5RnRhsbv5jVK_0kqNC0z9MwG38aM0MQTO80bwL9UCoGSP1PzrhcjkehuiiO_NyIcU5u4_0ADq22HxN68KI_JNhlVGGhSo3bhw7oMLolAI8do1lLfKIlWrO584oYo5VFVrEi5Je9jDBBzUoIsz"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">TACTICAL BOMBER</h2>
+<p class="font-price-accent text-price-accent text-black">$980</p>
+</div>
+</article>
+<!-- Product 3 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A full body shot of a model wearing stiff, wide-leg black trousers that stand away from the body like armor. The lighting is low-key, creating a sense of isolation in a vast black space. The trousers feature sharp, ironed-in creases that resemble folded paper or brutalist architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjNQsXOWarv7hKPy-i0pO5-Yx-mZ294BNl7DMFft7TscBKrczf7_0ApqLlgOcTQXU4MetAj9oSupu6d-axzuEzXk7RASJlWY0OOcqdB77fMokju7CecosHfqisUvKbjdv2hc3w32YLk2trrhHfD4PMpPtL324xGtTPqIdA_5L5PkF_5hsTYU0hbx5Yf2_GDzOdjuhCZ4ZR1LD5FpskN43zb7HIcpFe_QxlRJBCk2AZgkfxpHytngfNszqyahaBpOXLFiyzO0GrY85F"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Detail shot of the wide-leg trousers in motion, capturing the heavy drape and rigid movement of the technical fabric. A sliver of stark white light slices across the pure black material, highlighting its unyielding texture. The visual is abstract, focusing entirely on the structural tension of the garment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqIf91YqSblUl3msiAYALpWL_z9pJc3zYM6fv38ms_AVlUiz_TGQKI4aAHwRNIUAzN3ltrx05gaMnu6o84FlPE6c_bWrR2-7LU5rbBte0UrW9Xf6gNx7cDn_uM3wvHoZO2whq9kgfqh379mcd2heiupjDEW7-jNAwHN_tHsbrVE3fcCd9U0GhvmllmcfWw862JizUOTOOo309mSB2JXxYa-qzHZV5bn8bRdGKAuL_oFLmmfZ1xUrfvPqJZAYDlY1ftA76TQyFZ3zUH"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">ARMOR TROUSERS</h2>
+<p class="font-price-accent text-price-accent text-black">$650</p>
+</div>
+</article>
+<!-- Product 4 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model wearing a rigid, collarless black shirt with sharp, angular shoulders. The portrait is tightly cropped, set against an endless black void. High-contrast lighting highlights the stark minimalism of the design, rejecting any softness. The mood is severe, reflecting a brutalist fashion philosophy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC39fXUoC21POo0Ngnbf0kaccpMH6EZGXTXy5rieEHqP6Jbd8oQ9KDf-2_9qRnxfox1UbyFzR7Mkv1Zi0oqSsqYbwouX-ZhVC0OxupNfJii2IT32OsWzAa5gb6U8GQ7RYSgKh3NAzh5WUxQMMmyKFA7DXG1nkoL2jCvgJNdeAktPzM4KYmxAHnRG3L-zrkLLi_2TbMs4X3t38P-Abo0fLnw5l1KZf5gsch-T2466mhN-ydsriXJvi34Fv3kEQ2VOF3JM4n-6fQ1ELPX"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Close up on the placket of the collarless shirt, showing hidden fastenings and a seamless, monolithic front panel. The fabric appears almost like matte armor. The lighting is clinical and unforgiving, emphasizing the precision of the construction within a completely desaturated, dark environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8eDOzOlahJjjShPAwwmR_sN0p1CQEh_Zwef8JEIrET6mhip1KnYXCyYgCNxt1U4ixE2ykg06t_nil7mJxhHc9itKIEKSosmtqK1-wD5FtPKNLc5JdmhT7ldFnob7q79bgl4DR6mfhW11ux14favsajn4PHJDxpFDowadDWw5Q32J0Eop_3Kf92s5Ga8O9jBTbFjoMy6pTniJCiS-eP-S9TEg8P6Y7V5IbGNESS180fTY5Pz5GLyDWhAYCL3go_YOz2iFJMGUMCyQE"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">MONOLITH SHIRT</h2>
+<p class="font-price-accent text-price-accent text-black">$420</p>
+</div>
+</article>
+<!-- Product 5 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A figure standing in the shadows wearing a heavy, elongated black sweater with distressed, raw-edge finishing. The silhouette is imposing and columnar. The studio is pitch black except for a harsh spotlight revealing the brutal texture of the knitwear. Post-apocalyptic minimalism in high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJoBpQ9KZapWSlMukY8Z_cTGMLHvm5vdN4t2WPBl8P-QSwkZyHhOfwycviJxy4E8N9BCgVB2m3WfVoNxaZmbMxQ1gyfqK5go5i6GwmIoXTeO__ZWBxz8tG4lWunAFu6bAvLdRXHzWllkRYHW6j3AYHOv624bBQxdx7kyjN6IZzCfKZP0jmQKMXe60WZQi7ulN2f6wf6pBxg5uhStDArZqHBRIGYs6ZJHTzeueRHv4-fLTRO4qRtg_F-g-e_K7OwR9c0huyj2JJV56q"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Macro detail of the elongated sweater's knit structure, showing the irregular, distressed yarns that look almost like burnt material. The stark white lighting against the deep black garment creates a dramatic interplay of shadow and texture. The vibe is gritty, raw, and fiercely modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkn5f_-7h8jiMQNOVs96OZca_y8c3mKOmdAhFS7lh2uyWM7bAVVH9xwx1beU5SyXpWYgqW7QOMQhi9RIaVEI6KCJqLfStgYSP6X-GL6idE3U-5oy1kzUnqiKKuscM3gy8Ixm3gEyCrZNc1cvAQaT8XcckjuT1AF5fvaSsQFhb8ezbXZv-tiLvtBYpqWaDBwDbqp-FaIGmA_pvL2r5avTf_E1zDFR4OIB5mTIbS_7ZSeCGgjigjEk8ir1TUdj19uZcEu-xjW4E1c_G_"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">VOID KNIT</h2>
+<p class="font-price-accent text-price-accent text-black">$890</p>
+</div>
+</article>
+<!-- Product 6 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A model wearing severe, black leather combat boots with thick, architectural geometric soles. The boots are presented against a stark concrete floor and black backdrop. The lighting is intensely focused, creating deep, sharp shadows that highlight the aggressive, brutalist design of the footwear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYe5V8TcPz_QdDgPHMAT5HRotjFnhUjf8C_R33uPhIr_SwUeWg2pAan0PWr0NoTM9c4GXdfCl_RTKQYlqrEFd64HzSAPa6qrBqjAtgkDO8II2BYoa7rgV-_pQciJeFcqJxx8xtKGvy9ZFcmmQLk5Tx0wIrjSFVCcCZLojJZXTU4w_NDoZ7G0Ngl8Rantp55euX2Yl0q39K_Op9v6mu5M5KUhkstCmdYWsXADQFZI8fhlrvQ1iGOu6vYUhOKe2RtOgfX9PHNWUCkOLt"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Detail shot of the boot's sole and heel, showing harsh, angular cutouts resembling brutalist concrete structures. The matte finish of the black leather is contrasted by cold, sharp lighting. The overall composition is a strict study in form, devoid of any warmth or color." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe0aKGWHQUjBkqSVSd0nS1ps3qeVxftvuGMR7SH8njBSa-c1k6qxvJ9ixK643wZSTeEcPMdecJUSZl3HG5159ZJDxge970_lFYhRDroQjImUpIJHxeH884dAaCNCYH7heFLpj6lqBi5xPRIn2Je_R3PDk9GbjlRqJjiI5QBK4pKaLstWt10m4GzhVxTKp1LPQXuv8pJAUrZKM4VgA6JGK7NvI7MUuZCl9sJixO8rQfj_l410Xgs3XZjSQV5Xy8xgmSN_fmnLWcXwMe"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">BRUTALIST BOOT</h2>
+<p class="font-price-accent text-price-accent text-black">$1,100</p>
+</div>
+</article>
+<!-- Product 7 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A man in a sleek, completely seamless black turtleneck. The garment appears to merge with his skin, creating a stark, monolithic form. The environment is entirely black, with only a thin sliver of stark white rim light outlining his profile. The mood is futuristic and deeply secretive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu8fAThggkJWRHeX7zZSV5c_Vux9nda7m_q--KBUaasuV7iTanBLJUs1Y6pT6bW0nF2jVXhLXFvVZaKpdFKaAdD2CrGoY9Cpmbkc9xyztGkL_cp3rN7ptQieMnELOTRplEgrQSQHjGpeSw_HD0XhsKNqntoHDJMzmR4WDlMw4cNyyq0R-Uzl8H9KTvutRyG1Wflp25NUcFQ_iLCDJRHHN7_oO_BvEEzXHpNnUbK8SheaJJK6K_FxGTkhbs_ojGWvP0ffQ3c5BAAW2m"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A side-angle portrait focusing on the high, stiff neck of the black turtleneck. The fabric holds its shape perfectly, demonstrating technical, dense construction. The lighting isolates the neck area against absolute darkness, emphasizing the garment's role as subtle, modern armor. Monochrome severity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnsmTEcX4S-KZRqcWMFL6eeTZEJPalQd5tDnsj0OnXkA-pWtrSkRxmxqaiz1H4rbLS17zIXpMeY2cFjy8tHeEaMDM6LWPwaH0CVLqh7qQ5QStOFTucvk6UGqO8-ZMP2Lm6ec0Ych0VFto_9vszbFQejnvhDDzEHE6SDDLF57jKLnjbPlkvbirJDo8bDD85gLkFRR5k0UNsU-HbiBSTuEabsV9HB1i80PFCTepqbYo8_FmC-G6BXFvm8V_sHqLmjadW1kXAWBA_ExnG"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">SEAMLESS CORE</h2>
+<p class="font-price-accent text-price-accent text-black">$380</p>
+</div>
+</article>
+<!-- Product 8 -->
+<article class="bg-white flex flex-col group cursor-pointer border border-transparent hover:border-black transition-all duration-300 p-4 animate-fade-in-up">
+<div class="product-image-container relative aspect-[2/3] w-full bg-gray-100 mb-4 overflow-hidden">
+<img class="primary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="A male model draped in a massive, sweeping black wool cape that falls to the floor in heavy, rigid folds. The lighting is overhead and dramatic, casting deep shadows over the face and emphasizing the imposing, architectural silhouette of the cape. The setting is an infinite black void." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCce9yTPRlJRc3sn1F-jK7fecq3y0iPwS4bc-b3imhgfRbxOU-9pIeaZIeIdJHG0KjfhTKlxgyzth9iamgseAvlz0a-yBPDCSaXS2z40MrWpIVnqajk9VlAV9PcAucaoQxBB3Pa_soEYBZVx7NfzGE_AOVm4h6X9fOfAAbHpIkxa1XC1Mn9yO-s0smxaBSEYoPmr87Gev0mU7JSQCN1dzk4RjEU7JGicoo6J0i_HLCbZySwvG6C3KQ-fSp-T6Kavnbyp_zejMZOOV_M"/>
+<img class="secondary-image w-full h-full object-cover grayscale contrast-125 transition-opacity duration-300" data-alt="Detail of the black wool cape swirling in motion, capturing the heavy, felted texture of the material. A flash of intense white light cuts across the fabric, freezing the rigid, sculptural shapes formed by the movement. High-contrast, severe minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmQLnnjYNiXzvKs77JoHOfNDu2NEYkk5km-osnjQCOsfcZA5vSGb-zPNGYi1rWAZJ4_byKb3mVqZsT89OGweLDx5B-O6Hf2AivM37K74QQc97-GL687n-hjYxfDH3Wk9BMW-WpC97cGsBoiq9A1YhZA4aPDeIYEzT8VscP3ISecGwLwHzYCAqQ3jBLIWvJJJeoC6XINFg9XQVNhICaZOUol22AV6KEFa3qR1KCnnLmMs1b-bMF6gZQera90CeHmAAinUreqh2_CN3H"/>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-nav-ui text-nav-ui text-black">ARCHITECT CAPE</h2>
+<p class="font-price-accent text-price-accent text-black">$1,850</p>
+</div>
+</article>
+</div>
+<!-- Load More / Infinite Scroll Indicator -->
+<div class="w-full flex justify-center py-20 bg-white">
+<button class="border border-black bg-transparent text-black font-nav-ui text-nav-ui px-12 py-4 hover:bg-black hover:text-white transition-all duration-300 uppercase transition-all duration-500">
+                        LOAD MORE
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-black pt-20 pb-10 bg-white mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-10 px-10 max-w-full">
+<div class="flex flex-col gap-4 font-nav-ui text-nav-ui uppercase">
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">SHIPPING</a>
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">RETURNS</a>
+</div>
+<div class="flex flex-col gap-4 font-nav-ui text-nav-ui uppercase">
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">CONTACT</a>
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">LEGAL</a>
+</div>
+<div class="flex flex-col gap-4 font-nav-ui text-nav-ui uppercase">
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">PRIVACY</a>
+<a class="text-gray-600 hover:text-black underline transition-all duration-300" href="#">TERMS</a>
+</div>
+<div class="flex flex-col justify-end items-start md:items-end font-nav-ui text-nav-ui uppercase text-gray-600">
+<span>© 2024 SHIV SHAKTI PROJECT</span>
+</div>
+</div>
+</footer>
+</body></html>

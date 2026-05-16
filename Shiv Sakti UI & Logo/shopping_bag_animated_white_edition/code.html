@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SHIV SHAKTI PROJECT - SHOPPING BAG</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { background-color: #FFFFFF; color: #000000; font-family: 'Jost', sans-serif; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
+        
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+        .animate-fade-in-right {
+            animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Specific element styles */
+        .summary-box {
+            background-color: #FFFFFF;
+            border: 1px solid #000000;
+        }
+        
+        .product-border {
+            border-bottom: 1px solid #000000;
+        }
+        
+        .quantity-btn {
+            background: rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .quantity-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .quantity-value {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #000000;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        .btn-primary:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .btn-checkout {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-checkout:hover {
+            background-color: #000000;
+            color: #FFFFFF;
+            letter-spacing: 0.25em;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "sm": "0px",
+                        "md": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "2xl": "0px",
+                        "3xl": "0px",
+                        "full": "0px"
+                    },
+                    "colors": {
+                        "demobaza-dark": "#FFFFFF",
+                        "demobaza-border": "#000000",
+                        "demobaza-text": "#000000",
+                        "demobaza-text-dim": "#000000"
+                    },
+                    "fontFamily": {
+                        "price-accent": ["Jost"],
+                        "nav-ui": ["Jost"],
+                        "logo": ["Jost"],
+                        "hero-heading": ["Jost"],
+                        "body-primary": ["Jost"]
+                    },
+                    "fontSize": {
+                        "price-accent": ["14px", {"letterSpacing": "0.1em", "fontWeight": "400"}],
+                        "nav-ui": ["11px", {"lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "500"}],
+                        "logo": ["18px", {"letterSpacing": "0.25em", "fontWeight": "700"}],
+                        "hero-heading": ["72px", {"lineHeight": "1.1", "letterSpacing": "0.3em", "fontWeight": "300"}],
+                        "body-primary": ["14px", {"lineHeight": "1.6", "letterSpacing": "0.05em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-black antialiased min-h-screen flex flex-col font-body-primary">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full h-[60px] border-b border-demobaza-border bg-white/90 backdrop-blur-sm flex justify-between items-center px-10 z-50">
+<div class="flex gap-8">
+<a class="uppercase text-nav-ui font-nav-ui text-demobaza-text-dim hover:text-black transition-colors duration-300" href="#">DEMOWOMAN</a>
+<a class="uppercase text-nav-ui font-nav-ui text-demobaza-text-dim hover:text-black transition-colors duration-300" href="#">DEMOMAN</a>
+<a class="uppercase text-nav-ui font-nav-ui text-demobaza-text-dim hover:text-black transition-colors duration-300" href="#">BAZACOLLECTIONS</a>
+<a class="uppercase text-nav-ui font-nav-ui text-demobaza-text-dim hover:text-black transition-colors duration-300" href="#">BAZANEWS</a>
+<a class="uppercase text-nav-ui font-nav-ui text-demobaza-text-dim hover:text-black transition-colors duration-300" href="#">LOOKBOOK</a>
+</div>
+<div class="text-logo font-logo text-black">SHIV SHAKTI PROJECT</div>
+<div class="flex gap-6 items-center">
+<button class="text-demobaza-text-dim hover:text-black transition-colors duration-300"><span class="material-symbols-outlined text-[20px]" data-icon="search">search</span></button>
+<button class="text-demobaza-text-dim hover:text-black transition-colors duration-300"><span class="material-symbols-outlined text-[20px]" data-icon="person">person</span></button>
+<button class="text-black border-b border-black pb-1"><span class="material-symbols-outlined text-[20px]" data-icon="shopping_bag">shopping_bag</span></button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[140px] pb-[160px] px-10 md:px-20 max-w-[1600px] mx-auto w-full animate-fade-up">
+<div class="mb-16">
+<h1 class="text-hero-heading font-hero-heading uppercase mb-4">SHOPPING BAG</h1>
+<p class="text-[12px] font-light text-demobaza-text-dim mt-4 tracking-widest uppercase">2 ITEMS</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24">
+<!-- Items List -->
+<div class="lg:col-span-8 flex flex-col gap-0">
+<!-- Item 1 -->
+<div class="flex gap-8 product-border pb-12 pt-4 animate-fade-in-right" style="animation-delay: 0.1s;">
+<div class="w-[140px] h-[210px] flex-shrink-0 bg-white">
+<img alt="Product Image" class="w-full h-full object-cover grayscale opacity-90" data-alt="A striking digital installation art piece featuring a brutalist avant-garde black overcoat suspended in a vast, minimalist gallery space. The room is illuminated by high-key, stark white lighting that creates a cold, architectural aesthetic. The artwork relies on a sophisticated palette of deep blacks and pristine whites. The mood is intense and intellectual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgI7uWxQ5Uycabi45W7tliiOxQCFM8KwxWN4FiEZXu1WmkSOS8yXchVpvalVYK0U-_UKbUu_ELkORafALQrD0lmiMjcQbBTfBUaOwOd6PC07Jzqn0wI1zFCPEaP3lt3WaPRVYrm-O_uaOluZmzAVnLiH86-BZXvX0kTfAz0k8GwmTOLalyUSofdCYTJwd4tvhDjG2jA2ruiU4tW4anVRLk-_42yfe1oW9NdnoaFjlwUNcR5Kpm04nY-l3_s0urPUjlHbc6E13J5zrY"/>
+</div>
+<div class="flex flex-col justify-between flex-grow py-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-[14px] font-normal uppercase tracking-wider text-demobaza-text">ASYMMETRIC DRAPE COAT</h3>
+<p class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim mt-3">COLOR: OBSIDIAN</p>
+<p class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim mt-1">SIZE: 48</p>
+</div>
+<div class="text-price-accent font-price-accent">
+                                $1,250.00
+                            </div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex items-center border border-demobaza-border w-max h-[30px]">
+<button class="w-[30px] h-full flex items-center justify-center text-[12px] quantity-btn transition-colors">-</button>
+<span class="w-[40px] h-full flex items-center justify-center text-[10px] tracking-widest border-x border-demobaza-border quantity-value">1</span>
+<button class="w-[30px] h-full flex items-center justify-center text-[12px] quantity-btn transition-colors">+</button>
+</div>
+<button class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim hover:text-black btn-primary pb-1">REMOVE</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-8 product-border pb-12 pt-12 animate-fade-in-right" style="animation-delay: 0.3s;">
+<div class="w-[140px] h-[210px] flex-shrink-0 bg-white">
+<img alt="Product Image" class="w-full h-full object-cover grayscale opacity-90" data-alt="A striking digital installation art piece featuring a pair of highly structured, geometric drop-crotch trousers suspended in a vast, minimalist gallery space. The room is illuminated by sharp, directional lighting that casts intense shadows, highlighting the architectural fabric folds. The artwork relies on a stark palette of true blacks and stark whites. The mood is severe and conceptual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDibK57Tk5UvaBxUtyih0UN13UFisHNwwdxIkW3_xkHcxO4XaJ70v9_ZHzaQKdWuyNFGyDccj5riYCzXUHFCqtiNIb2M7dcny1ltvc3GFUE6KWxhwy4T9TaNZ0zm_SlbJDrHQzNXMtFcInQwTg5U46hhOxB_XrNvXnB2QgdbLMBIPji17GRylXJYxwBxZ5X8gLCI08yVXjQy454cPSuPTEAmDHKkwHk4QQ_rTiuAVzJJPYa0MhUeeIfbJnORB2exrmrwiwOPvDb1Qqd"/>
+</div>
+<div class="flex flex-col justify-between flex-grow py-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-[14px] font-normal uppercase tracking-wider text-demobaza-text">STRUCTURAL DROP TROUSER</h3>
+<p class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim mt-3">COLOR: VOID</p>
+<p class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim mt-1">SIZE: 46</p>
+</div>
+<div class="text-price-accent font-price-accent">
+                                $850.00
+                            </div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex items-center border border-demobaza-border w-max h-[30px]">
+<button class="w-[30px] h-full flex items-center justify-center text-[12px] quantity-btn transition-colors">-</button>
+<span class="w-[40px] h-full flex items-center justify-center text-[10px] tracking-widest border-x border-demobaza-border quantity-value">1</span>
+<button class="w-[30px] h-full flex items-center justify-center text-[12px] quantity-btn transition-colors">+</button>
+</div>
+<button class="text-[10px] uppercase tracking-[0.1em] text-demobaza-text-dim hover:text-black btn-primary pb-1">REMOVE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Section -->
+<div class="lg:col-span-4" style="animation-delay: 0.2s;">
+<div class="summary-box p-10 sticky top-[100px] rounded-none animate-fade-in" style="animation-delay: 0.5s;">
+<h2 class="text-[20px] font-light uppercase tracking-[0.1em] mb-10 product-border pb-6">SUMMARY</h2>
+<div class="space-y-5 mb-10">
+<div class="flex justify-between text-[11px] uppercase tracking-wider">
+<span class="text-demobaza-text-dim">SUBTOTAL</span>
+<span class="text-price-accent font-price-accent">$2,100.00</span>
+</div>
+<div class="flex justify-between text-[11px] uppercase tracking-wider">
+<span class="text-demobaza-text-dim">SHIPPING</span>
+<span class="text-right">CALCULATED AT<br/>CHECKOUT</span>
+</div>
+<div class="flex justify-between text-[11px] uppercase tracking-wider">
+<span class="text-demobaza-text-dim">TAXES</span>
+<span class="text-right">CALCULATED AT<br/>CHECKOUT</span>
+</div>
+</div>
+<div class="flex justify-between text-[16px] font-medium tracking-wider product-border pt-8 mb-12 border-t">
+<span>TOTAL</span>
+<span class="text-price-accent font-price-accent">$2,100.00</span>
+</div>
+<button class="w-full border border-black bg-transparent text-black btn-checkout py-4 text-[10px] uppercase tracking-[0.2em] text-center block rounded-none">
+                        PROCEED TO CHECKOUT
+                    </button>
+<div class="mt-8 text-center">
+<a class="text-[10px] uppercase tracking-[0.2em] text-demobaza-text-dim hover:text-black btn-primary pb-1 inline-block" href="#">CONTINUE SHOPPING</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-white text-black font-['Jost'] uppercase tracking-[0.15em] text-[9px] font-light w-full border-t border-demobaza-border pt-16 pb-12 grid grid-cols-1 md:grid-cols-4 gap-10 px-10 max-w-full">
+<div>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block mb-5" href="#">SHIPPING</a>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block mb-5" href="#">RETURNS</a>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block" href="#">CONTACT</a>
+</div>
+<div>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block mb-5" href="#">LEGAL</a>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block mb-5" href="#">PRIVACY</a>
+<a class="text-demobaza-text-dim hover:text-black transition-colors block" href="#">TERMS</a>
+</div>
+<div class="md:col-span-2 flex justify-start md:justify-end items-end">
+<span class="text-demobaza-text-dim">© 2024 SHIV SHAKTI PROJECT</span>
+</div>
+</footer>
+</body></html>

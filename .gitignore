@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.next/
+dist/
+build/
+bin/
+
+# Databases
+*.db
+*.db-shm
+*.db-wal
+sqlite_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# IDEs
+.vscode/
+.idea/
+
+# Backend specific
+backend/bin/
+backend/dist/
+__pycache__/
+*.pyc
+
+# Project specific binaries
+START_SERVER.command
+build.py
+copy_images.py
+server.py
+backend/main.py

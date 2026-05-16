@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SHIV SHAKTI - IDENTITY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #FFFFFF; color: #000000; font-family: 'Jost', sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+    .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; background: white;}
+    .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
+
+    /* Tab Indicator Animation */
+    .tab-indicator { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+    
+    /* Form Panel Transitions */
+    .form-panel { position: absolute; inset: 0; transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+    .form-panel.hidden-panel { opacity: 0; transform: translateX(30px); pointer-events: none; }
+    .form-panel.active-panel { opacity: 1; transform: translateX(0); pointer-events: all; }
+
+    /* Password Strength Bar */
+    .strength-bar { height: 2px; transition: width 0.4s ease, background-color 0.4s ease; }
+
+    /* Toast Notification */
+    .toast { transform: translateY(100px); opacity: 0; transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Shake Animation for errors */
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+    .shake { animation: shake 0.4s ease; }
+
+    /* Fade in for page load */
+    @keyframes fadeSlideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .animate-entry { animation: fadeSlideIn 0.8s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
+</style>
+</head>
+<body class="bg-white text-black h-screen flex antialiased overflow-hidden">
+<div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.04] mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+<div class="cursor-dot hidden md:block"></div>
+<div class="cursor-outline hidden md:block"></div>
+
+<a href="index.html" class="fixed top-10 left-10 z-50 magnetic transition-transform duration-300 ease-out inline-block">
+    <img src="Shiv%20Sakti%20UI%20%26%20Logo/horizontal_logo.png" alt="SHIV SHAKTI" class="h-12 mix-blend-multiply object-contain" />
+</a>
+<a href="javascript:history.back()" class="fixed top-10 right-10 z-50 text-black hover:text-gray-500 transition-colors magnetic uppercase text-[11px] tracking-[0.2em] flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">close</span> CLOSE
+</a>
+
+<div class="w-full h-full flex flex-col md:flex-row">
+    <!-- Image Panel -->
+    <div class="hidden md:block w-1/2 h-full bg-black relative overflow-hidden">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8D75C5r_ob1kjQXocCUpaR4jtSzMiDfaE8h-gPc1UxScESCDGpzWnYWHcUhJnijaHMue1ic1QLmxVIGYEaBve4GtocR-RyVKyVYMhCkOsbrkvNkuzvvfsrM78CNnccNcidUHiayKFTXiMcQWO_wM7muqdADPmZLjBhirGWEIuPdIkae6NFt5R1pdDyI26HT61D93r1DSkJgx3Ru9S2OR_TAErEHrQ7HL6yzb_nEa2K0Bh-8uNywa9CXw2toAZzBtayoFzPG4ZERgi" alt="Identity" class="w-full h-full object-cover grayscale opacity-80 transition-transform duration-[3000ms] hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col justify-end p-16">
+            <h2 id="panel-title" class="text-white text-[40px] font-light tracking-[0.2em] uppercase leading-tight mix-blend-difference transition-opacity duration-500">ESTABLISH<br>CONNECTION</h2>
+            <p class="text-white/40 text-[11px] tracking-[0.2em] uppercase mt-4">SECURE ENCRYPTED TRANSMISSION</p>
+        </div>
+    </div>
+    
+    <!-- Form Panel -->
+    <div class="w-full md:w-1/2 h-full bg-white flex items-center justify-center p-10 md:p-20 lg:p-32 overflow-y-auto">
+        <div class="w-full max-w-md">
+            <!-- Tab Switcher -->
+            <div class="relative flex gap-0 mb-16 border-b border-black/10 animate-entry">
+                <button id="tab-login" class="tab-btn flex-1 py-4 text-[11px] tracking-[0.2em] uppercase font-medium text-black transition-colors duration-300 text-center" onclick="switchTab('login')">AUTHORIZE</button>
+                <button id="tab-register" class="tab-btn flex-1 py-4 text-[11px] tracking-[0.2em] uppercase font-medium text-gray-400 transition-colors duration-300 text-center" onclick="switchTab('register')">CREATE IDENTITY</button>
+                <div id="tab-line" class="tab-indicator absolute bottom-0 left-0 h-[2px] bg-black w-1/2"></div>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="relative" style="min-height: 380px;">
+                <div id="login-panel" class="form-panel active-panel">
+                    <h1 class="text-[28px] font-light tracking-[0.15em] uppercase mb-10 animate-entry delay-1">IDENTIFICATION</h1>
+                    <form id="login-form" class="space-y-6" novalidate>
+                        <div class="relative mt-6 animate-entry delay-2">
+                            <input type="email" id="login-email" class="peer w-full border-0 border-b border-black/20 bg-transparent py-4 px-0 text-[14px] text-black focus:border-black focus:outline-none focus:ring-0 placeholder-transparent transition-colors" placeholder="EMAIL" required autocomplete="email">
+                            <label for="login-email" class="absolute left-0 -top-4 text-[11px] tracking-[0.2em] text-gray-500 transition-all peer-placeholder-shown:text-[14px] peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-[11px] peer-focus:text-black uppercase pointer-events-none">EMAIL ARCHIVE</label>
+                        </div>
+                        <div class="relative mt-6 animate-entry delay-3">
+                            <input type="password" id="login-password" class="peer w-full border-0 border-b border-black/20 bg-transparent py-4 px-0 text-[14px] text-black focus:border-black focus:outline-none focus:ring-0 placeholder-transparent transition-colors pr-10" placeholder="PASSWORD" required autocomplete="current-password">
+                            <label for="login-password" class="absolute left-0 -top-4 text-[11px] tracking-[0.2em] text-gray-500 transition-all peer-placeholder-shown:text-[14px] peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-[11px] peer-focus:text-black uppercase pointer-events-none">ACCESS CODE</label>
+                            <button type="button" onclick="togglePassword('login-password', this)" class="absolute right-0 top-4 text-gray-400 hover:text-black transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+                            </button>
+                        </div>
+                        <p id="login-error" class="text-[11px] tracking-[0.1em] text-red-600 uppercase mt-2 h-4"></p>
+                        <button type="submit" id="login-btn" class="relative overflow-hidden group w-full border-[1px] border-black text-white bg-black px-10 py-5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-500 flex justify-center items-center mt-8 magnetic">
+                            <span id="login-btn-text" class="relative z-10 group-hover:text-black transition-colors duration-500">AUTHORIZE</span>
+                            <div class="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-panel" class="form-panel hidden-panel">
+                    <h1 class="text-[28px] font-light tracking-[0.15em] uppercase mb-10">ESTABLISH IDENTITY</h1>
+                    <form id="register-form" class="space-y-6" novalidate>
+                        <div class="relative mt-6">
+                            <input type="email" id="reg-email" class="peer w-full border-0 border-b border-black/20 bg-transparent py-4 px-0 text-[14px] text-black focus:border-black focus:outline-none focus:ring-0 placeholder-transparent transition-colors" placeholder="EMAIL" required autocomplete="email">
+                            <label for="reg-email" class="absolute left-0 -top-4 text-[11px] tracking-[0.2em] text-gray-500 transition-all peer-placeholder-shown:text-[14px] peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-[11px] peer-focus:text-black uppercase pointer-events-none">EMAIL ARCHIVE</label>
+                            <p id="reg-email-hint" class="text-[10px] tracking-[0.1em] text-gray-400 mt-1 h-3"></p>
+                        </div>
+                        <div class="relative mt-4">
+                            <input type="password" id="reg-password" class="peer w-full border-0 border-b border-black/20 bg-transparent py-4 px-0 text-[14px] text-black focus:border-black focus:outline-none focus:ring-0 placeholder-transparent transition-colors pr-10" placeholder="PASSWORD" required autocomplete="new-password">
+                            <label for="reg-password" class="absolute left-0 -top-4 text-[11px] tracking-[0.2em] text-gray-500 transition-all peer-placeholder-shown:text-[14px] peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-[11px] peer-focus:text-black uppercase pointer-events-none">ACCESS CODE</label>
+                            <button type="button" onclick="togglePassword('reg-password', this)" class="absolute right-0 top-4 text-gray-400 hover:text-black transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+                            </button>
+                            <!-- Password Strength -->
+                            <div class="w-full bg-gray-100 mt-3 h-[2px]">
+                                <div id="strength-bar" class="strength-bar bg-gray-300" style="width: 0%"></div>
+                            </div>
+                            <p id="strength-text" class="text-[10px] tracking-[0.1em] text-gray-400 mt-1 uppercase h-3"></p>
+                        </div>
+                        <div class="relative mt-4">
+                            <input type="password" id="reg-confirm" class="peer w-full border-0 border-b border-black/20 bg-transparent py-4 px-0 text-[14px] text-black focus:border-black focus:outline-none focus:ring-0 placeholder-transparent transition-colors pr-10" placeholder="CONFIRM" required autocomplete="new-password">
+                            <label for="reg-confirm" class="absolute left-0 -top-4 text-[11px] tracking-[0.2em] text-gray-500 transition-all peer-placeholder-shown:text-[14px] peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-[11px] peer-focus:text-black uppercase pointer-events-none">CONFIRM CODE</label>
+                        </div>
+                        <p id="reg-error" class="text-[11px] tracking-[0.1em] text-red-600 uppercase mt-2 h-4"></p>
+                        <button type="submit" id="reg-btn" class="relative overflow-hidden group w-full border-[1px] border-black text-white bg-black px-10 py-5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-500 flex justify-center items-center mt-6 magnetic">
+                            <span id="reg-btn-text" class="relative z-10 group-hover:text-black transition-colors duration-500">CREATE IDENTITY</span>
+                            <div class="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-8 py-4 z-[200] flex items-center gap-4 shadow-2xl">
+    <span id="toast-icon" class="material-symbols-outlined text-[18px]">check_circle</span>
+    <span id="toast-msg" class="text-[11px] tracking-[0.2em] uppercase"></span>
+</div>
+
+<script>
+    const API = 'http://127.0.0.1:8000';
+
+    // --- Tab Switching ---
+    function switchTab(tab) {
+        const loginPanel = document.getElementById('login-panel');
+        const regPanel = document.getElementById('register-panel');
+        const tabLine = document.getElementById('tab-line');
+        const tabLogin = document.getElementById('tab-login');
+        const tabReg = document.getElementById('tab-register');
+        const panelTitle = document.getElementById('panel-title');
+
+        if (tab === 'login') {
+            loginPanel.className = 'form-panel active-panel';
+            regPanel.className = 'form-panel hidden-panel';
+            tabLine.style.transform = 'translateX(0)';
+            tabLogin.classList.replace('text-gray-400', 'text-black');
+            tabReg.classList.replace('text-black', 'text-gray-400');
+            if(panelTitle) panelTitle.innerHTML = 'ESTABLISH<br>CONNECTION';
+        } else {
+            loginPanel.className = 'form-panel hidden-panel';
+            regPanel.className = 'form-panel active-panel';
+            tabLine.style.transform = 'translateX(100%)';
+            tabReg.classList.replace('text-gray-400', 'text-black');
+            tabLogin.classList.replace('text-black', 'text-gray-400');
+            if(panelTitle) panelTitle.innerHTML = 'CREATE NEW<br>IDENTITY';
+        }
+    }
+
+    // --- Toggle Password Visibility ---
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('span');
+        if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility'; }
+        else { input.type = 'password'; icon.textContent = 'visibility_off'; }
+    }
+
+    // --- Toast ---
+    function showToast(msg, type = 'success') {
+        const toast = document.getElementById('toast');
+        const icon = document.getElementById('toast-icon');
+        const msgEl = document.getElementById('toast-msg');
+        msgEl.textContent = msg;
+        icon.textContent = type === 'success' ? 'check_circle' : 'error';
+        toast.style.backgroundColor = type === 'success' ? '#000' : '#ba1a1a';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // --- Password Strength ---
+    document.getElementById('reg-password').addEventListener('input', function() {
+        const val = this.value;
+        const bar = document.getElementById('strength-bar');
+        const text = document.getElementById('strength-text');
+        let score = 0;
+        if (val.length >= 6) score++;
+        if (val.length >= 10) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const levels = [
+            { w: '0%', c: '#e0e0e0', t: '' },
+            { w: '20%', c: '#ba1a1a', t: 'WEAK' },
+            { w: '40%', c: '#e65100', t: 'FAIR' },
+            { w: '60%', c: '#f9a825', t: 'MODERATE' },
+            { w: '80%', c: '#558b2f', t: 'STRONG' },
+            { w: '100%', c: '#2e7d32', t: 'FORTRESS' },
+        ];
+        const lvl = levels[score];
+        bar.style.width = lvl.w; bar.style.backgroundColor = lvl.c;
+        text.textContent = lvl.t; text.style.color = lvl.c;
+    });
+
+    // --- Email Validation Hint ---
+    document.getElementById('reg-email').addEventListener('blur', function() {
+        const hint = document.getElementById('reg-email-hint');
+        const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (this.value && !pattern.test(this.value)) {
+            hint.textContent = 'INVALID EMAIL FORMAT'; hint.style.color = '#ba1a1a';
+        } else { hint.textContent = ''; }
+    });
+
+    // --- Login Submit ---
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const btn = document.getElementById('login-btn-text');
+        const errEl = document.getElementById('login-error');
+        errEl.textContent = '';
+
+        if (!email || !password) { errEl.textContent = 'ALL FIELDS REQUIRED'; document.getElementById('login-form').classList.add('shake'); setTimeout(()=>document.getElementById('login-form').classList.remove('shake'),500); return; }
+        btn.innerText = 'AUTHORIZING...';
+        try {
+            const res = await fetch(API + '/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('shiv_token', data.token);
+                localStorage.setItem('shiv_email', data.email);
+                btn.innerText = 'ACCESS GRANTED';
+                showToast('AUTHORIZATION SUCCESSFUL');
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } else {
+                errEl.textContent = data.detail || 'AUTHORIZATION FAILED';
+                btn.innerText = 'AUTHORIZE';
+                document.getElementById('login-form').classList.add('shake');
+                setTimeout(()=>document.getElementById('login-form').classList.remove('shake'),500);
+            }
+        } catch (error) {
+            errEl.textContent = 'SERVER DISCONNECTED';
+            btn.innerText = 'AUTHORIZE';
+        }
+    });
+
+    // --- Register Submit ---
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        const btn = document.getElementById('reg-btn-text');
+        const errEl = document.getElementById('reg-error');
+        errEl.textContent = '';
+
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email || !password || !confirm) { errEl.textContent = 'ALL FIELDS REQUIRED'; return; }
+        if (!emailPattern.test(email)) { errEl.textContent = 'INVALID EMAIL FORMAT'; return; }
+        if (password.length < 6) { errEl.textContent = 'CODE MUST BE 6+ CHARACTERS'; return; }
+        if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) { errEl.textContent = 'CODE NEEDS LETTERS & NUMBERS'; return; }
+        if (password !== confirm) { errEl.textContent = 'ACCESS CODES DO NOT MATCH'; document.getElementById('register-form').classList.add('shake'); setTimeout(()=>document.getElementById('register-form').classList.remove('shake'),500); return; }
+
+        btn.innerText = 'ESTABLISHING...';
+        try {
+            const res = await fetch(API + '/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('shiv_token', data.token);
+                localStorage.setItem('shiv_email', data.email);
+                btn.innerText = 'IDENTITY CREATED';
+                showToast('WELCOME TO THE VOID — CHECK YOUR EMAIL');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+            } else {
+                errEl.textContent = data.detail || 'CREATION FAILED';
+                btn.innerText = 'CREATE IDENTITY';
+            }
+        } catch (error) {
+            errEl.textContent = 'SERVER DISCONNECTED';
+            btn.innerText = 'CREATE IDENTITY';
+        }
+    });
+
+    // --- Custom Cursor ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; if(cursorDot) { cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; } });
+        const animateCursor = () => { outlineX += (mouseX - outlineX) * 0.2; outlineY += (mouseY - outlineY) * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
+        animateCursor();
+        document.querySelectorAll('a, button, input, .magnetic').forEach(elem => {
+            if(elem.classList.contains('magnetic')) { elem.addEventListener('mousemove', (e) => { const pos = elem.getBoundingClientRect(); elem.style.transform = `translate(${(e.clientX - pos.left - pos.width/2) * 0.3}px, ${(e.clientY - pos.top - pos.height/2) * 0.3}px)`; }); elem.addEventListener('mouseleave', () => { elem.style.transform = 'translate(0,0)'; }); }
+            elem.addEventListener('mouseenter', () => { if(cursorOutline) { cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px'; } });
+            elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; } });
+        });
+
+        // Auto-redirect if already logged in
+        const token = localStorage.getItem('shiv_token');
+        if (token) {
+            fetch(API + '/api/auth/verify?token=' + token).then(r => { if(r.ok) window.location.href = 'index.html'; }).catch(() => {});
+        }
+    });
+</script>
+</body>
+</html>

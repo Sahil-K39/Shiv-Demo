@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SHIV SHAKTI - REVELATIONS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #ffffff; color: #000000; font-family: 'Jost', sans-serif; overflow-x: hidden; }
+    ::-webkit-scrollbar { display: none; }
+    .cursor-dot { width: 6px; height: 6px; background: #000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.2s; mix-blend-mode: difference; background: white;}
+    .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.8); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: difference; }
+    @media (pointer: fine) { body { cursor: none; } a, button, input { cursor: none; } }
+
+    /* Premium Animations */
+    .reveal-element { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-element.is-visible { opacity: 1; transform: translateY(0); }
+    
+    .image-curtain { clip-path: inset(100% 0 0 0); transition: clip-path 1.5s cubic-bezier(0.77,0,0.175,1); }
+    .image-curtain.is-revealed { clip-path: inset(0 0 0 0); }
+    
+    @keyframes scrollLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .animate-marquee { display: inline-block; animation: scrollLeft 20s linear infinite; white-space: nowrap; }
+</style>
+</head>
+<body class="bg-white text-black antialiased selection:bg-black selection:text-white">
+<div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.04] mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+
+<div class="cursor-dot hidden md:block"></div>
+<div class="cursor-outline hidden md:block"></div>
+
+<nav class="bg-white/60 backdrop-blur-2xl text-black fixed top-0 w-full h-[80px] border-b border-black/5 flex justify-between items-center px-10 z-50 transition-all duration-500 hover:bg-white/95">
+<a href="index.html" class="flex items-center h-full">
+<img src="Shiv%20Sakti%20UI%20&%20Logo/horizontal_logo.png" alt="SHIV SHAKTI" class="h-10 mix-blend-multiply object-contain" />
+</a>
+<div class="hidden md:flex gap-8 items-center h-full text-[11px] font-medium tracking-[0.2em] uppercase">
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shop.html">SHAKTI</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="shiva.html">SHIVA</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="index.html">COLLECTIONS</a>
+<a class="text-black border-b border-black pb-1" href="revelations.html">REVELATIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="lookbook.html">VISIONS</a>
+<a class="text-gray-400 hover:text-black transition-colors duration-300" href="community.html">COUNCIL</a>
+</div>
+<div class="flex items-center gap-6">
+<a href="search.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">search</span></a>
+<a href="login.html" class="text-gray-400 hover:text-black transition-colors duration-300 hidden md:flex"><span class="material-symbols-outlined">person</span></a>
+<a href="cart.html" class="text-gray-400 hover:text-black transition-colors duration-300"><span class="material-symbols-outlined">shopping_bag</span></a>
+</div>
+</nav>
+
+<main class="w-full flex flex-col pt-[80px]">
+    
+    <!-- Hero Manifesto -->
+    <section class="relative w-full h-[90vh] flex items-center justify-center bg-black overflow-hidden image-curtain is-revealed">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAubdN3kNsAPg09iwhfQSSSaI5r0Z041WGGNI5nhvp7_phkjk1WRAPt1f7Psp33809KhkrojQK8eQscqtnsGQz79uolmESqZnVUf5TVR6JH-C_xyYsrm-rcED1Biwuq-tti29kmlrZzeLN-b7wFNp47QQbQR9ehPb2t5Z543WyCOj4X6FosCx84qBUqxr24AJCErEL6xzaAVt9GJJoS5v7gE8a_wucY4SggORbbhg0vSID7VGDCW1wjZ_cRiUFxt_K8hA1Pmk297N48" class="absolute inset-0 w-full h-full object-cover opacity-60 grayscale" />
+        <h1 class="relative z-10 text-[60px] md:text-[120px] lg:text-[180px] text-white font-light uppercase tracking-tighter mix-blend-difference text-center leading-none">THE<br>MANIFESTO</h1>
+    </section>
+
+    <!-- Marquee -->
+    <section class="w-full py-6 border-b border-black bg-white overflow-hidden flex items-center whitespace-nowrap">
+        <div class="animate-marquee flex items-center gap-8">
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">A NEW ARCHITECTURE OF SILENCE</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">WE REJECT COLOR</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">FORMS BUILT FOR THE VOID</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">TACTICAL AVANT-GARDE</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">A NEW ARCHITECTURE OF SILENCE</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">WE REJECT COLOR</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">FORMS BUILT FOR THE VOID</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-black">TACTICAL AVANT-GARDE</span>
+            <span class="text-[12px] uppercase tracking-[0.3em] font-medium text-gray-400">///</span>
+        </div>
+    </section>
+
+    <!-- The Philosophy Text -->
+    <section class="w-full py-32 px-10 md:px-32 flex flex-col items-center border-b border-black">
+        <h3 class="text-[11px] tracking-[0.3em] uppercase text-gray-500 mb-16 reveal-element">PHILOSOPHY 001</h3>
+        <p class="text-[24px] md:text-[40px] font-light leading-[1.3] text-center max-w-5xl uppercase tracking-widest reveal-element">
+            WE DO NOT DESIGN CLOTHING.<br>WE CONSTRUCT HABITATS FOR THE FRACTURED WORLD.<br>OUR GARMENTS ARE MOBILE ARCHITECTURE, STRIPPED OF ALL ORNAMENTATION TO REVEAL THE BRUTALIST CORE OF SURVIVAL.
+        </p>
+    </section>
+
+    <!-- 3 Pillars Grid -->
+    <section class="w-full grid grid-cols-1 md:grid-cols-3 border-b border-black">
+        <div class="border-r border-black p-16 flex flex-col gap-10 group cursor-pointer hover:bg-black transition-colors duration-700 reveal-element">
+            <h2 class="text-[30px] font-light tracking-[0.2em] group-hover:text-white transition-colors duration-700">VOID</h2>
+            <p class="text-[12px] leading-relaxed text-gray-600 group-hover:text-gray-300 transition-colors duration-700 uppercase tracking-widest">In the absence of color, form becomes absolute. Black is not an aesthetic; it is the ultimate absorption of light. It hides nothing and demands everything.</p>
+        </div>
+        <div class="border-r border-black p-16 flex flex-col gap-10 group cursor-pointer hover:bg-black transition-colors duration-700 reveal-element delay-100">
+            <h2 class="text-[30px] font-light tracking-[0.2em] group-hover:text-white transition-colors duration-700">FORM</h2>
+            <p class="text-[12px] leading-relaxed text-gray-600 group-hover:text-gray-300 transition-colors duration-700 uppercase tracking-widest">Asymmetry is the truest reflection of nature. Perfect balance is a synthetic lie. Our silhouettes drape, fold, and structure themselves around the human anomaly.</p>
+        </div>
+        <div class="p-16 flex flex-col gap-10 group cursor-pointer hover:bg-black transition-colors duration-700 reveal-element delay-200">
+            <h2 class="text-[30px] font-light tracking-[0.2em] group-hover:text-white transition-colors duration-700">UTILITY</h2>
+            <p class="text-[12px] leading-relaxed text-gray-600 group-hover:text-gray-300 transition-colors duration-700 uppercase tracking-widest">Every stitch serves a purpose. Every pocket is tactical. We reject fast fashion. We engineer garments designed to withstand the collapse of the metropolitan system.</p>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        let mouseX = 0, mouseY = 0; let outlineX = 0, outlineY = 0;
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; if(cursorDot) { cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; } });
+        const animateCursor = () => { let dx = mouseX - outlineX; let dy = mouseY - outlineY; outlineX += dx * 0.2; outlineY += dy * 0.2; if(cursorOutline) { cursorOutline.style.left = outlineX + 'px'; cursorOutline.style.top = outlineY + 'px'; } requestAnimationFrame(animateCursor); };
+        animateCursor();
+
+        // Magnetic Physics
+        document.querySelectorAll('a, button, .magnetic').forEach(elem => {
+            if(elem.classList.contains('magnetic')) {
+                elem.addEventListener('mousemove', (e) => {
+                    const pos = elem.getBoundingClientRect();
+                    elem.style.transform = `translate(${(e.clientX - pos.left - pos.width/2) * 0.3}px, ${(e.clientY - pos.top - pos.height/2) * 0.3}px)`;
+                });
+                elem.addEventListener('mouseleave', () => { elem.style.transform = `translate(0px, 0px)`; });
+            }
+            elem.addEventListener('mouseenter', () => { if(cursorOutline) { cursorOutline.style.width = '60px'; cursorOutline.style.height = '60px'; cursorOutline.style.backgroundColor = 'rgba(0,0,0,0.05)'; } });
+            elem.addEventListener('mouseleave', () => { if(cursorOutline) { cursorOutline.style.width = '40px'; cursorOutline.style.height = '40px'; cursorOutline.style.backgroundColor = 'transparent'; } });
+        });
+
+        // Scroll Observer for Reveals
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible', 'is-revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal-element, .image-curtain').forEach(el => observer.observe(el));
+        
+        // Header Hide/Show on Scroll
+        let lastScroll = 0;
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 80 && currentScroll > lastScroll) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+    });
+</script>
+</body>
+</html>

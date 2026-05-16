@@ -1,0 +1,244 @@
+/*
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * SHIV SHAKTI PROJECT — Design System
+ * globals.css — Custom theme tokens, animations, and base styles
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+/* ── Google Fonts ──────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ── Custom Theme Tokens ───────────────────────────────────────── */
+@theme {
+  --color-void: #ffffff;
+  --color-obsidian: #ffffff;
+  --color-ash: #f3f3f3;
+  --color-smoke: #e2e2e2;
+  --color-stone: #888888;
+  --color-bone: #000000;
+  --color-ritual-white: #ffffff;
+  --color-accent-ember: #ba1a1a;
+  --color-accent-gold: #c4a14e;
+
+  --font-display: 'Jost', sans-serif;
+  --font-body: 'Jost', sans-serif;
+}
+
+/* ── Base Layer ────────────────────────────────────────────────── */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-radius: 0px !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #ffffff;
+    color: #000000;
+    overflow-x: hidden;
+  }
+
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 1px solid #000000;
+    outline-offset: 4px;
+  }
+
+  /* Hide scrollbar for brutalist aesthetic */
+  ::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+
+  /* Selection color */
+  ::selection {
+    background-color: white;
+    color: black;
+  }
+}
+
+/* ── Custom Cursor ─────────────────────────────────────────────── */
+@layer components {
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: white;
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    transition: transform 0.1s;
+  }
+
+  .cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.8);
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease;
+    mix-blend-mode: difference;
+  }
+
+  /* Noise texture overlay */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  }
+
+  /* Glow line separator */
+  .glow-line {
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.18), transparent);
+    height: 1px;
+  }
+
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid transparent;
+    color: rgba(0,0,0,0.58);
+    transition:
+      color 300ms cubic-bezier(0.22,1,0.36,1),
+      border-color 300ms cubic-bezier(0.22,1,0.36,1),
+      background-color 300ms cubic-bezier(0.22,1,0.36,1),
+      transform 300ms cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .icon-button:hover {
+    color: #000000;
+    border-color: rgba(0,0,0,0.12);
+    background-color: rgba(0,0,0,0.03);
+    transform: translateY(-1px);
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: rgba(0,0,0,0.56);
+    transition: color 300ms cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .nav-link:hover {
+    color: #000000;
+  }
+
+  .media-reveal {
+    clip-path: inset(0 0 0 0);
+    transform-origin: center;
+  }
+}
+
+/* ── Keyframe Animations ───────────────────────────────────────── */
+@layer utilities {
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes slideOutRight {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes softReveal {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease forwards;
+  }
+
+  .animate-slide-in {
+    animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  .animate-slide-out {
+    animation: slideOutRight 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-soft-reveal {
+    animation: softReveal 0.7s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
