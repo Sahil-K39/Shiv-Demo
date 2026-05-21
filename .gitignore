@@ -54,3 +54,4 @@ build.py
 copy_images.py
 server.py
 backend/main.py
+.env
