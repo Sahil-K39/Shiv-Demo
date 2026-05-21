@@ -5,9 +5,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { productsAPI } from "@/lib/api";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
+import { getAllProducts } from "@/lib/productData";
 
 export default function ShopCollection() {
   const params = useParams();
@@ -16,15 +16,12 @@ export default function ShopCollection() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    productsAPI
-      .listAll()
+    getAllProducts()
       .then((data) => {
-        
-        const filtered = data.products.filter(
-          (p) => p.collection.toLowerCase() === collection.toLowerCase()
+        const filtered = data.filter(
+          (p) => p.category.toLowerCase() === collection.toLowerCase()
         );
-        
-        setProducts(filtered.length > 0 ? filtered : data.products);
+        setProducts(filtered.length > 0 ? filtered : data);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
@@ -39,7 +36,7 @@ export default function ShopCollection() {
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="text-[40px] font-light uppercase tracking-[0.16em] text-black md:text-[60px]"
         >
-          {collection}
+          {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
       </div>
 

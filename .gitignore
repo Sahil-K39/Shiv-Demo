@@ -36,6 +36,13 @@ docker-compose.yml
 .idea/
 
 # Backend specific
+# Go build artifacts
+*.exe
+*.out
+*.test
+*.cover
+coverage.out
+
 backend/bin/
 backend/dist/
 __pycache__/

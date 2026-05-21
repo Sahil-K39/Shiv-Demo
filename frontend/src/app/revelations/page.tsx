@@ -20,6 +20,14 @@ export default function Revelations() {
             READ ARCHIVE
           </button>
         </article>
+        {/* Upcoming Sale & Offers Section */}
+        <article className="animate-soft-reveal border-l border-black/20 pl-8 mt-12">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-4">UPCOMING SALE</p>
+          <h2 className="text-[24px] uppercase tracking-[0.1em] text-black mb-6">SALE & OFFERS</h2>
+          <p className="text-[14px] leading-[1.8] text-gray-600 mb-8">
+            Get notified about upcoming sales, exclusive discounts, and special offers. Spend ₹6,000 to unlock Council membership for early access and extra perks.
+          </p>
+        </article>
       </div>
     </div>
   );

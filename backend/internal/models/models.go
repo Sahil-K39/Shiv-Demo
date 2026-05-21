@@ -95,13 +95,31 @@ type UpdateCartInput struct {
 
 
 type Order struct {
-	ID         int64       `json:"id"`
-	UserID     int64       `json:"user_id"`
-	Items      []OrderItem `json:"items"`
-	TotalPrice float64     `json:"total_price"`
-	Status     string      `json:"status"` 
-	CreatedAt  time.Time   `json:"created_at"`
+	ID              int64       `json:"id"`
+	UserID          int64       `json:"user_id"`
+	Items           []OrderItem `json:"items"`
+	TotalPrice      float64     `json:"total_price"`
+	Status          string      `json:"status"`
+	ShippingName    string      `json:"shipping_name"`
+	ShippingAddress string      `json:"shipping_address"`
+	ShippingCity    string      `json:"shipping_city"`
+	ShippingState   string      `json:"shipping_state"`
+	ShippingZip     string      `json:"shipping_zip"`
+	ShippingCountry string      `json:"shipping_country"`
+	ShippingPhone   string      `json:"shipping_phone"`
+	CreatedAt       time.Time   `json:"created_at"`
 }
+
+type CheckoutInput struct {
+	ShippingName    string `json:"shipping_name" binding:"required,min=2,max=100"`
+	ShippingAddress string `json:"shipping_address" binding:"required,min=5,max=200"`
+	ShippingCity    string `json:"shipping_city" binding:"required,min=2,max=100"`
+	ShippingState   string `json:"shipping_state" binding:"required,min=2,max=100"`
+	ShippingZip     string `json:"shipping_zip" binding:"required,min=3,max=20"`
+	ShippingCountry string `json:"shipping_country" binding:"required,min=2,max=100"`
+	ShippingPhone   string `json:"shipping_phone" binding:"required,min=5,max=20"`
+}
+
 
 
 type OrderItem struct {

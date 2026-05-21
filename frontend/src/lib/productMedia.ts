@@ -80,6 +80,13 @@ export function getCartItemImage(images: string[] | string | null | undefined) {
   return parseList(images)[0] || "/assets/images/ritual-wrap-coat.jpg";
 }
 
+export function getCategoryFallbackImage(category: string | null | undefined) {
+  return (
+    categoryFallbacks[category?.toLowerCase() ?? ""]?.[0] ||
+    "/assets/images/ritual-wrap-coat.jpg"
+  );
+}
+
 export function getColorSwatch(color: string) {
   return swatches[color.toLowerCase()] ?? "#777";
 }

@@ -2,12 +2,15 @@ package handlers
 
 import (
 	"database/sql"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
 
 	"shiv-shakti/internal/auth"
+	"shiv-shakti/internal/email"
 	"shiv-shakti/internal/models"
+	"shiv-shakti/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +19,12 @@ import (
 
 type AuthHandler struct {
 	service *auth.Service
+	emailService *email.MailService
 }
 
 func NewAuthHandler(service *auth.Service) *AuthHandler {
-	return &AuthHandler{service: service}
+	return &AuthHandler{service: service, emailService: email.NewMailService()}
 }
-
-
 
 func (h *AuthHandler) Register(c *gin.Context) {
 	var input models.RegisterInput
@@ -44,7 +46,11 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	
+	// Send welcome email (mock mode logs)
+	if err := h.emailService.SendWelcome(user.Email, user.Name); err != nil {
+		log.Printf("Failed to send welcome email: %v", err)
+	}
+
 	token, err := h.service.GenerateToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
@@ -52,13 +58,14 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 	setSessionCookie(c, token)
 
+	// Generate CSRF token and include in response
+	csrfToken := middleware.GenerateCSRFToken()
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "Account created successfully",
-		"user":    user,
+		"message":    "Account created successfully",
+		"user":       user,
+		"csrf_token": csrfToken,
 	})
 }
-
-
 
 func (h *AuthHandler) Login(c *gin.Context) {
 	var input models.LoginInput
@@ -79,6 +86,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
+	// Send welcome email on each login
+	if err := h.emailService.SendWelcome(user.Email, user.Name); err != nil {
+		log.Printf("Failed to send login welcome email: %v", err)
+	}
+
 	token, err := h.service.GenerateToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
@@ -86,13 +98,14 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	}
 	setSessionCookie(c, token)
 
+	// Generate CSRF token for subsequent state‑changing requests
+	csrfToken := middleware.GenerateCSRFToken()
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Login successful",
-		"user":    user,
+		"message":    "Login successful",
+		"user":       user,
+		"csrf_token": csrfToken,
 	})
 }
-
-
 
 func (h *AuthHandler) Logout(c *gin.Context) {
 	c.SetCookie("shiv_session", "", -1, "/", "", false, true)
@@ -417,19 +430,32 @@ func (h *CartHandler) RemoveItem(c *gin.Context) {
 
 
 type OrderHandler struct {
-	db *sql.DB
+	db           *sql.DB
+	emailService *email.MailService
 }
 
 func NewOrderHandler(db *sql.DB) *OrderHandler {
-	return &OrderHandler{db: db}
+	return &OrderHandler{
+		db:           db,
+		emailService: email.NewMailService(),
+	}
 }
 
 
 
 func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	userID := c.GetInt64("user_id")
+	userEmail := c.GetString("email")
 
-	
+	var input models.CheckoutInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "validation_failed",
+			"message": "Invalid shipping details: " + err.Error(),
+		})
+		return
+	}
+
 	rows, err := h.db.Query(`
 		SELECT ci.product_id, ci.quantity, ci.size, ci.color, p.name, p.price
 		FROM cart_items ci JOIN products p ON ci.product_id = p.id
@@ -441,22 +467,13 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	}
 	defer rows.Close()
 
-	type lineItem struct {
-		productID int64
-		quantity  int
-		size      string
-		color     string
-		name      string
-		price     float64
-	}
-
-	var items []lineItem
+	var items []models.OrderItem
 	var total float64
 	for rows.Next() {
-		var li lineItem
-		rows.Scan(&li.productID, &li.quantity, &li.size, &li.color, &li.name, &li.price)
-		total += li.price * float64(li.quantity)
-		items = append(items, li)
+		var item models.OrderItem
+		rows.Scan(&item.ProductID, &item.Quantity, &item.Size, &item.Color, &item.Name, &item.Price)
+		total += item.Price * float64(item.Quantity)
+		items = append(items, item)
 	}
 
 	if len(items) == 0 {
@@ -464,31 +481,36 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	
 	tx, err := h.db.Begin()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "transaction_failed"})
 		return
 	}
 
-	
-	result, err := tx.Exec(
-		"INSERT INTO orders (user_id, total_price, status, created_at) VALUES (?, ?, 'confirmed', ?)",
-		userID, total, time.Now(),
+	result, err := tx.Exec(`
+		INSERT INTO orders (
+			user_id, total_price, status, 
+			shipping_name, shipping_address, shipping_city, 
+			shipping_state, shipping_zip, shipping_country, 
+			shipping_phone, created_at
+		) VALUES (?, ?, 'confirmed', ?, ?, ?, ?, ?, ?, ?, ?)`,
+		userID, total,
+		input.ShippingName, input.ShippingAddress, input.ShippingCity,
+		input.ShippingState, input.ShippingZip, input.ShippingCountry,
+		input.ShippingPhone, time.Now(),
 	)
 	if err != nil {
 		tx.Rollback()
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_creation_failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_creation_failed", "details": err.Error()})
 		return
 	}
 
 	orderID, _ := result.LastInsertId()
 
-	
 	for _, item := range items {
 		_, err = tx.Exec(
 			"INSERT INTO order_items (order_id, product_id, name, price, quantity, size, color) VALUES (?, ?, ?, ?, ?, ?, ?)",
-			orderID, item.productID, item.name, item.price, item.quantity, item.size, item.color,
+			orderID, item.ProductID, item.Name, item.Price, item.Quantity, item.Size, item.Color,
 		)
 		if err != nil {
 			tx.Rollback()
@@ -497,14 +519,36 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		}
 	}
 
-	
 	tx.Exec("DELETE FROM cart_items WHERE user_id = ?", userID)
 
-	
 	if err := tx.Commit(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "commit_failed"})
 		return
 	}
+
+	// Prepare Order object for email template
+	order := &models.Order{
+		ID:              orderID,
+		UserID:          userID,
+		Items:           items,
+		TotalPrice:      total,
+		Status:          "confirmed",
+		ShippingName:    input.ShippingName,
+		ShippingAddress: input.ShippingAddress,
+		ShippingCity:    input.ShippingCity,
+		ShippingState:   input.ShippingState,
+		ShippingZip:     input.ShippingZip,
+		ShippingCountry: input.ShippingCountry,
+		ShippingPhone:   input.ShippingPhone,
+		CreatedAt:       time.Now(),
+	}
+
+	// Asynchronously trigger order confirmation email
+	go func() {
+		if err := h.emailService.SendOrderConfirmation(userEmail, order); err != nil {
+			log.Printf("✗ Email delivery failed for Order #%d: %v", order.ID, err)
+		}
+	}()
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message":  "Order confirmed",

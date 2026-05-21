@@ -9,6 +9,10 @@ import { useRouter } from "next/navigation";
 import { authAPI } from "@/lib/api";
 import { useCartStore } from "@/store/cart";
 
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}
+
 export default function Login() {
   const [tab, setTab] = useState<"login" | "register">("login");
   const router = useRouter();
@@ -28,8 +32,8 @@ export default function Login() {
       const res = await authAPI.login({ email, password });
       setUser(res.user);
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Login failed"));
     } finally {
       setIsLoading(false);
     }
@@ -43,8 +47,8 @@ export default function Login() {
       const res = await authAPI.register({ email, password, name });
       setUser(res.user);
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Registration failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Registration failed"));
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +64,6 @@ export default function Login() {
 
   return (
     <div className="w-full h-[calc(100vh-80px)] flex flex-col md:flex-row bg-white">
-      {}
       <div className="hidden md:block w-1/2 h-full bg-black relative overflow-hidden border-r border-black">
         <Image
           src="/assets/images/deconstructed-blazer.jpg" 
@@ -79,10 +82,8 @@ export default function Login() {
         </div>
       </div>
 
-      {}
       <div className="w-full md:w-1/2 h-full bg-white flex items-center justify-center p-10 md:p-20 overflow-y-auto">
         <div className="w-full max-w-md">
-          {}
           <div className="relative flex mb-16 border-b border-black/10">
             <button 
               type="button"

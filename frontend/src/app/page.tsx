@@ -4,19 +4,18 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { productsAPI } from "@/lib/api";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
+import { getAllProducts } from "@/lib/productData";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    productsAPI
-      .listAll()
+    getAllProducts()
       .then((data) => {
-        setProducts(data.products);
+        setProducts(data);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
@@ -27,7 +26,6 @@ export default function Home() {
 
   return (
     <>
-      {}
       <section className="relative flex h-[calc(100svh-80px)] min-h-[620px] w-full items-end overflow-hidden border-b border-black p-6 md:p-10">
         <motion.div 
           className="absolute inset-0 w-full h-[120%] -top-[10%]"
@@ -44,7 +42,6 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/20" />
         </motion.div>
 
-        {}
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-start gap-10 pb-16">
           <motion.h1
             initial={{ opacity: 0, filter: "blur(10px)", y: 28 }}
@@ -71,16 +68,13 @@ export default function Home() {
         </div>
       </section>
 
-      {}
       <div className="w-full h-[120px] bg-black flex items-center overflow-hidden border-b border-black select-none">
         <div className="whitespace-nowrap px-4 text-[54px] uppercase animate-marquee md:text-[80px]" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.5)", color: "transparent" }}>
           FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / SS26 NEW ARRIVALS. / SHAKTI AND SHIVA EDITIONS. / FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / SS26 NEW ARRIVALS.
         </div>
       </div>
 
-      {}
       <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-black mt-[1px] border-b border-black">
-        {}
         <Link href="/shop/shakti" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
@@ -95,7 +89,6 @@ export default function Home() {
             <h2 className="text-[50px] md:text-[70px] text-white uppercase tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHAKTI</h2>
           </div>
         </Link>
-        {}
         <Link href="/shop/shiva" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
@@ -112,7 +105,6 @@ export default function Home() {
         </Link>
       </section>
 
-      {}
       <section className="w-full py-20 flex flex-col gap-10 border-b border-black">
         <div className="w-full px-10 text-center">
           <h3 className="text-2xl text-black uppercase tracking-[0.1em]">NEW ARRIVALS</h3>

@@ -83,6 +83,13 @@ func migrate(db *sql.DB) error {
 		user_id INTEGER NOT NULL,
 		total_price REAL NOT NULL,
 		status TEXT DEFAULT 'pending',
+		shipping_name TEXT DEFAULT '',
+		shipping_address TEXT DEFAULT '',
+		shipping_city TEXT DEFAULT '',
+		shipping_state TEXT DEFAULT '',
+		shipping_zip TEXT DEFAULT '',
+		shipping_country TEXT DEFAULT '',
+		shipping_phone TEXT DEFAULT '',
 		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
@@ -120,6 +127,16 @@ func migrate(db *sql.DB) error {
 		post_id INTEGER NOT NULL,
 		UNIQUE(user_id, post_id)
 	);
+
+	-- NGO Interests
+	CREATE TABLE IF NOT EXISTS ngo_interests (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT NOT NULL,
+		email TEXT NOT NULL,
+		phone TEXT,
+		message TEXT,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+	);
 	`
 
 	_, err := db.Exec(schema)
@@ -128,6 +145,23 @@ func migrate(db *sql.DB) error {
 	db.Exec("ALTER TABLE products ADD COLUMN sale_price REAL DEFAULT 0")
 	db.Exec("ALTER TABLE products ADD COLUMN is_on_sale BOOLEAN DEFAULT 0")
 
+	
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_name TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_address TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_city TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_state TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_zip TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_country TEXT DEFAULT ''")
+	db.Exec("ALTER TABLE orders ADD COLUMN shipping_phone TEXT DEFAULT ''")
+
+	return err
+}
+
+
+// InsertNGOInterest saves a new NGO interest submission.
+func InsertNGOInterest(db *sql.DB, name, email, phone, message string) error {
+	_, err := db.Exec(`INSERT INTO ngo_interests (name, email, phone, message) VALUES (?, ?, ?, ?)`,
+		name, email, phone, message)
 	return err
 }
 

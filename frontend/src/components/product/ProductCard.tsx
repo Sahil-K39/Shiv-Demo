@@ -8,7 +8,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
 import type { Product } from "@/types";
-import { getProductImages, parseList } from "@/lib/productMedia";
+import {
+  getCategoryFallbackImage,
+  getProductImages,
+  parseList,
+} from "@/lib/productMedia";
 
 interface ProductCardProps {
   product: Product;
@@ -26,6 +30,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
   const images = getProductImages(product);
   const sizes = parseList(product.sizes);
+  const fallbackImage = getCategoryFallbackImage(product.category);
 
   
   useGSAP(() => {
@@ -140,9 +145,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link href={`/product/${product.slug}`} className="block">
-        {}
         <div className="relative mb-4 aspect-[3/4] overflow-hidden border border-black/10 bg-white">
-          {}
           <motion.div
             ref={imageRef}
             variants={imageVariants}
@@ -154,6 +157,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               src={images[0] || "/placeholder.jpg"}
               alt={product.name}
               className="w-full h-full object-cover"
+              onError={(event) => {
+                event.currentTarget.src = fallbackImage;
+              }}
               animate={{
                 scale: isHovered ? 1.08 : 1,
               }}
@@ -170,10 +176,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
               aria-hidden="true"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
             />
           )}
 
-          {}
           <motion.div
             className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
             initial={{ opacity: 0 }}
@@ -181,7 +189,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             transition={{ duration: 0.4 }}
           />
 
-          {}
           {product.featured && (
             <div className="absolute top-3 left-3 z-10">
               <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
@@ -190,7 +197,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           )}
 
-          {}
           <motion.div
             ref={overlayRef}
             className="absolute bottom-0 left-0 right-0 p-4 z-10"
@@ -216,7 +222,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           </motion.div>
 
-          {}
           <div
             className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
             style={{
@@ -226,9 +231,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           />
         </div>
 
-        {}
         <div className="space-y-2 px-1 pb-1">
-          {}
           <motion.p
             custom={0}
             variants={textVariants}
@@ -239,7 +242,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             {product.category} / {product.collection}
           </motion.p>
 
-          {}
           <motion.h3
             custom={1}
             variants={textVariants}
@@ -250,7 +252,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             {product.name}
           </motion.h3>
 
-          {}
           <motion.div
             custom={2}
             variants={textVariants}
@@ -268,7 +269,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             )}
           </motion.div>
 
-          {}
           <motion.div
             className="h-[1px] bg-bone/20 origin-left"
             initial={{ scaleX: 0 }}

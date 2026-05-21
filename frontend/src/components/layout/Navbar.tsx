@@ -8,15 +8,21 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import BrandLogo from "@/components/ui/BrandLogo";
-import { BagIcon, CloseIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/ui/Icons";
+import {
+  BagIcon,
+  CloseIcon,
+  MenuIcon,
+  SearchIcon,
+  UserIcon,
+} from "@/components/ui/Icons";
 
 const navLinks = [
   { href: "/shop/shakti", label: "SHAKTI" },
   { href: "/shop/shiva", label: "SHIVA" },
   { href: "/", label: "COLLECTIONS" },
   { href: "/revelations", label: "REVELATIONS" },
-  { href: "/lookbook", label: "VISIONS" },
   { href: "/council", label: "COUNCIL" },
+  { href: "/ngo", label: "NGO" },
 ];
 
 export default function Navbar() {
@@ -33,12 +39,11 @@ export default function Navbar() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl md:px-10"
+        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between gap-3 border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl md:px-6 lg:px-10"
       >
         <BrandLogo />
 
-        {}
-        <div className="hidden h-full items-center gap-7 text-[11px] font-medium uppercase tracking-[0.16em] md:flex">
+        <div className="hidden h-full min-w-0 flex-1 items-center justify-center gap-2 text-[9px] font-medium uppercase tracking-[0.09em] md:flex lg:gap-4 lg:text-[10px] lg:tracking-[0.12em] xl:gap-5 xl:text-[11px]">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
@@ -62,7 +67,6 @@ export default function Navbar() {
           })}
         </div>
 
-        {}
         <div className="flex items-center gap-1 md:gap-2">
           <Link
             href="/search"

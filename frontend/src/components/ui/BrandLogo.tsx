@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { BrandMark } from "@/components/ui/Icons";
 
 interface BrandLogoProps {
   href?: string;
@@ -14,35 +14,42 @@ export default function BrandLogo({
 }: BrandLogoProps) {
   const isFooter = variant === "footer";
   const isMarkOnly = variant === "mark";
+  const logoSrc = isMarkOnly
+    ? "/logos/mark-logo.png"
+    : isFooter
+      ? "/logos/footer-logo.png"
+      : "/logos/nav-logo.png";
 
   return (
     <Link
       href={href}
       aria-label="Shiv Shakti Project home"
-      className={`group inline-flex items-center gap-3 text-black ${className}`}
+      className={`group inline-flex shrink-0 items-center text-black ${className}`}
     >
       <span
-        className={`grid place-items-center border border-black/15 bg-white transition-colors duration-300 group-hover:border-black ${
-          isFooter ? "h-14 w-12" : "h-11 w-10"
+        className={`relative block shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-90 ${
+          isMarkOnly
+            ? "h-10 w-8"
+            : isFooter
+              ? "h-[132px] w-[150px] md:h-[160px] md:w-[178px]"
+              : "h-[48px] w-[128px] sm:w-[146px] lg:h-[52px] lg:w-[164px] xl:w-[188px]"
         }`}
       >
-        <BrandMark className={isFooter ? "h-10 w-8" : "h-8 w-7"} />
+        <Image
+          src={logoSrc}
+          alt={isMarkOnly ? "Shiv Shakti icon" : "Shiv Shakti Premium Wear"}
+          fill
+          priority={variant === "nav"}
+          sizes={
+            isMarkOnly
+              ? "32px"
+              : isFooter
+                ? "(max-width: 768px) 150px, 178px"
+                : "(max-width: 640px) 128px, (max-width: 1024px) 146px, 188px"
+          }
+          className="object-contain"
+        />
       </span>
-
-      {!isMarkOnly && (
-        <span className="flex flex-col leading-none">
-          <span
-            className={`font-light uppercase tracking-[0.08em] ${
-              isFooter ? "text-[24px]" : "text-[18px] md:text-[20px]"
-            }`}
-          >
-            Shiv Shakti
-          </span>
-          <span className="mt-1 text-[8px] font-medium uppercase tracking-[0.28em] text-black/50">
-            Project
-          </span>
-        </span>
-      )}
     </Link>
   );
 }

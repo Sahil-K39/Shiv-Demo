@@ -1,18 +1,22 @@
 
 
 import Link from "next/link";
+import Image from "next/image";
 import BrandLogo from "@/components/ui/BrandLogo";
-import { ArrowRightIcon, BrandMark } from "@/components/ui/Icons";
+import { ArrowRightIcon } from "@/components/ui/Icons";
 
 export default function Footer() {
   return (
     <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-white px-6 py-16 text-black md:px-10">
-      {}
-      <BrandMark className="pointer-events-none absolute -bottom-16 -right-12 h-[360px] w-[280px] text-black opacity-[0.025] md:h-[520px] md:w-[400px]" />
+      <Image
+        src="/logos/logo4.png"
+        alt=""
+        width={760}
+        height={560}
+        className="pointer-events-none absolute -bottom-20 -right-20 h-[420px] w-[560px] object-cover opacity-[0.04] md:h-[560px] md:w-[760px]"
+      />
 
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-        
-        {}
         <div className="space-y-6">
           <BrandLogo variant="footer" />
           <p className="text-[11px] tracking-[0.2em] text-gray-500 uppercase leading-loose max-w-[250px]">
@@ -20,21 +24,20 @@ export default function Footer() {
           </p>
         </div>
 
-        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Collections</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-500 uppercase">
             <li><Link href="/shop/shakti" className="hover:text-black transition-colors">Shakti</Link></li>
             <li><Link href="/shop/shiva" className="hover:text-black transition-colors">Shiva</Link></li>
-            <li><Link href="/lookbook" className="hover:text-black transition-colors">Visions Lookbook</Link></li>
+
             <li><Link href="/council" className="hover:text-black transition-colors">The Council</Link></li>
           </ul>
         </div>
 
-        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Information</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-500 uppercase">
+            <li><Link href="/ngo" className="hover:text-black transition-colors">Women Employment NGO</Link></li>
             <li><Link href="/shipping" className="hover:text-black transition-colors">Shipping & Returns</Link></li>
             <li><Link href="/terms" className="hover:text-black transition-colors">Terms of Service</Link></li>
             <li><Link href="/privacy" className="hover:text-black transition-colors">Privacy Policy</Link></li>
@@ -42,7 +45,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {}
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Transmission</h4>
           <p className="text-[10px] tracking-[0.1em] text-gray-500 uppercase leading-loose">
@@ -70,7 +72,7 @@ export default function Footer() {
         <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center md:text-left">
           © 2026 SHIV SHAKTI PROJECT. ALL RIGHTS RESERVED.
         </p>
-        <BrandMark className="h-10 w-8 text-black/55" />
+        <BrandLogo variant="mark" />
       </div>
     </footer>
   );
