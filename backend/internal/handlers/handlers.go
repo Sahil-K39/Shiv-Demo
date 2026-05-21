@@ -36,7 +36,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	user, err := h.service.Register(&input)
+	user, token, err := h.service.Register(&input)
 	if err != nil {
 		status := http.StatusInternalServerError
 		if err.Error() == "email already registered" {
@@ -46,22 +46,22 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Send welcome email (mock mode logs)
-	if err := h.emailService.SendWelcome(user.Email, user.Name); err != nil {
-		log.Printf("Failed to send welcome email: %v", err)
+	// Send verification email (mock mode logs)
+	if err := h.emailService.SendVerification(user.Email, user.Name, token); err != nil {
+		log.Printf("Failed to send verification email: %v", err)
 	}
 
-	token, err := h.service.GenerateToken(user)
+	tokenStr, err := h.service.GenerateToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
 		return
 	}
-	setSessionCookie(c, token)
+	setSessionCookie(c, tokenStr)
 
 	// Generate CSRF token and include in response
 	csrfToken := middleware.GenerateCSRFToken()
 	c.JSON(http.StatusCreated, gin.H{
-		"message":    "Account created successfully",
+		"message":    "Account created successfully. Verification email sent.",
 		"user":       user,
 		"csrf_token": csrfToken,
 	})
@@ -111,6 +111,29 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	c.SetCookie("shiv_session", "", -1, "/", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
+
+// Verify handles email verification via token query param
+func (h *AuthHandler) Verify(c *gin.Context) {
+    token := c.Query("token")
+    if token == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "missing_token", "message": "Verification token is required"})
+        return
+    }
+    user, err := h.service.VerifyEmail(token)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "verification_failed", "message": err.Error()})
+        return
+    }
+    // Generate JWT token for the verified user
+    tokenStr, err := h.service.GenerateToken(user)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
+        return
+    }
+    setSessionCookie(c, tokenStr)
+    c.JSON(http.StatusOK, gin.H{"message": "Email verified", "user": user})
+}
+
 
 
 

@@ -8,10 +8,10 @@ import (
 	"shiv-shakti/internal/auth"
 	"shiv-shakti/internal/handlers"
 	"shiv-shakti/internal/middleware"
-	"shiv-shakti/internal/models"
 	"shiv-shakti/internal/store"
 
 	"github.com/gin-gonic/gin"
+	"github.com/resend/resend-go/v3"
 )
 
 func main() {
@@ -172,16 +172,33 @@ func main() {
 		})
 	})
 
+	r.POST("/send-email", func(c *gin.Context) {
+		client := resend.NewClient("re_RY56hJE8_14JWjBfo1cZq25MHx4BSF4MT")
+		params := &resend.SendEmailRequest{
+			From: "onboarding@resend.dev",
+			To: []string{"Sahilk394872@gmail.com"},
+			Subject: "Demo Email",
+			Html: "<p>Congrats on sending your <strong>first email</strong>!</p>",
+		}
+		sent, err := client.Emails.Send(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "email sent", "id": sent.Id})
+	})
+
 	
 	api := r.Group("/api")
 	{
 		
 		authGroup := api.Group("/auth")
-		authGroup.Use(middleware.RateLimiter(10, 60)) 
+		authGroup.Use(middleware.RateLimiter(10, 60))
 		{
 			authGroup.POST("/register", authHandler.Register)
 			authGroup.POST("/login", authHandler.Login)
 			authGroup.POST("/logout", authHandler.Logout)
+			authGroup.GET("/verify", authHandler.Verify)
 		}
 
 		
@@ -268,9 +285,4 @@ func main() {
 
 
 
-func init() {
-	_ = models.User{}
-	_ = models.Product{}
-	_ = models.CartItem{}
-	_ = models.Order{}
-}
+// init function removed

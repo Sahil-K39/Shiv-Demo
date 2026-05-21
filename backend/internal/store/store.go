@@ -141,7 +141,12 @@ func migrate(db *sql.DB) error {
 
 	_, err := db.Exec(schema)
 
-	
+	// Add new columns for email verification and role management
+	db.Exec("ALTER TABLE users ADD COLUMN is_verified BOOLEAN DEFAULT 0")
+	db.Exec("ALTER TABLE users ADD COLUMN verification_token TEXT")
+	db.Exec("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'")
+
+	// Existing product and order alterations
 	db.Exec("ALTER TABLE products ADD COLUMN sale_price REAL DEFAULT 0")
 	db.Exec("ALTER TABLE products ADD COLUMN is_on_sale BOOLEAN DEFAULT 0")
 

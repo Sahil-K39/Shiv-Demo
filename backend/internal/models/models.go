@@ -7,12 +7,15 @@ import "time"
 
 
 type User struct {
-	ID           int64     `json:"id"`
-	Email        string    `json:"email" binding:"required,email"`
-	PasswordHash string    `json:"-"` 
-	Name         string    `json:"name" binding:"required,min=2,max=100"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ID               int64     `json:"id"`
+	Email            string    `json:"email" binding:"required,email"`
+	PasswordHash     string    `json:"-"` 
+	Name             string    `json:"name" binding:"required,min=2,max=100"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+	IsVerified       bool      `json:"is_verified"`
+	VerificationToken string   `json:"verification_token"`
+	Role             string    `json:"role"`
 }
 
 

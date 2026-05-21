@@ -62,17 +62,37 @@ const WelcomeEmailHTMLTemplate = `
 <html>
 <head><meta charset="UTF-8"><title>Welcome to Shiv Shakti</title></head>
 <body style="font-family:Arial,Helvetica,sans-serif;background:#f9f9f9;padding:20px;">
-  <div style="max-width:600px;margin:auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-    <h2 style="color:#222;">Welcome, {{.Name}}!</h2>
-    <p style="color:#555;">Thank you for joining Shiv Shakti. We're excited to have you on board.</p>
-    <p style="color:#555;">Feel free to explore our collection and stay tuned for upcoming sales and exclusive offers.</p>
-    <p style="color:#555;">If you have any questions, reply to this email.</p>
-    <hr style="border:none;border-top:1px solid #eee;margin:20px 0;"/>
-    <p style="font-size:12px;color:#999;">© 2026 Shiv Shakti Project</p>
-  </div>
+<div style="max-width:600px;margin:auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+<h2 style="color:#222;">Welcome, {{.Name}}!</h2>
+<p style="color:#555;">Thank you for joining Shiv Shakti. We're excited to have you on board.</p>
+<p style="color:#555;">Feel free to explore our collection and stay tuned for upcoming sales and exclusive offers.</p>
+<p style="color:#555;">If you have any questions, reply to this email.</p>
+<hr style="border:none;border-top:1px solid #eee;margin:20px 0;"/>
+<p style="font-size:12px;color:#999;">© 2026 Shiv Shakti Project</p>
+</div>
 </body>
 </html>
 `
+
+const VerifyEmailHTMLTemplate = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Verify Your Email</title></head>
+<body style="font-family:Arial,Helvetica,sans-serif;background:#f9f9f9;padding:20px;">
+<div style="max-width:600px;margin:auto;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+<h2 style="color:#222;">Hello, {{.Name}}!</h2>
+<p style="color:#555;">Thank you for registering. Please verify your email by clicking the link below:</p>
+<p><a href="{{.URL}}" style="color:#0a84ff;">Verify Email</a></p>
+<p style="color:#555;">If you did not request this, you can ignore this email.</p>
+<hr style="border:none;border-top:1px solid #eee;margin:20px 0;"/>
+<p style="font-size:12px;color:#999;">© 2026 Shiv Shakti Project</p>
+</div>
+</body>
+</html>
+`
+
+
+
 
 func (m *MailService) SendWelcome(userEmail string, name string) error {
     tmpl, err := template.New("welcome").Parse(WelcomeEmailHTMLTemplate)
@@ -112,6 +132,53 @@ func (m *MailService) SendWelcome(userEmail string, name string) error {
         return fmt.Errorf("failed to send welcome email: %w", err)
     }
     log.Printf("✓ Welcome email sent to %s", userEmail)
+    return nil
+}
+
+// SendVerification sends an email with a verification link to the user.
+func (m *MailService) SendVerification(userEmail string, name string, token string) error {
+    verificationURL := fmt.Sprintf("%s/verify?token=%s", os.Getenv("FRONTEND_URL"), token)
+    tmpl, err := template.New("verify").Parse(VerifyEmailHTMLTemplate)
+    if err != nil {
+        return fmt.Errorf("failed to parse verification template: %w", err)
+    }
+    var body bytes.Buffer
+    data := struct {
+        Name string
+        URL  string
+    }{Name: name, URL: verificationURL}
+    if err := tmpl.Execute(&body, data); err != nil {
+        return fmt.Errorf("failed to execute verification template: %w", err)
+    }
+    if m.MockMode {
+        log.Printf("================ MOCK EMAIL START ================")
+        log.Printf("To: %s", userEmail)
+        log.Printf("From: %s", m.From)
+        log.Printf("Subject: Verify Your Email")
+        log.Printf("Content Length: %d bytes", body.Len())
+        log.Printf("Verification URL: %s", verificationURL)
+        log.Printf("================= MOCK EMAIL END =================")
+        return nil
+    }
+    headers := map[string]string{
+        "From":    m.From,
+        "To":      userEmail,
+        "Subject": "Verify Your Email",
+        "MIME-Version": "1.0",
+        "Content-Type": "text/html; charset=UTF-8",
+    }
+    var msg strings.Builder
+    for k, v := range headers {
+        msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
+    }
+    msg.WriteString("\r\n")
+    msg.Write(body.Bytes())
+    addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
+    auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
+    if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
+        return fmt.Errorf("failed to send verification email: %w", err)
+    }
+    log.Printf("✓ Verification email sent to %s", userEmail)
     return nil
 }
 
