@@ -173,7 +173,7 @@ func main() {
 	})
 
 	r.POST("/send-email", func(c *gin.Context) {
-		client := resend.NewClient("re_RY56hJE8_14JWjBfo1cZq25MHx4BSF4MT")
+		client := resend.NewClient(os.Getenv("RESEND_API_KEY"))
 		params := &resend.SendEmailRequest{
 			From: "onboarding@resend.dev",
 			To: []string{"Sahilk394872@gmail.com"},

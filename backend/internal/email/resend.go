@@ -2,6 +2,7 @@ package email
 
 import (
     "log"
+    "os"
     "github.com/resend/resend-go/v3"
 )
 
@@ -9,7 +10,7 @@ import (
 // Replace the placeholder API key (re_xxxxxxxxx) with your actual Resend API key.
 // Optionally, you can move the API key to an environment variable for better security.
 func SendResendEmail(to []string, subject string, htmlBody string) (string, error) {
-    apiKey := "re_RY56hJE8_14JWjBfo1cZq25MHx4BSF4MT"
+    apiKey := os.Getenv("RESEND_API_KEY")
 
     client := resend.NewClient(apiKey)
 
