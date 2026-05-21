@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
-import PageTransition from "@/components/layout/PageTransition";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: "SHIV SHAKTI PROJECT — Neo-Primitive Fashion",
@@ -23,7 +23,7 @@ export default function RootLayout({
         <div className="noise-overlay" />
         <Navbar />
         <CartDrawer />
-        <PageTransition>{children}</PageTransition>
+        {children}
         <Footer />
       </body>
     </html>

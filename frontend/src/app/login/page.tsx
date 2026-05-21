@@ -1,10 +1,9 @@
-
-
 "use client";
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import { authAPI } from "@/lib/api";
 import { useCartStore } from "@/store/cart";
@@ -66,12 +65,12 @@ export default function Login() {
     <div className="w-full h-[calc(100vh-80px)] flex flex-col md:flex-row bg-white">
       <div className="hidden md:block w-1/2 h-full bg-black relative overflow-hidden border-r border-black">
         <Image
-          src="/assets/images/deconstructed-blazer.jpg" 
+          src="/assets/images/10-153A0999.jpg"
           alt="Identity" 
           fill
           priority
           sizes="50vw"
-          className="object-cover grayscale opacity-80"
+          className="object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-end p-16">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+
 import Link from "next/link";
 import NGOInterestForm from "@/components/ngo/NGOInterestForm";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
@@ -39,12 +40,12 @@ export default function NGOPage() {
     <div className="bg-white text-black">
       <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
         <Image
-          src="/assets/images/asymmetric-drape-dress.jpg"
+          src="/assets/images/20-153A1078.jpg"
           alt="Woman wearing Shiv Shakti garment"
           fill
           priority
           sizes="100vw"
-          className="object-cover grayscale"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">
@@ -82,11 +83,14 @@ export default function NGOPage() {
 
       <section className="grid border-b border-black md:grid-cols-3">
         {[
-          ["Training First", "Practical skill sessions before placement."],
-          ["Paid Roles", "Work mapped to skill, location, and availability."],
-          ["Women Led", "Mentorship from women already in the program."],
-        ].map(([title, body]) => (
+          ["Training First", "Practical skill sessions before placement.", "/assets/images/25-153A1093.jpg"],
+          ["Paid Roles", "Work mapped to skill, location, and availability.", "/assets/images/55-153A0055.jpg"],
+          ["Women Led", "Mentorship from women already in the program.", "/assets/images/95-153A0198.jpg"],
+        ].map(([title, body, src]) => (
           <div key={title} className="border-b border-black/10 p-6 md:border-b-0 md:border-r md:p-10 last:md:border-r-0">
+            <div className="relative mb-6 h-48 w-full overflow-hidden">
+              <Image src={src} alt={title} fill className="object-cover" />
+            </div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{title}</p>
             <p className="mt-4 text-[18px] font-light leading-relaxed text-black">{body}</p>
           </div>

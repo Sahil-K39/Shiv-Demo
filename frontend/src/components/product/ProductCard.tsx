@@ -2,11 +2,14 @@
 
 "use client";
 
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import ImageLightbox from "@/components/ImageLightbox";
+// Product details will be shown on a dedicated page
+import { useRouter } from 'next/navigation';
+// Removed unused GSAP imports for cleaner build
 import Link from "next/link";
+import Image from "next/image";
 import type { Product } from "@/types";
 import {
   getCategoryFallbackImage,
@@ -19,79 +22,22 @@ interface ProductCardProps {
   index: number;
 }
 
-const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
 export default function ProductCard({ product, index }: ProductCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-100px" });
   const [isHovered, setIsHovered] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  // Removed modal state; navigation will handle description
 
+  const router = useRouter();
   const images = getProductImages(product);
   const sizes = parseList(product.sizes);
   const fallbackImage = getCategoryFallbackImage(product.category);
+  const hoverImage = images.length > 1 ? images[1] : null; // use second image if available
 
   
-  useGSAP(() => {
-    const card = cardRef.current;
-    if (!card) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = ((y - centerY) / centerY) * -8;
-      const rotateY = ((x - centerX) / centerX) * 8;
-
-      gsap.to(card, {
-        rotateX,
-        rotateY,
-        transformPerspective: 1000,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-
-      
-      if (imageRef.current) {
-        gsap.to(imageRef.current, {
-          x: ((x - centerX) / centerX) * 10,
-          y: ((y - centerY) / centerY) * 10,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(card, {
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.6,
-        ease: "elastic.out(1, 0.5)",
-      });
-      if (imageRef.current) {
-        gsap.to(imageRef.current, {
-          x: 0,
-          y: 0,
-          duration: 0.6,
-          ease: "elastic.out(1, 0.5)",
-        });
-      }
-    };
-
-    card.addEventListener("mousemove", handleMouseMove);
-    card.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      card.removeEventListener("mousemove", handleMouseMove);
-      card.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, { scope: cardRef });
+  // Removed heavy GSAP tilt for smoother performance. Hover scaling is handled via CSS.
 
   
   const cardVariants: Variants = {
@@ -101,8 +47,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       y: 0,
       transition: {
         duration: 0.8,
-        delay: index * 0.1, 
-        ease: smoothEase,
+        delay: index * 0.1,
+        ease: "easeInOut",
       },
     },
   };
@@ -115,7 +61,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       transition: {
         duration: 1.2,
         delay: index * 0.1 + 0.2,
-        ease: smoothEase,
+                 ease: "easeInOut",
       },
     },
   };
@@ -128,7 +74,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       transition: {
         duration: 0.5,
         delay: index * 0.1 + 0.4 + i * 0.1,
-        ease: smoothEase,
+        ease: "easeInOut",
       },
     }),
   };
@@ -144,93 +90,103 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/product/${product.slug}`} className="block">
-        <div className="relative mb-4 aspect-[3/4] overflow-hidden border border-black/10 bg-white">
-          <motion.div
-            ref={imageRef}
-            variants={imageVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="absolute inset-0"
-          >
-            <motion.img
-              src={images[0] || "/placeholder.jpg"}
-              alt={product.name}
-              className="w-full h-full object-cover"
-              onError={(event) => {
-                event.currentTarget.src = fallbackImage;
-              }}
-              animate={{
-                scale: isHovered ? 1.08 : 1,
-              }}
-              transition={{
-                duration: 0.6,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            />
-          </motion.div>
-
-          {images[1] && (
-            <motion.img
-              src={images[1]}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
-              aria-hidden="true"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
-            />
-          )}
-
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4 }}
-          />
-
-          {product.featured && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
-                FEATURED
-              </span>
-            </div>
-          )}
-
-          <motion.div
-            ref={overlayRef}
-            className="absolute bottom-0 left-0 right-0 p-4 z-10"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{
-              y: isHovered ? 0 : 20,
-              opacity: isHovered ? 1 : 0,
+      <div
+        className="relative mb-4 aspect-[3/4] overflow-hidden border border-black/10 bg-white"
+        onClick={() => router.push(`/product/${product.slug}`)}
+      >
+        <Image
+            src={images[0]}
+            alt={product.name}
+            width={500}
+            height={667}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            priority={index < 4}
+            className="w-full h-full object-cover transition-transform duration-500 ease-out cursor-pointer"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = fallbackImage;
             }}
-            transition={{
-              duration: 0.4,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <div className="flex flex-wrap gap-2">
-              {sizes.map((size) => (
-                <span
-                  key={size}
-                  className="border border-white/40 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.15em] text-white transition-colors duration-200"
-                >
-                  {size}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          <div
-            className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
             style={{
-              backgroundImage:
-                "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 3px)",
+              transform: `scale(${isHovered ? 1.08 : 1})`,
+            }}
+            onClick={(e) => { e.stopPropagation(); setLightboxOpen(true); }}
+          />
+
+        {hoverImage && (
+          <Image
+            src={hoverImage}
+            alt=""
+            width={500}
+            height={667}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
+            aria-hidden={true}
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
             }}
           />
-        </div>
+        )}
 
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+        />
+
+        {product.featured && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
+              FEATURED
+            </span>
+          </div>
+        )}
+
+        <motion.div
+          ref={overlayRef}
+          className="absolute bottom-0 left-0 right-0 p-4 z-10"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{
+            y: isHovered ? 0 : 20,
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{
+            duration: 0.4,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          <div className="flex flex-wrap gap-2">
+            {sizes.map((size) => (
+              <span
+                key={size}
+                className="border border-white/40 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.15em] text-white transition-colors duration-200"
+              >
+                {size}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 3px)",
+          }}
+        />
+      </div>
+
+      {lightboxOpen && (
+        <ImageLightbox
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          imageSrc={images[0]}
+          imageAlt={product.name}
+        />
+      )}
+      {/* Details are now on a separate page via navigation */}
+
+      <Link href={`/product/${product.slug}`} className="block">
         <div className="space-y-2 px-1 pb-1">
           <motion.p
             custom={0}

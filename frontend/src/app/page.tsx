@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+// Fixed hero/section images to avoid hydration mismatch from Math.random()
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
@@ -32,7 +33,7 @@ export default function Home() {
           style={{ y: heroY }}
         >
           <Image
-            src="/assets/images/lookbook-vision-2.jpg" 
+            src="/assets/images/5-153A0979.jpg"
             alt="Shiv Shakti SS26 editorial look" 
             fill
             priority
@@ -78,11 +79,11 @@ export default function Home() {
         <Link href="/shop/shakti" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/assets/images/lookbook-shakti-1.jpg" 
+              src="/assets/images/1-153A0953.jpg"
               alt="Shakti" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover grayscale transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
+              className="object-cover transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -92,11 +93,11 @@ export default function Home() {
         <Link href="/shop/shiva" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/assets/images/deconstructed-blazer.jpg" 
+              src="/assets/images/32-153A9973.jpg"
               alt="Shiva" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover grayscale transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
+              className="object-cover transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
