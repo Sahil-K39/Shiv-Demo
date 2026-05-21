@@ -2,7 +2,7 @@
 
 import type { Product, CartItem, User, Order, CommunityPost } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://shiv-shakti-backend-i1up.onrender.com";
 
 
 async function apiFetch<T>(
