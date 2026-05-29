@@ -4,8 +4,8 @@ Avant-garde e-commerce platform for the post-apocalyptic era.
 
 ## Architecture
 
-- **Frontend**: Next.js (React 19) with Tailwind CSS and Framer Motion.
-- **Backend**: Go (Gin Gonic) with SQLite.
+- **Frontend**: Next.js 16 with React 18, Tailwind CSS, and Framer Motion.
+- **Backend**: Go (Gin Gonic) with SQLite locally and optional PostgreSQL via `DATABASE_URL`.
 - **Authentication**: JWT with HttpOnly cookies.
 - **Security**: CSRF protection, Rate limiting, and Secure headers.
 
@@ -13,7 +13,7 @@ Avant-garde e-commerce platform for the post-apocalyptic era.
 
 ### Prerequisites
 
-- Go 1.26+
+- Go 1.26.3+
 - Node.js 20+
 - npm
 

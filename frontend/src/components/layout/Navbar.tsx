@@ -19,8 +19,8 @@ import {
 const navLinks = [
   { href: "/shop/shakti", label: "SHAKTI" },
   { href: "/shop/shiva", label: "SHIVA" },
-  { href: "/", label: "COLLECTIONS" },
-  { href: "/revelations", label: "REVELATIONS" },
+  { href: "/", label: "WHOLESALE" },
+  { href: "/fabric-selling", label: "FABRIC SELLING" },
   { href: "/council", label: "COUNCIL" },
   { href: "/ngo", label: "NGO" },
 ];

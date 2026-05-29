@@ -28,6 +28,7 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState("");
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
+  const [quantity, setQuantity] = useState(12);
 
   useEffect(() => {
     
@@ -73,9 +74,11 @@ export default function ProductDetail() {
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) return;
     setIsAdding(true);
-    await addItem(product.id, selectedSize, selectedColor, 1);
+    await addItem(product.id, selectedSize, selectedColor, quantity);
     setIsAdding(false);
   };
+
+  const wholesaleSubtotal = product.price * quantity;
 
   return (
     <div className="max-w-[1600px] mx-auto px-6 md:px-10 py-12 lg:py-20 flex flex-col lg:flex-row gap-12 lg:gap-24">
@@ -138,13 +141,16 @@ export default function ProductDetail() {
         >
           <div>
             <p className="text-[10px] tracking-[0.3em] uppercase text-stone mb-4">
-              {product.category} / {product.collection}
+              {product.category} / {product.collection} / wholesale
             </p>
             <h1 className="text-[32px] lg:text-[48px] font-light tracking-[0.05em] uppercase text-bone leading-none">
               {product.name}
             </h1>
             <p className="text-[18px] tracking-[0.1em] text-bone/70 mt-6">
-              ${product.price.toLocaleString()}
+              ${product.price.toLocaleString()} wholesale unit
+            </p>
+            <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-stone">
+              MOQ 12 units per style. Pack quantities can be adjusted before checkout.
             </p>
           </div>
 
@@ -205,6 +211,66 @@ export default function ProductDetail() {
             )}
           </div>
 
+          <div className="space-y-4 border border-black/10 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-stone">
+                  Wholesale quantity
+                </p>
+                <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-bone/55">
+                  Minimum order: 12 units
+                </p>
+              </div>
+              <div className="flex items-center border border-black/15">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((value) => Math.max(12, value - 1))}
+                  className="h-11 w-11 text-[18px] text-stone transition-colors hover:text-black"
+                  aria-label="Decrease wholesale quantity"
+                >
+                  -
+                </button>
+                <span className="w-14 text-center text-[13px] tracking-[0.12em] text-black">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((value) => Math.min(500, value + 1))}
+                  className="h-11 w-11 text-[18px] text-stone transition-colors hover:text-black"
+                  aria-label="Increase wholesale quantity"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-4 gap-2">
+              {[12, 24, 48, 96].map((packSize) => (
+                <button
+                  key={packSize}
+                  type="button"
+                  onClick={() => setQuantity(packSize)}
+                  className={`h-10 border text-[10px] uppercase tracking-[0.16em] transition-colors ${
+                    quantity === packSize
+                      ? "border-black bg-black text-white"
+                      : "border-black/15 text-stone hover:border-black/40 hover:text-black"
+                  }`}
+                >
+                  {packSize}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between border-t border-black/10 pt-4">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone">
+                Estimated line total
+              </span>
+              <span className="text-[16px] tracking-[0.08em] text-bone">
+                ${wholesaleSubtotal.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
           <motion.button
             onClick={handleAddToCart}
             disabled={!product.in_stock || isAdding}
@@ -219,17 +285,17 @@ export default function ProductDetail() {
             ) : product.in_stock ? (
               <>
                 <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-                  ADD TO BAG
+                  ADD WHOLESALE PACK
                 </span>
                 <div className="absolute inset-0 translate-y-[100%] bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
               </>
             ) : (
-              <span>OUT OF STOCK</span>
+                <span>OUT OF STOCK</span>
             )}
           </motion.button>
           
           <ul className="space-y-2 pt-6 text-[10px] uppercase tracking-[0.15em] text-stone">
-            {["WORLDWIDE SECURE SHIPPING", "LIFETIME REPAIR GUARANTEE", "MADE IN LIMITED RUNS"].map((item) => (
+            {["WHOLESALE PO REVIEW", "BULK SHIPPING QUOTED AFTER ORDER", "MADE IN LIMITED RUNS"].map((item) => (
               <li key={item} className="flex items-center gap-2">
                 <CheckIcon className="h-3.5 w-3.5 text-black" />
                 <span>{item}</span>

@@ -31,6 +31,9 @@ func NewMailService() *MailService {
 
 	mockMode := false
 	if host == "" || username == "" {
+		if strings.EqualFold(os.Getenv("REQUIRE_SMTP"), "true") || strings.EqualFold(os.Getenv("APP_ENV"), "production") {
+			log.Fatal("✗ SMTP_HOST and SMTP_USERNAME are required when email delivery is mandatory")
+		}
 		log.Println("⚠ SMTP_HOST or SMTP_USERNAME not configured. Email service running in MOCK mode (logging to stdout).")
 		mockMode = true
 	}
@@ -43,8 +46,10 @@ func NewMailService() *MailService {
 	}
 
 	if from == "" {
-		// Default fallback – user requested "testforme39487@gmail.com"
-		from = "testforme39487@gmail.com"
+		from = username
+	}
+	if from == "" {
+		from = "no-reply@shiv-shakti.local"
 	}
 
 	return &MailService{
@@ -91,95 +96,92 @@ const VerifyEmailHTMLTemplate = `
 </html>
 `
 
-
-
-
 func (m *MailService) SendWelcome(userEmail string, name string) error {
-    tmpl, err := template.New("welcome").Parse(WelcomeEmailHTMLTemplate)
-    if err != nil {
-        return fmt.Errorf("failed to parse welcome template: %w", err)
-    }
-    var body bytes.Buffer
-    data := struct{ Name string }{Name: name}
-    if err := tmpl.Execute(&body, data); err != nil {
-        return fmt.Errorf("failed to execute welcome template: %w", err)
-    }
-    if m.MockMode {
-        log.Printf("================ MOCK EMAIL START ================")
-        log.Printf("To: %s", userEmail)
-        log.Printf("From: %s", m.From)
-        log.Printf("Subject: Welcome to Shiv Shakti")
-        log.Printf("Content Length: %d bytes", body.Len())
-        log.Printf("================= MOCK EMAIL END =================")
-        return nil
-    }
-    headers := map[string]string{
-        "From":    m.From,
-        "To":      userEmail,
-        "Subject": "Welcome to Shiv Shakti",
-        "MIME-Version": "1.0",
-        "Content-Type": "text/html; charset=UTF-8",
-    }
-    var msg strings.Builder
-    for k, v := range headers {
-        msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
-    }
-    msg.WriteString("\r\n")
-    msg.Write(body.Bytes())
-    addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-    auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-    if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
-        return fmt.Errorf("failed to send welcome email: %w", err)
-    }
-    log.Printf("✓ Welcome email sent to %s", userEmail)
-    return nil
+	tmpl, err := template.New("welcome").Parse(WelcomeEmailHTMLTemplate)
+	if err != nil {
+		return fmt.Errorf("failed to parse welcome template: %w", err)
+	}
+	var body bytes.Buffer
+	data := struct{ Name string }{Name: name}
+	if err := tmpl.Execute(&body, data); err != nil {
+		return fmt.Errorf("failed to execute welcome template: %w", err)
+	}
+	if m.MockMode {
+		log.Printf("================ MOCK EMAIL START ================")
+		log.Printf("To: %s", userEmail)
+		log.Printf("From: %s", m.From)
+		log.Printf("Subject: Welcome to Shiv Shakti")
+		log.Printf("Content Length: %d bytes", body.Len())
+		log.Printf("================= MOCK EMAIL END =================")
+		return nil
+	}
+	headers := map[string]string{
+		"From":         m.From,
+		"To":           userEmail,
+		"Subject":      "Welcome to Shiv Shakti",
+		"MIME-Version": "1.0",
+		"Content-Type": "text/html; charset=UTF-8",
+	}
+	var msg strings.Builder
+	for k, v := range headers {
+		msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
+	}
+	msg.WriteString("\r\n")
+	msg.Write(body.Bytes())
+	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
+	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
+	if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
+		return fmt.Errorf("failed to send welcome email: %w", err)
+	}
+	log.Printf("✓ Welcome email sent to %s", userEmail)
+	return nil
 }
 
 // SendVerification sends an email with a verification link to the user.
 func (m *MailService) SendVerification(userEmail string, name string, token string) error {
-    verificationURL := fmt.Sprintf("%s/verify?token=%s", os.Getenv("FRONTEND_URL"), token)
-    tmpl, err := template.New("verify").Parse(VerifyEmailHTMLTemplate)
-    if err != nil {
-        return fmt.Errorf("failed to parse verification template: %w", err)
-    }
-    var body bytes.Buffer
-    data := struct {
-        Name string
-        URL  string
-    }{Name: name, URL: verificationURL}
-    if err := tmpl.Execute(&body, data); err != nil {
-        return fmt.Errorf("failed to execute verification template: %w", err)
-    }
-    if m.MockMode {
-        log.Printf("================ MOCK EMAIL START ================")
-        log.Printf("To: %s", userEmail)
-        log.Printf("From: %s", m.From)
-        log.Printf("Subject: Verify Your Email")
-        log.Printf("Content Length: %d bytes", body.Len())
-        log.Printf("Verification URL: %s", verificationURL)
-        log.Printf("================= MOCK EMAIL END =================")
-        return nil
-    }
-    headers := map[string]string{
-        "From":    m.From,
-        "To":      userEmail,
-        "Subject": "Verify Your Email",
-        "MIME-Version": "1.0",
-        "Content-Type": "text/html; charset=UTF-8",
-    }
-    var msg strings.Builder
-    for k, v := range headers {
-        msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
-    }
-    msg.WriteString("\r\n")
-    msg.Write(body.Bytes())
-    addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-    auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-    if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
-        return fmt.Errorf("failed to send verification email: %w", err)
-    }
-    log.Printf("✓ Verification email sent to %s", userEmail)
-    return nil
+	verificationURL := fmt.Sprintf("%s/verify?token=%s", os.Getenv("FRONTEND_URL"), token)
+	tmpl, err := template.New("verify").Parse(VerifyEmailHTMLTemplate)
+	if err != nil {
+		return fmt.Errorf("failed to parse verification template: %w", err)
+	}
+	var body bytes.Buffer
+	data := struct {
+		Name string
+		URL  string
+	}{Name: name, URL: verificationURL}
+	if err := tmpl.Execute(&body, data); err != nil {
+		return fmt.Errorf("failed to execute verification template: %w", err)
+	}
+	if m.MockMode {
+		log.Printf("================ MOCK EMAIL START ================")
+		log.Printf("To: %s", userEmail)
+		log.Printf("From: %s", m.From)
+		log.Printf("Subject: Verify Your Email")
+		log.Printf("Content Length: %d bytes", body.Len())
+		log.Printf("Verification URL: %s", verificationURL)
+		log.Printf("================= MOCK EMAIL END =================")
+		return nil
+	}
+	headers := map[string]string{
+		"From":         m.From,
+		"To":           userEmail,
+		"Subject":      "Verify Your Email",
+		"MIME-Version": "1.0",
+		"Content-Type": "text/html; charset=UTF-8",
+	}
+	var msg strings.Builder
+	for k, v := range headers {
+		msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
+	}
+	msg.WriteString("\r\n")
+	msg.Write(body.Bytes())
+	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
+	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
+	if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
+		return fmt.Errorf("failed to send verification email: %w", err)
+	}
+	log.Printf("✓ Verification email sent to %s", userEmail)
+	return nil
 }
 
 func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Order) error {

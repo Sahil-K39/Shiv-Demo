@@ -30,6 +30,9 @@ export default function ShopCollection() {
   return (
     <div className="w-full bg-white min-h-[80vh] flex flex-col items-center">
       <div className="w-full border-b border-black py-20 text-center">
+        <p className="mb-5 text-[10px] font-medium uppercase tracking-[0.28em] text-black/45">
+          Wholesale catalogue / MOQ 12 units per style
+        </p>
         <motion.h1
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -38,6 +41,9 @@ export default function ShopCollection() {
         >
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
+        <p className="mx-auto mt-6 max-w-2xl px-6 text-[12px] uppercase leading-relaxed tracking-[0.14em] text-black/50">
+          Select sizes, colorways, and bulk quantities for boutique, studio, and partner purchase orders.
+        </p>
       </div>
 
       <div className="grid w-full grid-cols-1 gap-8 bg-white px-6 py-12 sm:grid-cols-2 md:px-10 lg:grid-cols-4">

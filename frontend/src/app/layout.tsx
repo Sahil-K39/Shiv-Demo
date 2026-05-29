@@ -25,6 +25,7 @@ export default function RootLayout({
         <CartDrawer />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

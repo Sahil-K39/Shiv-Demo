@@ -39,8 +39,13 @@ def update_links(html):
     html = html.replace('<button class="text-gray-500 hover:text-black transition-colors duration-300 flex items-center justify-center">\n<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>\n</button>', 
                         '<a href="cart.html" class="text-gray-500 hover:text-black transition-colors duration-300 flex items-center justify-center"><span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span></a>')
     
-    
-    html = re.sub(r'<article[^>]*>', r'\g<0 onclick="window.location.href=\'product.html\'" >', html)
+    def add_article_onclick(match):
+        attributes = match.group(1)
+        if re.search(r'\sonclick\s*=', attributes, flags=re.IGNORECASE):
+            return match.group(0)
+        return f'<article{attributes} onclick="window.location.href=\'product.html\'">'
+
+    html = re.sub(r'<article\b([^>]*)>', add_article_onclick, html)
     
     return html
 
@@ -57,4 +62,3 @@ for src, dest in files_to_process.items():
         print(f"Processed {dest}")
     else:
         print(f"File not found: {src_path}")
-

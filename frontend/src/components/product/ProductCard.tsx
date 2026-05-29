@@ -53,19 +53,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     },
   };
 
-  const imageVariants: Variants = {
-    hidden: { scale: 1.2, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 1.2,
-        delay: index * 0.1 + 0.2,
-                 ease: "easeInOut",
-      },
-    },
-  };
-
   const textVariants: Variants = {
     hidden: { opacity: 0, y: 15 },
     visible: (i: number) => ({
@@ -137,7 +124,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         {product.featured && (
           <div className="absolute top-3 left-3 z-10">
             <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
-              FEATURED
+              WHOLESALE READY
             </span>
           </div>
         )}
@@ -216,7 +203,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             className="flex items-center gap-3"
           >
             <span className="text-[14px] tracking-[0.1em] text-bone/70 font-light">
-              ${product.price.toLocaleString()}
+              ${product.price.toLocaleString()} wholesale unit
+            </span>
+            <span className="text-[9px] tracking-[0.2em] uppercase text-bone/45 border border-bone/15 px-2 py-0.5">
+              MOQ 12
             </span>
             {!product.in_stock && (
               <span className="text-[9px] tracking-[0.2em] uppercase text-accent-ember/70 border border-accent-ember/30 px-2 py-0.5">

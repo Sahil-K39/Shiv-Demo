@@ -89,7 +89,13 @@ export default function NGOPage() {
         ].map(([title, body, src]) => (
           <div key={title} className="border-b border-black/10 p-6 md:border-b-0 md:border-r md:p-10 last:md:border-r-0">
             <div className="relative mb-6 h-48 w-full overflow-hidden">
-              <Image src={src} alt={title} fill className="object-cover" />
+              <Image
+                src={src}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
+              />
             </div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{title}</p>
             <p className="mt-4 text-[18px] font-light leading-relaxed text-black">{body}</p>

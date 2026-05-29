@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"shiv-shakti/internal/auth"
 	"shiv-shakti/internal/handlers"
@@ -15,20 +16,29 @@ import (
 )
 
 func main() {
-	
+
+	appEnv := strings.ToLower(strings.TrimSpace(os.Getenv("APP_ENV")))
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
+		if appEnv == "production" {
+			log.Fatal("✗ APP_ENV=production requires JWT_SECRET")
+		}
 		jwtSecret = "shiv-shakti-dev-secret-change-in-production-2026"
 	}
+	if appEnv == "production" && (jwtSecret == "shiv-shakti-dev-secret-change-in-production-2026" || len(jwtSecret) < 32) {
+		log.Fatal("✗ APP_ENV=production requires a strong JWT_SECRET with at least 32 characters")
+	}
 
-	
 	dbPath := os.Getenv("DB_PATH")
 	if dbPath == "" {
 		dbPath = "./shiv_shakti.db"
+	}
+	if appEnv == "production" && os.Getenv("DATABASE_URL") == "" {
+		log.Fatal("✗ APP_ENV=production requires DATABASE_URL for PostgreSQL")
 	}
 	db, err := store.InitDB(dbPath)
 	if err != nil {
@@ -36,38 +46,37 @@ func main() {
 	}
 	defer db.Close()
 
-	
 	store.SeedProducts(db)
 
-	
 	authService := auth.NewService(jwtSecret, db)
+	authService.EnsureAdminFromEnv()
 
-	
 	productHandler := handlers.NewProductHandler(db)
 	cartHandler := handlers.NewCartHandler(db)
 	orderHandler := handlers.NewOrderHandler(db)
 	authHandler := handlers.NewAuthHandler(authService)
 	communityHandler := handlers.NewCommunityHandler(db)
+	ngoHandler := handlers.NewNGOHandler(db)
+	adminDataHandler := handlers.NewAdminDataHandler(db)
+	adminUploadHandler := handlers.NewAdminUploadHandler()
 
-	
 	if os.Getenv("GIN_MODE") == "" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
 
-	
-	r.Use(gin.Recovery())                                      
-	r.Use(middleware.Logger())                                  
-	r.Use(middleware.SecureHeaders())                           
-	
+	r.Use(gin.Recovery())
+	r.Use(middleware.Logger())
+	r.Use(middleware.SecureHeaders())
+
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	if corsOrigin == "" {
-		corsOrigin = "http://localhost:3000"
+		corsOrigin = "http://localhost:3000,http://127.0.0.1:3000"
 	}
-	r.Use(middleware.CORS(corsOrigin))                          
-	r.Use(middleware.RateLimiter(100, 60))                     
+	r.Use(middleware.CORS(corsOrigin))
+	r.Use(middleware.RateLimiter(100, 60))
+	r.MaxMultipartMemory = 32 << 20
 
-	
 	r.GET("/", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(`<!DOCTYPE html>
 <html lang="en">
@@ -163,7 +172,6 @@ func main() {
 </html>`))
 	})
 
-	
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "operational",
@@ -173,12 +181,25 @@ func main() {
 	})
 
 	r.POST("/send-email", func(c *gin.Context) {
+		if os.Getenv("ENABLE_DEMO_EMAIL") != "true" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "not_found"})
+			return
+		}
+		to := os.Getenv("RESEND_TEST_TO")
+		if to == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "missing_resend_test_to"})
+			return
+		}
+		from := os.Getenv("RESEND_FROM")
+		if from == "" {
+			from = "onboarding@resend.dev"
+		}
 		client := resend.NewClient(os.Getenv("RESEND_API_KEY"))
 		params := &resend.SendEmailRequest{
-			From: "onboarding@resend.dev",
-			To: []string{"Sahilk394872@gmail.com"},
+			From:    from,
+			To:      []string{to},
 			Subject: "Demo Email",
-			Html: "<p>Congrats on sending your <strong>first email</strong>!</p>",
+			Html:    "<p>Congrats on sending your <strong>first email</strong>!</p>",
 		}
 		sent, err := client.Emails.Send(params)
 		if err != nil {
@@ -188,10 +209,9 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "email sent", "id": sent.Id})
 	})
 
-	
 	api := r.Group("/api")
 	{
-		
+
 		authGroup := api.Group("/auth")
 		authGroup.Use(middleware.RateLimiter(10, 60))
 		{
@@ -201,7 +221,6 @@ func main() {
 			authGroup.GET("/verify", authHandler.Verify)
 		}
 
-		
 		products := api.Group("/products")
 		{
 			products.GET("", productHandler.ListAll)
@@ -209,21 +228,49 @@ func main() {
 			products.GET("/category/:category", productHandler.GetByCategory)
 		}
 
-		
 		community := api.Group("/community")
 		{
 			community.GET("/posts", communityHandler.ListPosts)
 		}
+
+		ngo := api.Group("/ngo")
+		ngo.Use(middleware.RateLimiter(10, 60))
+		{
+			ngo.POST("/interest", ngoHandler.CreateInterest)
+		}
 	}
 
-	
+	admin := r.Group("/admin")
+	{
+		admin.POST("/login", authHandler.AdminLogin)
+	}
+
+	protectedAdmin := r.Group("/admin")
+	protectedAdmin.Use(middleware.JWTAuth(jwtSecret))
+	protectedAdmin.Use(middleware.AdminOnly())
+	protectedAdmin.Use(middleware.CSRFProtection())
+	{
+		protectedAdmin.GET("/me", authHandler.Me)
+		protectedAdmin.GET("/dashboard", productHandler.Dashboard)
+		protectedAdmin.GET("/products", productHandler.ListAdmin)
+		protectedAdmin.GET("/products/:id", productHandler.GetByID)
+		protectedAdmin.POST("/products", productHandler.CreateProduct)
+		protectedAdmin.PUT("/products/:id", productHandler.UpdateProduct)
+		protectedAdmin.DELETE("/products/:id", productHandler.DeleteProduct)
+		protectedAdmin.GET("/users", adminDataHandler.ListUsers)
+		protectedAdmin.GET("/ngo-interests", adminDataHandler.ListNGOInterests)
+		protectedAdmin.GET("/orders", adminDataHandler.ListOrders)
+		protectedAdmin.GET("/orders/:id", adminDataHandler.GetOrder)
+		protectedAdmin.PUT("/orders/:id/status", adminDataHandler.UpdateOrderStatus)
+		protectedAdmin.POST("/uploads/images", adminUploadHandler.UploadImages)
+	}
+
 	protected := r.Group("/api")
 	protected.Use(middleware.JWTAuth(jwtSecret))
 	{
-		
+
 		protected.GET("/auth/me", authHandler.Me)
 
-		
 		cart := protected.Group("/cart")
 		cart.Use(middleware.CSRFProtection())
 		{
@@ -233,18 +280,15 @@ func main() {
 			cart.DELETE("/remove/:itemId", cartHandler.RemoveItem)
 		}
 
-		
 		checkout := protected.Group("/checkout")
-		checkout.Use(middleware.RateLimiter(5, 60)) 
+		checkout.Use(middleware.RateLimiter(5, 60))
 		checkout.Use(middleware.CSRFProtection())
 		{
 			checkout.POST("", orderHandler.CreateOrder)
 		}
 
-		
 		protected.GET("/orders", orderHandler.ListOrders)
 
-		
 		communityWrite := protected.Group("/community")
 		communityWrite.Use(middleware.CSRFProtection())
 		{
@@ -252,26 +296,14 @@ func main() {
 			communityWrite.POST("/like", communityHandler.LikePost)
 		}
 
-		
-		adminProducts := protected.Group("/admin/products")
-		adminProducts.Use(middleware.CSRFProtection())
-		{
-			adminProducts.POST("", productHandler.CreateProduct)
-			adminProducts.PUT("/:id", productHandler.UpdateProduct)
-			adminProducts.DELETE("/:id", productHandler.DeleteProduct)
-		}
-
-		
 		protected.GET("/csrf-token", func(c *gin.Context) {
 			token := middleware.GenerateCSRFToken()
 			c.JSON(http.StatusOK, gin.H{"csrf_token": token})
 		})
 	}
 
-	
 	r.Static("/assets", "./assets")
 
-	
 	log.Printf("✓ API running on http://localhost:%s", port)
 	log.Println("✓ JWT Authentication enabled")
 	log.Println("✓ CSRF Protection active")
@@ -282,7 +314,5 @@ func main() {
 		log.Fatalf("✗ Server failed to start: %v", err)
 	}
 }
-
-
 
 // init function removed

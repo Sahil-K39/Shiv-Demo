@@ -50,7 +50,7 @@ export default function Home() {
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-5xl break-words text-[44px] font-light uppercase leading-[0.92] text-white mix-blend-difference sm:text-[64px] md:text-[96px] xl:text-[112px]"
           >
-            SS26 / THE COUNCIL OF LIGHT
+            SS26 / WHOLESALE BUYING ROOM
           </motion.h1>
 
           <Link href="/shop/shakti">
@@ -61,7 +61,7 @@ export default function Home() {
               className="relative overflow-hidden group inline-block border border-white text-white bg-transparent backdrop-blur-sm px-10 py-5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-500"
             >
               <span className="relative z-10 group-hover:text-black transition-colors duration-500">
-                Explore Collection
+                Start Wholesale Order
               </span>
               <div className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
             </motion.div>
@@ -71,7 +71,7 @@ export default function Home() {
 
       <div className="w-full h-[120px] bg-black flex items-center overflow-hidden border-b border-black select-none">
         <div className="whitespace-nowrap px-4 text-[54px] uppercase animate-marquee md:text-[80px]" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.5)", color: "transparent" }}>
-          FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / SS26 NEW ARRIVALS. / SHAKTI AND SHIVA EDITIONS. / FREE WORLDWIDE SHIPPING ON ALL ORDERS OVER $500. / SS26 NEW ARRIVALS.
+          WHOLESALE MOQ 12 UNITS PER STYLE. / VOLUME ORDERS FOR STUDIOS, RETAILERS, AND COMMUNITY PARTNERS. / SS26 BUYING WINDOW OPEN. / WHOLESALE MOQ 12 UNITS PER STYLE.
         </div>
       </div>
 
@@ -108,7 +108,7 @@ export default function Home() {
 
       <section className="w-full py-20 flex flex-col gap-10 border-b border-black">
         <div className="w-full px-10 text-center">
-          <h3 className="text-2xl text-black uppercase tracking-[0.1em]">NEW ARRIVALS</h3>
+          <h3 className="text-2xl text-black uppercase tracking-[0.1em]">WHOLESALE READY STYLES</h3>
         </div>
 
         {isLoading ? (
@@ -125,7 +125,7 @@ export default function Home() {
 
         <div className="w-full flex justify-center mt-10">
           <Link href="/shop/shakti" className="relative overflow-hidden group inline-block border border-black text-black px-10 py-5 text-[11px] tracking-[0.2em] uppercase bg-white">
-            <span className="relative z-10 group-hover:text-white transition-colors duration-500">VIEW ALL NEW</span>
+            <span className="relative z-10 group-hover:text-white transition-colors duration-500">VIEW WHOLESALE CATALOGUE</span>
             <div className="absolute inset-0 bg-black translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
           </Link>
         </div>

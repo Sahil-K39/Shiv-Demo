@@ -11,8 +11,10 @@ export default function Footer() {
       <Image
         src="/logos/logo4.png"
         alt=""
+        aria-hidden="true"
         width={760}
         height={560}
+        loading="eager"
         className="pointer-events-none absolute -bottom-20 -right-20 h-[420px] w-[560px] object-cover opacity-[0.04] md:h-[560px] md:w-[760px]"
       />
 
@@ -30,6 +32,7 @@ export default function Footer() {
             <li><Link href="/shop/shakti" className="hover:text-black transition-colors">Shakti</Link></li>
             <li><Link href="/shop/shiva" className="hover:text-black transition-colors">Shiva</Link></li>
 
+            <li><Link href="/fabric-selling" className="hover:text-black transition-colors">Fabric Selling</Link></li>
             <li><Link href="/council" className="hover:text-black transition-colors">The Council</Link></li>
           </ul>
         </div>
@@ -48,7 +51,7 @@ export default function Footer() {
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Transmission</h4>
           <p className="text-[10px] tracking-[0.1em] text-gray-500 uppercase leading-loose">
-            Join the Council to receive early access to drops and exclusive revelations.
+            Join the Council for early access to drops, fabric lots, and wholesale updates.
           </p>
           <div className="flex mt-4 border border-black/20 focus-within:border-black transition-colors">
             <input 

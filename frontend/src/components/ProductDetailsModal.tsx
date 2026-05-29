@@ -44,7 +44,10 @@ export default function ProductDetailsModal({ isOpen, onClose, product }: Produc
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
-            <p className="text-xl text-gray-800 mb-4">${product.price.toLocaleString()}</p>
+            <p className="text-xl text-gray-800 mb-1">${product.price.toLocaleString()} wholesale unit</p>
+            <p className="mb-4 text-xs uppercase tracking-[0.14em] text-gray-500">
+              MOQ 12 units per style
+            </p>
             {product.description && (
               <p className="text-sm text-gray-600 mb-4">{product.description}</p>
             )}
@@ -62,7 +65,7 @@ export default function ProductDetailsModal({ isOpen, onClose, product }: Produc
               </div>
             )}
             <button className="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition">
-              Add to Cart
+              Add Wholesale Pack
             </button>
           </div>
         </div>

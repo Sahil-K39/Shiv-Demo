@@ -26,11 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 *.log
 
-# Docker
-.dockerignore
-/Dockerfile
-docker-compose.yml
-
 # IDEs
 .vscode/
 .idea/
@@ -44,15 +39,13 @@ docker-compose.yml
 coverage.out
 
 backend/bin/
+backend/.gocache/
 backend/dist/
+backend/assets/uploads/
 __pycache__/
 *.pyc
 
 # Project specific binaries
-START_SERVER.command
-build.py
-copy_images.py
-server.py
 backend/main.py
 .env
 .vercel

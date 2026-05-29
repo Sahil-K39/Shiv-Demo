@@ -37,7 +37,7 @@ export default function CartDrawer() {
                   YOUR CART
                 </h2>
                 <p className="text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-1">
-                  {items.length} {items.length === 1 ? "ITEM" : "ITEMS"}
+                  {items.length} wholesale {items.length === 1 ? "line" : "lines"}
                 </p>
               </div>
               <button
@@ -59,10 +59,10 @@ export default function CartDrawer() {
               {!isLoading && items.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                   <p className="text-[13px] tracking-[0.1em] text-gray-500 uppercase">
-                    YOUR BAG IS EMPTY
+                    YOUR WHOLESALE ORDER IS EMPTY
                   </p>
                   <p className="text-[11px] text-gray-400 mt-2">
-                    Add garments to begin the order.
+                    Add bulk units to begin a purchase order.
                   </p>
                 </div>
               )}
@@ -111,7 +111,7 @@ export default function CartDrawer() {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, Math.min(10, item.quantity + 1))}
+                          onClick={() => updateQuantity(item.id, Math.min(500, item.quantity + 1))}
                             aria-label={`Increase quantity for ${item.name}`}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:text-black"
                           >
@@ -140,7 +140,7 @@ export default function CartDrawer() {
               <div className="p-8 border-t border-black/5 space-y-4 bg-white">
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] tracking-[0.2em] uppercase text-gray-500">
-                    SUBTOTAL
+                    WHOLESALE SUBTOTAL
                   </span>
                   <span className="text-[18px] tracking-[0.05em] text-black font-light">
                     ${total.toLocaleString()}
@@ -153,7 +153,7 @@ export default function CartDrawer() {
                   whileTap={{ scale: 0.99 }}
                 >
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    PROCEED TO CHECKOUT
+                    REQUEST WHOLESALE CHECKOUT
                   </span>
                   <motion.div
                     className="absolute inset-0 bg-black"
@@ -164,7 +164,7 @@ export default function CartDrawer() {
                 </motion.button>
 
                 <p className="text-[9px] tracking-[0.1em] text-center text-gray-400 uppercase">
-                  Shipping calculated at checkout
+                  MOQ 12 units per style. Shipping and payment terms confirmed after review.
                 </p>
               </div>
             )}
