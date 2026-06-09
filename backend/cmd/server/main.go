@@ -302,7 +302,11 @@ func main() {
 		})
 	}
 
-	r.Static("/assets", "./assets")
+	assetsDir := os.Getenv("ASSETS_DIR")
+	if assetsDir == "" {
+		assetsDir = "./assets"
+	}
+	r.Static("/assets", assetsDir)
 
 	log.Printf("✓ API running on http://localhost:%s", port)
 	log.Println("✓ JWT Authentication enabled")

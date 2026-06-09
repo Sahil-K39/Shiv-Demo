@@ -45,3 +45,15 @@ npm run dev
 - `frontend/`: Next.js application.
 - `assets/`: Static assets shared by the stack.
 - `Shiv Sakti UI & Logo/`: Brand assets and design files.
+
+## Production Upload Storage
+
+Admin product image uploads are stored by the backend and returned as `/assets/uploads/...` URLs. For Render production, add a persistent disk and set:
+
+```bash
+ASSETS_DIR=/app/assets
+UPLOAD_DIR=/app/assets/uploads
+UPLOAD_PUBLIC_PATH=/assets/uploads
+```
+
+Without a persistent disk, uploads can work temporarily but may disappear after a Render restart or redeploy.
