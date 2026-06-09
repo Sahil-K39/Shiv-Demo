@@ -491,6 +491,15 @@ var seedProductRows = []struct {
 	{"Brown Wrap Skirt Set", "shiva", 785.27, []string{"75-153A0113.jpg", "76-153A0115.jpg", "77-153A0118.jpg", "78-153A0119.jpg", "79-153A0120.jpg"}},
 }
 
+var legacySeedSlugs = []string{
+	"void-walker-trench",
+	"asymmetric-drape-dress",
+	"tactical-survival-suit",
+	"deconstructed-blazer",
+	"nomad-cargo-trousers",
+	"ritual-wrap-coat",
+}
+
 func seedProductSlug(name string) string {
 	slug := strings.ToLower(name)
 	slug = strings.ReplaceAll(slug, " ", "-")
@@ -509,25 +518,140 @@ func SeedProducts(db *sql.DB) {
 	var count int
 	QueryRow(db, "SELECT COUNT(*) FROM products").Scan(&count)
 	if count > 0 {
+		if isLegacySeedCatalogue(db, count) {
+			if err := replaceLegacySeedCatalogue(db); err != nil {
+				log.Printf("Failed to replace legacy product seed: %v", err)
+			}
+		}
 		return
 	}
 
-	for i, p := range seedProductRows {
-		id := i + 1
-		featured := id <= 4
-		quantity := 120
-		idText := strconv.Itoa(id)
-		images := seedImagesJSON(p.images)
-		sku := "SS26-" + strings.ToUpper(p.category) + "-" + strings.Repeat("0", 3-len(idText)) + idText
+	if err := seedProducts(db); err != nil {
+		log.Printf("Failed to seed product catalogue: %v", err)
+		return
+	}
+	log.Printf("✓ Seeded %d products into catalogue", len(seedProductRows))
+}
 
-		_, err := Exec(db, `
-			INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, sizes, colors, images, featured, quantity, sku, is_featured, is_active, sale_active, in_stock, updated_at)
-			VALUES (?, ?, ?, ?, 0, false, ?, ?, ?, ?, ?, ?, ?, ?, true, false, ?, CURRENT_TIMESTAMP)
-		`, p.name, seedProductSlug(p.name), "Studio photographed wholesale style with matching front, back, and detail views.", p.price, p.category, `["XS","S","M","L","XL"]`, `["Void Black"]`, images, featured, quantity, sku, featured, quantity > 0)
-		if err != nil {
-			log.Printf("Failed to seed product %s: %v", p.name, err)
+func seedProducts(db *sql.DB) error {
+	for i, p := range seedProductRows {
+		if err := insertSeedProduct(db, i, p.name, p.category, p.price, p.images); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func isLegacySeedCatalogue(db *sql.DB, totalProducts int) bool {
+	var legacyCount, realSeedCount int
+	QueryRow(db, "SELECT COUNT(*) FROM products WHERE slug IN ("+placeholders(len(legacySeedSlugs))+")", anySlice(legacySeedSlugs)...).Scan(&legacyCount)
+	QueryRow(db, "SELECT COUNT(*) FROM products WHERE slug IN ("+placeholders(len(seedProductRows))+")", seedSlugArgs()...).Scan(&realSeedCount)
+	return totalProducts <= len(legacySeedSlugs) && legacyCount >= 4 && realSeedCount == 0
+}
+
+func replaceLegacySeedCatalogue(db *sql.DB) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	refs, err := referencedLegacyProductCount(tx)
+	if err != nil {
+		return err
+	}
+	if refs == 0 {
+		if _, err := tx.Exec(Rebind("DELETE FROM products WHERE slug IN ("+placeholders(len(legacySeedSlugs))+")"), anySlice(legacySeedSlugs)...); err != nil {
+			return err
+		}
+	} else {
+		if _, err := tx.Exec(Rebind("UPDATE products SET is_active = false, in_stock = false, quantity = 0, updated_at = CURRENT_TIMESTAMP WHERE slug IN ("+placeholders(len(legacySeedSlugs))+")"), anySlice(legacySeedSlugs)...); err != nil {
+			return err
 		}
 	}
 
-	log.Printf("✓ Seeded %d products into catalogue", len(seedProductRows))
+	for i, p := range seedProductRows {
+		if err := insertSeedProductTx(tx, i, p.name, p.category, p.price, p.images); err != nil {
+			return err
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+	log.Printf("✓ Replaced legacy demo catalogue with %d production products", len(seedProductRows))
+	return nil
+}
+
+func referencedLegacyProductCount(tx *sql.Tx) (int, error) {
+	args := anySlice(legacySeedSlugs)
+	query := `
+		SELECT
+			(SELECT COUNT(*)
+			 FROM cart_items ci
+			 JOIN products p ON p.id = ci.product_id
+			 WHERE p.slug IN (` + placeholders(len(legacySeedSlugs)) + `))
+			+
+			(SELECT COUNT(*)
+			 FROM order_items oi
+			 JOIN products p ON p.id = oi.product_id
+			 WHERE p.slug IN (` + placeholders(len(legacySeedSlugs)) + `))
+	`
+	allArgs := append(args, args...)
+	var count int
+	err := tx.QueryRow(Rebind(query), allArgs...).Scan(&count)
+	return count, err
+}
+
+func insertSeedProduct(db *sql.DB, index int, name string, category string, price float64, images []string) error {
+	return insertSeedProductWithExec(func(query string, args ...any) (sql.Result, error) {
+		return Exec(db, query, args...)
+	}, index, name, category, price, images)
+}
+
+func insertSeedProductTx(tx *sql.Tx, index int, name string, category string, price float64, images []string) error {
+	return insertSeedProductWithExec(func(query string, args ...any) (sql.Result, error) {
+		return tx.Exec(Rebind(query), args...)
+	}, index, name, category, price, images)
+}
+
+func insertSeedProductWithExec(exec func(string, ...any) (sql.Result, error), index int, name string, category string, price float64, images []string) error {
+	id := index + 1
+	featured := id <= 4
+	quantity := 120
+	idText := strconv.Itoa(id)
+	imagesJSON := seedImagesJSON(images)
+	sku := "SS26-" + strings.ToUpper(category) + "-" + strings.Repeat("0", 3-len(idText)) + idText
+
+	_, err := exec(`
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, sizes, colors, images, featured, quantity, sku, is_featured, is_active, sale_active, in_stock, updated_at)
+		VALUES (?, ?, ?, ?, 0, false, ?, ?, ?, ?, ?, ?, ?, ?, true, false, ?, CURRENT_TIMESTAMP)
+	`, name, seedProductSlug(name), "Studio photographed wholesale style with matching front, back, and detail views.", price, category, `["XS","S","M","L","XL"]`, `["Void Black"]`, imagesJSON, featured, quantity, sku, featured, quantity > 0)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func placeholders(count int) string {
+	if count <= 0 {
+		return "NULL"
+	}
+	return strings.TrimRight(strings.Repeat("?,", count), ",")
+}
+
+func seedSlugArgs() []any {
+	args := make([]any, 0, len(seedProductRows))
+	for _, product := range seedProductRows {
+		args = append(args, seedProductSlug(product.name))
+	}
+	return args
+}
+
+func anySlice(values []string) []any {
+	args := make([]any, 0, len(values))
+	for _, value := range values {
+		args = append(args, value)
+	}
+	return args
 }
