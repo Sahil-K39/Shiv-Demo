@@ -15,7 +15,7 @@ FROM alpine:3.18
 WORKDIR /app
 
 COPY --from=builder /app/shiv-shakti-engine .
-RUN apk add --no-cache ca-certificates && mkdir -p /app/data
+RUN apk add --no-cache ca-certificates && mkdir -p /app/data /app/assets/uploads
 
 EXPOSE 8080
 

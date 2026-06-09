@@ -119,7 +119,7 @@ export default function Home() {
         ) : (
           <div className="grid w-full grid-cols-1 gap-8 bg-white px-6 sm:grid-cols-2 md:px-10 lg:grid-cols-4">
             {products.slice(0, 4).map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+              <ProductCard key={product.slug} product={product} index={i} />
             ))}
           </div>
         )}

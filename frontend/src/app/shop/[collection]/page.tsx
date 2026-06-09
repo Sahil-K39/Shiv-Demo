@@ -54,7 +54,7 @@ export default function ShopCollection() {
           </div>
         ) : (
           products.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
+            <ProductCard key={product.slug} product={product} index={index} />
           ))
         )}
       </div>

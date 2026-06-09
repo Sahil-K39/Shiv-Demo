@@ -222,8 +222,8 @@ function productSlug(name: string) {
 
 export const fallbackProducts: Product[] = groupedProductRows.map(
   (product, index) => {
-    const id = index + 1;
-    const featured = id <= 4;
+    const id = 100000 + index + 1;
+    const featured = index < 4;
 
     return {
       id,
@@ -254,10 +254,44 @@ export const fallbackProducts: Product[] = groupedProductRows.map(
   }
 );
 
+const legacyBackendProductSlugs = new Set([
+  "void-walker-trench",
+  "asymmetric-drape-dress",
+  "tactical-survival-suit",
+  "deconstructed-blazer",
+  "nomad-cargo-trousers",
+  "ritual-wrap-coat",
+]);
+
+function removeLegacyBackendProducts(products: Product[]) {
+  return products.filter((product) => !legacyBackendProductSlugs.has(product.slug));
+}
+
+function hasLegacyBackendCatalogue(products: Product[]) {
+  const legacyCount = products.filter((product) =>
+    legacyBackendProductSlugs.has(product.slug)
+  ).length;
+
+  return legacyCount >= 4;
+}
+
 export async function getAllProducts() {
   try {
     const data = await productsAPI.listAll();
-    return data.products.length > 0 ? data.products : fallbackProducts;
+    const products = data.products ?? [];
+
+    if (products.length === 0) {
+      return fallbackProducts;
+    }
+
+    if (hasLegacyBackendCatalogue(products)) {
+      const nonLegacyProducts = removeLegacyBackendProducts(products);
+      return nonLegacyProducts.length > 0
+        ? [...fallbackProducts, ...nonLegacyProducts]
+        : fallbackProducts;
+    }
+
+    return products;
   } catch {
     return fallbackProducts;
   }
