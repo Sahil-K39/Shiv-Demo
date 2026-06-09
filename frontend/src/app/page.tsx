@@ -8,6 +8,7 @@ import Image from "next/image";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -71,7 +72,7 @@ export default function Home() {
 
       <div className="w-full h-[120px] bg-black flex items-center overflow-hidden border-b border-black select-none">
         <div className="whitespace-nowrap px-4 text-[54px] uppercase animate-marquee md:text-[80px]" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.5)", color: "transparent" }}>
-          WHOLESALE MOQ 12 UNITS PER STYLE. / VOLUME ORDERS FOR STUDIOS, RETAILERS, AND COMMUNITY PARTNERS. / SS26 BUYING WINDOW OPEN. / WHOLESALE MOQ 12 UNITS PER STYLE.
+          WHOLESALE MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE. / SEND ENQUIRY FOR REVIEW, PAYMENT TERMS, AND DELIVERY PLAN. / SS26 BUYING WINDOW OPEN. / WHOLESALE MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE.
         </div>
       </div>
 

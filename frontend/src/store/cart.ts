@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem, User } from "@/types";
 import { cartAPI, authAPI } from "@/lib/api";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 interface CartState {
   
@@ -59,7 +60,7 @@ export const useCartStore = create<CartState>()(
       },
 
       
-      addItem: async (productId, size, color, qty = 1) => {
+      addItem: async (productId, size, color, qty = MIN_WHOLESALE_QUANTITY) => {
         set({ isLoading: true });
         try {
           await cartAPI.addItem({

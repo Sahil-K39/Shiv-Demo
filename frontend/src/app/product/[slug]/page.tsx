@@ -16,6 +16,7 @@ import {
   parseList,
 } from "@/lib/productMedia";
 import { getAllProducts } from "@/lib/productData";
+import { MIN_WHOLESALE_QUANTITY, WHOLESALE_PACK_SIZES } from "@/lib/wholesale";
 
 export default function ProductDetail() {
   const params = useParams();
@@ -28,7 +29,7 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState("");
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
-  const [quantity, setQuantity] = useState(12);
+  const [quantity, setQuantity] = useState(MIN_WHOLESALE_QUANTITY);
 
   useEffect(() => {
     
@@ -150,7 +151,7 @@ export default function ProductDetail() {
               ${product.price.toLocaleString()} wholesale unit
             </p>
             <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-stone">
-              MOQ 12 units per style. Pack quantities can be adjusted before checkout.
+              MOQ {MIN_WHOLESALE_QUANTITY} units per style. Pack quantities can be adjusted before enquiry review.
             </p>
           </div>
 
@@ -218,13 +219,13 @@ export default function ProductDetail() {
                   Wholesale quantity
                 </p>
                 <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-bone/55">
-                  Minimum order: 12 units
+                  Minimum order: {MIN_WHOLESALE_QUANTITY} units
                 </p>
               </div>
               <div className="flex items-center border border-black/15">
                 <button
                   type="button"
-                  onClick={() => setQuantity((value) => Math.max(12, value - 1))}
+                  onClick={() => setQuantity((value) => Math.max(MIN_WHOLESALE_QUANTITY, value - 1))}
                   className="h-11 w-11 text-[18px] text-stone transition-colors hover:text-black"
                   aria-label="Decrease wholesale quantity"
                 >
@@ -245,7 +246,7 @@ export default function ProductDetail() {
             </div>
 
             <div className="grid grid-cols-4 gap-2">
-              {[12, 24, 48, 96].map((packSize) => (
+              {WHOLESALE_PACK_SIZES.map((packSize) => (
                 <button
                   key={packSize}
                   type="button"
@@ -285,7 +286,7 @@ export default function ProductDetail() {
             ) : product.in_stock ? (
               <>
                 <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-                  ADD WHOLESALE PACK
+                  ADD TO WHOLESALE ENQUIRY
                 </span>
                 <div className="absolute inset-0 translate-y-[100%] bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
               </>
@@ -295,7 +296,7 @@ export default function ProductDetail() {
           </motion.button>
           
           <ul className="space-y-2 pt-6 text-[10px] uppercase tracking-[0.15em] text-stone">
-            {["WHOLESALE PO REVIEW", "BULK SHIPPING QUOTED AFTER ORDER", "MADE IN LIMITED RUNS"].map((item) => (
+            {["WHOLESALE ENQUIRY REVIEW", "PAYMENT METHOD SHARED AFTER APPROVAL", "BULK SHIPPING QUOTED AFTER REVIEW"].map((item) => (
               <li key={item} className="flex items-center gap-2">
                 <CheckIcon className="h-3.5 w-3.5 text-black" />
                 <span>{item}</span>

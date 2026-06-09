@@ -5,6 +5,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
 import type { Product, ProductInput } from "@/types";
 import { getColorSwatch, getProductImages, parseList } from "@/lib/productMedia";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 const emptyForm: ProductInput = {
   name: "",
@@ -458,7 +459,10 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState<ProductInput>(emptyForm);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
+  const [stockNotice, setStockNotice] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [savingStockId, setSavingStockId] = useState<number | null>(null);
+  const [stockDrafts, setStockDrafts] = useState<Record<number, string>>({});
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "hidden" | "low" | "sale">("all");
 
@@ -498,7 +502,7 @@ export default function AdminProductsPage() {
         statusFilter === "all" ||
         (statusFilter === "active" && product.is_active !== false) ||
         (statusFilter === "hidden" && product.is_active === false) ||
-        (statusFilter === "low" && quantity > 0 && quantity <= 10) ||
+        (statusFilter === "low" && quantity > 0 && quantity < MIN_WHOLESALE_QUANTITY) ||
         (statusFilter === "sale" && Boolean(product.sale_active || product.is_on_sale));
 
       return matchesQuery && matchesStatus;
@@ -509,7 +513,7 @@ export default function AdminProductsPage() {
     const totalStock = products.reduce((sum, product) => sum + productQuantity(product), 0);
     const lowStock = products.filter((product) => {
       const quantity = productQuantity(product);
-      return quantity > 0 && quantity <= 10;
+      return quantity > 0 && quantity < MIN_WHOLESALE_QUANTITY;
     }).length;
     const outOfStock = products.filter((product) => productQuantity(product) === 0).length;
     const activeSales = products.filter((product) => product.sale_active || product.is_on_sale).length;
@@ -525,6 +529,7 @@ export default function AdminProductsPage() {
       } else {
         await adminAPI.createProduct(form);
       }
+      setStockNotice("");
       setForm(emptyForm);
       setEditingProduct(null);
       await loadProducts();
@@ -543,6 +548,49 @@ export default function AdminProductsPage() {
       await loadProducts();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not delete product");
+    }
+  }
+
+  function stockDraft(product: Product) {
+    return stockDrafts[product.id] ?? String(productQuantity(product));
+  }
+
+  function setStockDraft(product: Product, value: string) {
+    setStockDrafts((current) => ({ ...current, [product.id]: value }));
+  }
+
+  function adjustStockDraft(product: Product, delta: number) {
+    const current = Number(stockDraft(product));
+    const safeCurrent = Number.isFinite(current) ? current : productQuantity(product);
+    setStockDraft(product, String(Math.max(0, safeCurrent + delta)));
+  }
+
+  async function saveStock(product: Product) {
+    const nextStock = Number(stockDraft(product));
+    if (!Number.isInteger(nextStock) || nextStock < 0 || nextStock > 100000) {
+      setError("Stock must be a whole number between 0 and 100000.");
+      return;
+    }
+
+    setError("");
+    setStockNotice("");
+    setSavingStockId(product.id);
+    try {
+      await adminAPI.updateProduct(product.id, {
+        ...productToForm(product),
+        quantity: nextStock,
+      });
+      setStockDrafts((current) => {
+        const next = { ...current };
+        delete next[product.id];
+        return next;
+      });
+      setStockNotice(`${product.name} stock updated to ${nextStock} units.`);
+      await loadProducts();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update stock");
+    } finally {
+      setSavingStockId(null);
     }
   }
 
@@ -580,11 +628,18 @@ export default function AdminProductsPage() {
         </p>
       )}
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {stockNotice && (
+        <p className="mb-5 border border-green-200 bg-green-50 p-3 text-[11px] uppercase tracking-[0.12em] text-green-700">
+          {stockNotice}
+        </p>
+      )}
+
+      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         {[
           ["Products", products.length],
           ["Total Units", summary.totalStock],
-          ["Low Stock", summary.lowStock],
+          [`Low < ${MIN_WHOLESALE_QUANTITY}`, summary.lowStock],
+          ["Out Of Stock", summary.outOfStock],
           ["Sale Active", summary.activeSales],
         ].map(([label, value]) => (
           <div key={label} className="border border-black/10 p-4">
@@ -627,7 +682,7 @@ export default function AdminProductsPage() {
 
       <div className="grid gap-6 2xl:grid-cols-[1fr_520px]">
         <div className="overflow-x-auto border border-black/10">
-          <table className="w-full min-w-[1120px] border-collapse text-left">
+          <table className="w-full min-w-[1280px] border-collapse text-left">
             <thead className="bg-neutral-50 text-[10px] uppercase tracking-[0.16em] text-black/45">
               <tr>
                 <th className="p-4">Product</th>
@@ -643,7 +698,10 @@ export default function AdminProductsPage() {
             <tbody className="divide-y divide-black/10 text-[13px]">
               {filteredProducts.map((product) => {
                 const quantity = productQuantity(product);
-                const lowStock = quantity > 0 && quantity <= 10;
+                const lowStock = quantity > 0 && quantity < MIN_WHOLESALE_QUANTITY;
+                const draft = stockDraft(product);
+                const draftNumber = Number(draft);
+                const hasStockChange = Number.isFinite(draftNumber) && draftNumber !== quantity;
                 const image = getProductImages(product)[0];
                 return (
                   <tr key={product.id} className="align-top">
@@ -683,13 +741,49 @@ export default function AdminProductsPage() {
                       ) : null}
                     </td>
                     <td className="p-4">
-                      {quantity === 0 ? (
-                        <StatusBadge tone="red">Out</StatusBadge>
-                      ) : lowStock ? (
-                        <StatusBadge tone="amber">Low {quantity}</StatusBadge>
-                      ) : (
-                        <StatusBadge tone="green">In {quantity}</StatusBadge>
-                      )}
+                      <div className="space-y-3">
+                        {quantity === 0 ? (
+                          <StatusBadge tone="red">Out</StatusBadge>
+                        ) : lowStock ? (
+                          <StatusBadge tone="amber">Low {quantity}</StatusBadge>
+                        ) : (
+                          <StatusBadge tone="green">In {quantity}</StatusBadge>
+                        )}
+                        <div className="flex w-[190px] items-center border border-black/10">
+                          <button
+                            type="button"
+                            aria-label={`Decrease stock for ${product.name}`}
+                            className="h-9 w-9 border-r border-black/10 text-[12px] text-black/55 hover:bg-neutral-50 hover:text-black"
+                            onClick={() => adjustStockDraft(product, -MIN_WHOLESALE_QUANTITY)}
+                          >
+                            -50
+                          </button>
+                          <input
+                            type="number"
+                            min="0"
+                            max="100000"
+                            value={draft}
+                            onChange={(event) => setStockDraft(product, event.target.value)}
+                            className="h-9 min-w-0 flex-1 border-0 px-2 text-center text-[12px] outline-none"
+                          />
+                          <button
+                            type="button"
+                            aria-label={`Increase stock for ${product.name}`}
+                            className="h-9 w-9 border-l border-black/10 text-[12px] text-black/55 hover:bg-neutral-50 hover:text-black"
+                            onClick={() => adjustStockDraft(product, MIN_WHOLESALE_QUANTITY)}
+                          >
+                            +50
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          disabled={!hasStockChange || savingStockId === product.id}
+                          className="w-[190px] border border-black/15 px-3 py-2 text-[10px] uppercase tracking-[0.12em] disabled:opacity-40"
+                          onClick={() => saveStock(product)}
+                        >
+                          {savingStockId === product.id ? "Saving..." : "Save Stock"}
+                        </button>
+                      </div>
                     </td>
                     <td className="p-4">
                       {product.sale_active || product.is_on_sale ? (

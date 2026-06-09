@@ -24,6 +24,7 @@ function formatDate(value?: string | null) {
 }
 
 function statusLabel(status: OrderStatus) {
+  if (status === "payment_pending") return "enquiry pending";
   return status.replace("_", " ");
 }
 
@@ -32,6 +33,14 @@ function statusTone(status: OrderStatus) {
   if (status === "shipped") return "black";
   if (status === "cancelled" || status === "refunded") return "red";
   return "amber";
+}
+
+function orderUnits(order: AdminOrder) {
+  return order.items.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function isSoldStatus(status: OrderStatus) {
+  return status === "confirmed" || status === "shipped" || status === "delivered";
 }
 
 function Badge({
@@ -113,9 +122,17 @@ export default function AdminOrdersPage() {
     const pending = orders.filter(
       (order) => order.status === "pending" || order.status === "payment_pending"
     ).length;
-    const paid = orders.filter((order) => Boolean(order.payment_confirmed_at)).length;
-    const gross = orders.reduce((sum, order) => sum + order.total_price, 0);
-    return { pending, paid, gross };
+    const soldOrders = orders.filter((order) => isSoldStatus(order.status));
+    const paid = soldOrders.length;
+    const gross = orders
+      .filter((order) => order.status !== "cancelled" && order.status !== "refunded")
+      .reduce((sum, order) => sum + order.total_price, 0);
+    const confirmedValue = soldOrders.reduce((sum, order) => sum + order.total_price, 0);
+    const unitsPending = orders
+      .filter((order) => order.status === "pending" || order.status === "payment_pending")
+      .reduce((sum, order) => sum + orderUnits(order), 0);
+    const unitsSold = soldOrders.reduce((sum, order) => sum + orderUnits(order), 0);
+    return { pending, paid, gross, confirmedValue, unitsPending, unitsSold };
   }, [orders]);
 
   async function updateStatus(order: AdminOrder, status: OrderStatus) {
@@ -148,10 +165,10 @@ export default function AdminOrdersPage() {
           Fulfillment
         </p>
         <h1 className="text-[32px] font-light uppercase tracking-[0.12em]">
-          Orders
+          Wholesale Enquiries
         </h1>
         <p className="mt-3 max-w-2xl text-[12px] uppercase leading-relaxed tracking-[0.12em] text-black/45">
-          Wholesale order totals, items, customer email, shipping details, and payment confirmation status.
+          Buyer enquiries, requested quantities, customer email, delivery details, and manual payment confirmation status.
         </p>
       </div>
 
@@ -161,12 +178,15 @@ export default function AdminOrdersPage() {
         </p>
       )}
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
         {[
-          ["Total Orders", orders.length],
-          ["Payment Pending", summary.pending],
-          ["Payment Confirmed", summary.paid],
-          ["Gross Value", money(summary.gross)],
+          ["Total Enquiries", orders.length],
+          ["Pending Review", summary.pending],
+          ["Units In Review", summary.unitsPending],
+          ["Units Sold", summary.unitsSold],
+          ["Confirmed Sales", summary.paid],
+          ["Confirmed Value", money(summary.confirmedValue)],
+          ["Enquiry Value", money(summary.gross)],
         ].map(([label, value]) => (
           <div key={label} className="border border-black/10 p-4">
             <p className="text-[10px] uppercase tracking-[0.16em] text-black/45">
@@ -181,7 +201,7 @@ export default function AdminOrdersPage() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search order, customer, phone, payment reference"
+          placeholder="Search enquiry, customer, phone, payment reference"
           className="min-h-11 flex-1 border border-black/10 px-4 text-[13px] outline-none focus:border-black"
         />
         <div className="flex flex-wrap gap-2">
@@ -196,7 +216,7 @@ export default function AdminOrdersPage() {
                   : "border-black/10 text-black/55 hover:border-black/40 hover:text-black"
               }`}
             >
-              {status.replace("_", " ")}
+              {statusLabel(status as OrderStatus)}
             </button>
           ))}
         </div>
@@ -209,15 +229,16 @@ export default function AdminOrdersPage() {
               <div>
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   <h2 className="text-[15px] uppercase tracking-[0.14em]">
-                    Order #{order.id}
+                    Enquiry #{order.id}
                   </h2>
                   <Badge tone={statusTone(order.status)}>
                     {statusLabel(order.status)}
                   </Badge>
+                  <Badge tone="neutral">{orderUnits(order)} Units</Badge>
                   {order.payment_confirmed_at ? (
                     <Badge tone="green">Paid</Badge>
                   ) : (
-                    <Badge tone="amber">Payment Pending</Badge>
+                    <Badge tone="amber">Awaiting Payment</Badge>
                   )}
                 </div>
                 <p className="text-[12px] normal-case tracking-normal text-black/65">
@@ -236,7 +257,7 @@ export default function AdminOrdersPage() {
                   onClick={() => updateStatus(order, "confirmed")}
                   className="border border-black bg-black px-3 py-2 text-[10px] uppercase tracking-[0.12em] text-white disabled:opacity-50"
                 >
-                  Mark Paid
+                  Confirm Payment
                 </button>
                 <button
                   type="button"
@@ -268,14 +289,17 @@ export default function AdminOrdersPage() {
             <div className="grid gap-5 p-5 xl:grid-cols-[1fr_1fr_1.1fr]">
               <div>
                 <p className="mb-3 text-[10px] uppercase tracking-[0.2em] text-black/45">
-                  Payment
+                  Approval And Payment
                 </p>
                 <p className="text-[24px] font-light">{money(order.total_price)}</p>
                 <p className="mt-3 text-[12px] leading-relaxed text-black/60">
-                  Reference: {order.payment_reference || "No reference recorded"}
+                  Payment note: {order.payment_reference || "No payment note recorded"}
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-black/60">
-                  Confirmed: {formatDate(order.payment_confirmed_at)}
+                  Units tracked: {orderUnits(order)}
+                </p>
+                <p className="mt-1 text-[12px] leading-relaxed text-black/60">
+                  Payment confirmed: {formatDate(order.payment_confirmed_at)}
                 </p>
               </div>
 
@@ -331,7 +355,7 @@ export default function AdminOrdersPage() {
 
         {filteredOrders.length === 0 && (
           <p className="border border-black/10 p-8 text-center text-[12px] uppercase tracking-[0.14em] text-black/45">
-            No orders match this filter.
+            No enquiries match this filter.
           </p>
         )}
       </div>

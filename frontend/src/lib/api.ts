@@ -85,7 +85,19 @@ export const adminAPI = {
       total_products: number;
       total_stock: number;
       low_stock_products: number;
+      out_of_stock_products: number;
       active_sale_products: number;
+      total_enquiries: number;
+      pending_enquiries: number;
+      confirmed_orders: number;
+      shipped_orders: number;
+      delivered_orders: number;
+      cancelled_orders: number;
+      units_requested: number;
+      units_pending: number;
+      units_sold: number;
+      gross_enquiry_value: number;
+      confirmed_revenue: number;
     }>(`${ADMIN_API_PREFIX}/dashboard`),
 
   listProducts: () =>

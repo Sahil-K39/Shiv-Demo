@@ -39,8 +39,8 @@ Validation:
 - `GET /api/products` returns seeded products or production products.
 - Registering a user sends or logs a verification email.
 - Login sets the `shiv_session` cookie.
-- `POST /api/ngo/interest` stores a public NGO interest submission.
-- Checkout creates an order with `payment_pending`, not `confirmed`, until a gateway webhook is integrated.
+- NGO is hidden from public navigation until the post-launch NGO phase.
+- Wholesale enquiry creates a `payment_pending` record for manual review, not an online payment.
 
 ## 3. Frontend on Vercel
 
@@ -60,7 +60,7 @@ Validation:
 - Product images render through Next image optimization.
 - Product catalogue calls the live backend.
 - Login and authenticated cart requests include cookies.
-- CSRF-protected cart and checkout actions include `X-CSRF-Token`.
+- CSRF-protected cart and wholesale enquiry actions include `X-CSRF-Token`.
 
 ## 4. Production Smoke Test
 
@@ -70,14 +70,14 @@ Validation:
 - Log in.
 - Add a product to cart.
 - Update item quantity.
-- Submit checkout with shipping details.
-- Confirm order email dispatch or mock-mode log output.
+- Submit a wholesale enquiry with delivery details.
+- Confirm wholesale enquiry email dispatch or mock-mode log output.
 - Create and like a community post.
-- Submit NGO interest after the backend endpoint is wired.
+- Re-enable and test NGO interest after the planned post-launch NGO phase.
 
 ## 5. Go-Live Risks
 
 - `APP_ENV=production` now requires `DATABASE_URL`, so production uses PostgreSQL instead of local SQLite.
-- Checkout no longer marks unpaid orders as confirmed, but Stripe/Razorpay webhook verification is still the next production payment step.
+- The launch flow is manual wholesale enquiry: payment and delivery instructions are shared after your review.
 - CSRF tokens are process-local.
 - If importing old SQLite data, run a one-time data migration before launch.

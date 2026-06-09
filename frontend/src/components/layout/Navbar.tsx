@@ -22,7 +22,6 @@ const navLinks = [
   { href: "/", label: "WHOLESALE" },
   { href: "/fabric-selling", label: "FABRIC SELLING" },
   { href: "/council", label: "COUNCIL" },
-  { href: "/ngo", label: "NGO" },
 ];
 
 export default function Navbar() {
@@ -92,7 +91,7 @@ export default function Navbar() {
               closeMenu();
               toggleCart();
             }}
-            aria-label={`Open cart${count > 0 ? ` with ${count} item${count === 1 ? "" : "s"}` : ""}`}
+            aria-label={`Open wholesale enquiry${count > 0 ? ` with ${count} unit${count === 1 ? "" : "s"}` : ""}`}
             className="icon-button relative"
           >
             <BagIcon />

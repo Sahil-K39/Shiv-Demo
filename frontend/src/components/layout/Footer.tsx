@@ -40,7 +40,6 @@ export default function Footer() {
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Information</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-500 uppercase">
-            <li><Link href="/ngo" className="hover:text-black transition-colors">Women Employment NGO</Link></li>
             <li><Link href="/shipping" className="hover:text-black transition-colors">Shipping & Returns</Link></li>
             <li><Link href="/terms" className="hover:text-black transition-colors">Terms of Service</Link></li>
             <li><Link href="/privacy" className="hover:text-black transition-colors">Privacy Policy</Link></li>

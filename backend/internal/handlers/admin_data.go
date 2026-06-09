@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -14,6 +15,21 @@ import (
 
 type AdminDataHandler struct {
 	db *sql.DB
+}
+
+type inventoryConflictError struct {
+	message string
+}
+
+func (e inventoryConflictError) Error() string {
+	return e.message
+}
+
+type orderInventoryLine struct {
+	ProductID int64
+	Quantity  int
+	Available int
+	Name      string
 }
 
 func NewAdminDataHandler(db *sql.DB) *AdminDataHandler {
@@ -130,36 +146,79 @@ func (h *AdminDataHandler) UpdateOrderStatus(c *gin.Context) {
 
 	paymentReference := strings.TrimSpace(input.PaymentReference)
 	var result sql.Result
-	if status == "confirmed" {
-		result, err = store.Exec(h.db, `
+	tx, err := h.db.Begin()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "transaction_failed"})
+		return
+	}
+
+	var currentStatus string
+	if err := tx.QueryRow(store.Rebind("SELECT status FROM orders WHERE id = ?"), id).Scan(&currentStatus); err != nil {
+		tx.Rollback()
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": "order_not_found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error"})
+		return
+	}
+
+	unitsAdjusted, err := h.adjustInventoryForStatusChange(tx, id, currentStatus, status)
+	if err != nil {
+		tx.Rollback()
+		if conflict, ok := err.(inventoryConflictError); ok {
+			c.JSON(http.StatusConflict, gin.H{"error": "stock_limit_exceeded", "message": conflict.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "inventory_update_failed", "message": err.Error()})
+		return
+	}
+
+	if soldOrderStatus(status) {
+		if paymentReference != "" {
+			result, err = tx.Exec(store.Rebind(`
 			UPDATE orders
-			SET status = ?, payment_reference = ?, payment_confirmed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+			SET status = ?, payment_reference = ?, payment_confirmed_at = COALESCE(payment_confirmed_at, CURRENT_TIMESTAMP), updated_at = CURRENT_TIMESTAMP
 			WHERE id = ?
-		`, status, paymentReference, id)
+		`), status, paymentReference, id)
+		} else {
+			result, err = tx.Exec(store.Rebind(`
+			UPDATE orders
+			SET status = ?, payment_confirmed_at = COALESCE(payment_confirmed_at, CURRENT_TIMESTAMP), updated_at = CURRENT_TIMESTAMP
+			WHERE id = ?
+		`), status, id)
+		}
 	} else if paymentReference != "" {
-		result, err = store.Exec(h.db, `
+		result, err = tx.Exec(store.Rebind(`
 			UPDATE orders
 			SET status = ?, payment_reference = ?, updated_at = CURRENT_TIMESTAMP
 			WHERE id = ?
-		`, status, paymentReference, id)
+		`), status, paymentReference, id)
 	} else {
-		result, err = store.Exec(h.db, `
+		result, err = tx.Exec(store.Rebind(`
 			UPDATE orders
 			SET status = ?, updated_at = CURRENT_TIMESTAMP
 			WHERE id = ?
-		`, status, id)
+		`), status, id)
 	}
 
 	if err != nil {
+		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_update_failed", "message": err.Error()})
 		return
 	}
 	if affected, err := result.RowsAffected(); err == nil && affected == 0 {
+		tx.Rollback()
 		c.JSON(http.StatusNotFound, gin.H{"error": "order_not_found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Order updated"})
+	if err := tx.Commit(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "commit_failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Order updated", "units_adjusted": unitsAdjusted})
 }
 
 func validOrderStatus(status string) bool {
@@ -169,6 +228,91 @@ func validOrderStatus(status string) bool {
 	default:
 		return false
 	}
+}
+
+func soldOrderStatus(status string) bool {
+	switch status {
+	case "confirmed", "shipped", "delivered":
+		return true
+	default:
+		return false
+	}
+}
+
+func (h *AdminDataHandler) adjustInventoryForStatusChange(tx *sql.Tx, orderID int64, fromStatus string, toStatus string) (int, error) {
+	fromSold := soldOrderStatus(fromStatus)
+	toSold := soldOrderStatus(toStatus)
+	if fromSold == toSold {
+		return 0, nil
+	}
+
+	lines, err := h.fetchOrderInventoryLines(tx, orderID)
+	if err != nil {
+		return 0, err
+	}
+
+	unitsAdjusted := 0
+	if !fromSold && toSold {
+		for _, line := range lines {
+			if line.Available < line.Quantity {
+				return 0, inventoryConflictError{
+					message: fmt.Sprintf("%s has only %d units available, but this enquiry needs %d.", line.Name, line.Available, line.Quantity),
+				}
+			}
+		}
+		for _, line := range lines {
+			if _, err := tx.Exec(store.Rebind(`
+				UPDATE products
+				SET quantity = quantity - ?,
+					in_stock = CASE WHEN quantity - ? > 0 THEN ? ELSE ? END,
+					updated_at = CURRENT_TIMESTAMP
+				WHERE id = ?
+			`), line.Quantity, line.Quantity, true, false, line.ProductID); err != nil {
+				return 0, err
+			}
+			unitsAdjusted += line.Quantity
+		}
+		return unitsAdjusted, nil
+	}
+
+	for _, line := range lines {
+		if _, err := tx.Exec(store.Rebind(`
+			UPDATE products
+			SET quantity = quantity + ?,
+				in_stock = ?,
+				updated_at = CURRENT_TIMESTAMP
+			WHERE id = ?
+		`), line.Quantity, true, line.ProductID); err != nil {
+			return 0, err
+		}
+		unitsAdjusted += line.Quantity
+	}
+
+	return -unitsAdjusted, nil
+}
+
+func (h *AdminDataHandler) fetchOrderInventoryLines(tx *sql.Tx, orderID int64) ([]orderInventoryLine, error) {
+	rows, err := tx.Query(store.Rebind(`
+		SELECT oi.product_id, oi.quantity, p.quantity, COALESCE(p.name, oi.name)
+		FROM order_items oi
+		JOIN products p ON p.id = oi.product_id
+		WHERE oi.order_id = ?
+	`), orderID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	lines := []orderInventoryLine{}
+	for rows.Next() {
+		var line orderInventoryLine
+		if err := rows.Scan(&line.ProductID, &line.Quantity, &line.Available, &line.Name); err != nil {
+			return nil, err
+		}
+		lines = append(lines, line)
+	}
+
+	return lines, rows.Err()
 }
 
 func (h *AdminDataHandler) fetchOrders(where string, args []any) ([]models.AdminOrder, error) {

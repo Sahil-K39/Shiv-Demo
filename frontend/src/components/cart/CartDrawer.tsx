@@ -2,15 +2,66 @@
 
 "use client";
 
+import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useCartStore } from "@/store/cart";
 import { CloseIcon, MinusIcon, PlusIcon } from "@/components/ui/Icons";
+import { ordersAPI } from "@/lib/api";
 import { getCartItemImage } from "@/lib/productMedia";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
+
+const emptyEnquiryForm = {
+  shipping_name: "",
+  shipping_address: "",
+  shipping_city: "",
+  shipping_state: "",
+  shipping_zip: "",
+  shipping_country: "India",
+  shipping_phone: "+91 ",
+};
 
 export default function CartDrawer() {
-  const { items, isOpen, closeCart, total, removeItem, updateQuantity, isLoading } =
+  const { items, isOpen, closeCart, total, removeItem, updateQuantity, fetchCart, isLoading, user } =
     useCartStore();
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
+  const [form, setForm] = useState(emptyEnquiryForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const totalUnits = items.reduce((sum, item) => sum + item.quantity, 0);
+  const canSendEnquiry = Boolean(user) && totalUnits >= MIN_WHOLESALE_QUANTITY;
+  const enquiryBlockedReason = !user
+    ? "Log in to send this wholesale enquiry."
+    : totalUnits < MIN_WHOLESALE_QUANTITY
+      ? `Add at least ${MIN_WHOLESALE_QUANTITY} units to send an enquiry.`
+      : "";
+
+  function setField(field: keyof typeof emptyEnquiryForm, value: string) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  async function handleEnquirySubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await ordersAPI.checkout(form);
+      setMessage(
+        `Enquiry #${response.order_id} sent. We will review quantities, payment method, and delivery plan before confirming.`
+      );
+      setForm(emptyEnquiryForm);
+      setIsEnquiryOpen(false);
+      await fetchCart();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send enquiry.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -34,7 +85,7 @@ export default function CartDrawer() {
             <div className="flex items-center justify-between p-8 border-b border-black/5">
               <div>
                 <h2 className="text-[18px] tracking-[0.15em] uppercase font-light text-black">
-                  YOUR CART
+                  WHOLESALE ENQUIRY
                 </h2>
                 <p className="text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-1">
                   {items.length} wholesale {items.length === 1 ? "line" : "lines"}
@@ -59,10 +110,10 @@ export default function CartDrawer() {
               {!isLoading && items.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                   <p className="text-[13px] tracking-[0.1em] text-gray-500 uppercase">
-                    YOUR WHOLESALE ORDER IS EMPTY
+                    YOUR WHOLESALE ENQUIRY IS EMPTY
                   </p>
                   <p className="text-[11px] text-gray-400 mt-2">
-                    Add bulk units to begin a purchase order.
+                    Add at least {MIN_WHOLESALE_QUANTITY} units to begin a buyer enquiry.
                   </p>
                 </div>
               )}
@@ -101,7 +152,12 @@ export default function CartDrawer() {
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center border border-black/10">
                           <button
-                            onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                            onClick={() =>
+                              updateQuantity(
+                                item.id,
+                                Math.max(MIN_WHOLESALE_QUANTITY, item.quantity - 1)
+                              )
+                            }
                             aria-label={`Decrease quantity for ${item.name}`}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:text-black"
                           >
@@ -111,7 +167,7 @@ export default function CartDrawer() {
                             {item.quantity}
                           </span>
                           <button
-                          onClick={() => updateQuantity(item.id, Math.min(500, item.quantity + 1))}
+                            onClick={() => updateQuantity(item.id, Math.min(500, item.quantity + 1))}
                             aria-label={`Increase quantity for ${item.name}`}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:text-black"
                           >
@@ -140,20 +196,86 @@ export default function CartDrawer() {
               <div className="p-8 border-t border-black/5 space-y-4 bg-white">
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] tracking-[0.2em] uppercase text-gray-500">
-                    WHOLESALE SUBTOTAL
+                    ENQUIRY SUBTOTAL
                   </span>
                   <span className="text-[18px] tracking-[0.05em] text-black font-light">
                     ${total.toLocaleString()}
                   </span>
                 </div>
 
+                {enquiryBlockedReason && (
+                  <p className="border border-amber-200 bg-amber-50 p-3 text-[10px] uppercase leading-relaxed tracking-[0.12em] text-amber-700">
+                    {enquiryBlockedReason}
+                  </p>
+                )}
+
+                <div className="flex justify-between text-[10px] uppercase tracking-[0.16em] text-gray-500">
+                  <span>Total Units</span>
+                  <span>{totalUnits}</span>
+                </div>
+
+                {message && (
+                  <p className="border border-green-200 bg-green-50 p-3 text-[10px] uppercase leading-relaxed tracking-[0.12em] text-green-700">
+                    {message}
+                  </p>
+                )}
+
+                {error && (
+                  <p className="border border-red-200 bg-red-50 p-3 text-[10px] uppercase leading-relaxed tracking-[0.12em] text-red-700">
+                    {error}
+                  </p>
+                )}
+
+                {isEnquiryOpen && (
+                  <form onSubmit={handleEnquirySubmit} className="space-y-3 border border-black/10 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">
+                      Buyer and delivery details
+                    </p>
+                    {[
+                      ["shipping_name", "Full name"],
+                      ["shipping_phone", "Phone"],
+                      ["shipping_address", "Address"],
+                      ["shipping_city", "City"],
+                      ["shipping_state", "State"],
+                      ["shipping_zip", "PIN / ZIP"],
+                      ["shipping_country", "Country"],
+                    ].map(([field, label]) => (
+                      <input
+                        key={field}
+                        required
+                        value={form[field as keyof typeof form]}
+                        onChange={(event) =>
+                          setField(field as keyof typeof emptyEnquiryForm, event.target.value)
+                        }
+                        placeholder={label}
+                        className="min-h-11 w-full border border-black/10 px-3 text-[12px] outline-none focus:border-black"
+                      />
+                    ))}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full border border-black bg-black py-3 text-[10px] uppercase tracking-[0.18em] text-white disabled:opacity-50"
+                    >
+                      {isSubmitting ? "Sending..." : "Submit Enquiry"}
+                    </button>
+                  </form>
+                )}
+
                 <motion.button
+                  type="button"
+                  onClick={() => {
+                    setError("");
+                    setMessage("");
+                    if (!canSendEnquiry) return;
+                    setIsEnquiryOpen((value) => !value);
+                  }}
+                  disabled={!canSendEnquiry}
                   className="relative w-full overflow-hidden group border border-black text-black py-4 text-[11px] tracking-[0.2em] uppercase bg-transparent"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    REQUEST WHOLESALE CHECKOUT
+                    {user ? "SEND WHOLESALE ENQUIRY" : "LOG IN TO SEND ENQUIRY"}
                   </span>
                   <motion.div
                     className="absolute inset-0 bg-black"
@@ -164,7 +286,7 @@ export default function CartDrawer() {
                 </motion.button>
 
                 <p className="text-[9px] tracking-[0.1em] text-center text-gray-400 uppercase">
-                  MOQ 12 units per style. Shipping and payment terms confirmed after review.
+                  MOQ {MIN_WHOLESALE_QUANTITY} units. We review the enquiry, then share payment and delivery instructions.
                 </p>
               </div>
             )}

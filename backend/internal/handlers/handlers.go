@@ -20,6 +20,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const minWholesaleQuantity = 50
+
 type AuthHandler struct {
 	service      *auth.Service
 	emailService *email.MailService
@@ -528,17 +530,61 @@ func (h *ProductHandler) ListAdmin(c *gin.Context) {
 }
 
 func (h *ProductHandler) Dashboard(c *gin.Context) {
-	var totalProducts, totalStock, lowStockProducts, activeSaleProducts int
+	var totalProducts, totalStock, lowStockProducts, outOfStockProducts, activeSaleProducts int
+	var totalEnquiries, pendingEnquiries, confirmedOrders, shippedOrders, deliveredOrders, cancelledOrders int
+	var unitsRequested, unitsPending, unitsSold int
+	var grossEnquiryValue, confirmedRevenue float64
+
 	store.QueryRow(h.db, "SELECT COUNT(*) FROM products").Scan(&totalProducts)
 	store.QueryRow(h.db, "SELECT COALESCE(SUM(quantity), 0) FROM products").Scan(&totalStock)
-	store.QueryRow(h.db, "SELECT COUNT(*) FROM products WHERE quantity > 0 AND quantity <= 10").Scan(&lowStockProducts)
-	store.QueryRow(h.db, "SELECT COUNT(*) FROM products WHERE sale_active = ?", true).Scan(&activeSaleProducts)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM products WHERE quantity > 0 AND quantity < ?", minWholesaleQuantity).Scan(&lowStockProducts)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM products WHERE quantity = 0").Scan(&outOfStockProducts)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM products WHERE sale_active = ? OR is_on_sale = ?", true, true).Scan(&activeSaleProducts)
+
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders").Scan(&totalEnquiries)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders WHERE status IN ('pending', 'payment_pending')").Scan(&pendingEnquiries)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders WHERE status = 'confirmed'").Scan(&confirmedOrders)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders WHERE status = 'shipped'").Scan(&shippedOrders)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders WHERE status = 'delivered'").Scan(&deliveredOrders)
+	store.QueryRow(h.db, "SELECT COUNT(*) FROM orders WHERE status IN ('cancelled', 'refunded')").Scan(&cancelledOrders)
+	store.QueryRow(h.db, "SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status NOT IN ('cancelled', 'refunded')").Scan(&grossEnquiryValue)
+	store.QueryRow(h.db, "SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status IN ('confirmed', 'shipped', 'delivered')").Scan(&confirmedRevenue)
+	store.QueryRow(h.db, `
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_items oi
+		JOIN orders o ON o.id = oi.order_id
+		WHERE o.status NOT IN ('cancelled', 'refunded')
+	`).Scan(&unitsRequested)
+	store.QueryRow(h.db, `
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_items oi
+		JOIN orders o ON o.id = oi.order_id
+		WHERE o.status IN ('pending', 'payment_pending')
+	`).Scan(&unitsPending)
+	store.QueryRow(h.db, `
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_items oi
+		JOIN orders o ON o.id = oi.order_id
+		WHERE o.status IN ('confirmed', 'shipped', 'delivered')
+	`).Scan(&unitsSold)
 
 	c.JSON(http.StatusOK, gin.H{
-		"total_products":       totalProducts,
-		"total_stock":          totalStock,
-		"low_stock_products":   lowStockProducts,
-		"active_sale_products": activeSaleProducts,
+		"total_products":        totalProducts,
+		"total_stock":           totalStock,
+		"low_stock_products":    lowStockProducts,
+		"out_of_stock_products": outOfStockProducts,
+		"active_sale_products":  activeSaleProducts,
+		"total_enquiries":       totalEnquiries,
+		"pending_enquiries":     pendingEnquiries,
+		"confirmed_orders":      confirmedOrders,
+		"shipped_orders":        shippedOrders,
+		"delivered_orders":      deliveredOrders,
+		"cancelled_orders":      cancelledOrders,
+		"units_requested":       unitsRequested,
+		"units_pending":         unitsPending,
+		"units_sold":            unitsSold,
+		"gross_enquiry_value":   grossEnquiryValue,
+		"confirmed_revenue":     confirmedRevenue,
 	})
 }
 
@@ -683,6 +729,13 @@ func (h *CartHandler) UpdateItem(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Item removed from cart"})
 		return
 	}
+	if input.Quantity < minWholesaleQuantity {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "minimum_quantity_not_met",
+			"message": "Wholesale enquiries require at least 50 units per style.",
+		})
+		return
+	}
 
 	var available int
 	err := store.QueryRow(h.db, `
@@ -786,6 +839,13 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error"})
 			return
 		}
+		if item.Quantity < minWholesaleQuantity {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   "minimum_quantity_not_met",
+				"message": "Wholesale enquiries require at least 50 units per style.",
+			})
+			return
+		}
 		total += item.Price * float64(item.Quantity)
 		items = append(items, item)
 	}
@@ -807,28 +867,6 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "transaction_failed"})
 		return
-	}
-	for _, item := range items {
-		result, err := store.TxExec(tx, `
-			UPDATE products
-			SET quantity = quantity - ?,
-			    in_stock = CASE WHEN quantity - ? > 0 THEN ? ELSE ? END,
-			    updated_at = CURRENT_TIMESTAMP
-			WHERE id = ? AND is_active = ? AND in_stock = ? AND quantity >= ?
-		`, item.Quantity, item.Quantity, true, false, item.ProductID, true, true, item.Quantity)
-		if err != nil {
-			tx.Rollback()
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "stock_update_failed"})
-			return
-		}
-		if affected, err := result.RowsAffected(); err == nil && affected == 0 {
-			tx.Rollback()
-			c.JSON(http.StatusConflict, gin.H{
-				"error":   "stock_limit_exceeded",
-				"message": "One or more items no longer have enough stock.",
-			})
-			return
-		}
 	}
 
 	const orderStatus = "payment_pending"
@@ -908,7 +946,7 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	}()
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message":  "Wholesale order received. Payment is pending manual review.",
+		"message":  "Wholesale enquiry received. We will review quantities and share payment and delivery instructions.",
 		"order_id": orderID,
 		"status":   orderStatus,
 		"total":    total,

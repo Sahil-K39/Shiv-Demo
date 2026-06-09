@@ -4,14 +4,27 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
-import type { Product } from "@/types";
+import type { AdminOrder, OrderStatus, Product } from "@/types";
 import { getProductImages } from "@/lib/productMedia";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 type DashboardStats = {
   total_products: number;
   total_stock: number;
   low_stock_products: number;
+  out_of_stock_products: number;
   active_sale_products: number;
+  total_enquiries: number;
+  pending_enquiries: number;
+  confirmed_orders: number;
+  shipped_orders: number;
+  delivered_orders: number;
+  cancelled_orders: number;
+  units_requested: number;
+  units_pending: number;
+  units_sold: number;
+  gross_enquiry_value: number;
+  confirmed_revenue: number;
 };
 
 function money(value: number) {
@@ -34,18 +47,37 @@ function productStock(product: Product) {
   return product.quantity ?? 0;
 }
 
+function orderUnits(order: AdminOrder) {
+  return order.items.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function soldOrder(status: OrderStatus) {
+  return status === "confirmed" || status === "shipped" || status === "delivered";
+}
+
+function pendingOrder(status: OrderStatus) {
+  return status === "pending" || status === "payment_pending";
+}
+
+function statusLabel(status: OrderStatus) {
+  if (status === "payment_pending") return "enquiry pending";
+  return status.replace("_", " ");
+}
+
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([adminAPI.dashboard(), adminAPI.listProducts()])
-      .then(([dashboard, productResponse]) => {
+    Promise.all([adminAPI.dashboard(), adminAPI.listProducts(), adminAPI.listOrders()])
+      .then(([dashboard, productResponse, orderResponse]) => {
         if (cancelled) return;
         setStats(dashboard);
         setProducts(productResponse.products);
+        setOrders(orderResponse.orders);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -70,7 +102,7 @@ export default function AdminDashboardPage() {
     const lowStock = products
       .filter((product) => {
         const quantity = productStock(product);
-        return quantity > 0 && quantity <= 10;
+        return quantity > 0 && quantity < MIN_WHOLESALE_QUANTITY;
       })
       .sort((a, b) => productStock(a) - productStock(b));
     const activeSales = products.filter((product) => product.sale_active || product.is_on_sale);
@@ -90,6 +122,20 @@ export default function AdminDashboardPage() {
     const recentProducts = [...products]
       .sort((a, b) => productTime(b) - productTime(a))
       .slice(0, 5);
+    const pendingOrders = orders.filter((order) => pendingOrder(order.status));
+    const soldOrders = orders.filter((order) => soldOrder(order.status));
+    const pendingUnits = pendingOrders.reduce((sum, order) => sum + orderUnits(order), 0);
+    const soldUnits = soldOrders.reduce((sum, order) => sum + orderUnits(order), 0);
+    const requestedUnits = orders
+      .filter((order) => order.status !== "cancelled" && order.status !== "refunded")
+      .reduce((sum, order) => sum + orderUnits(order), 0);
+    const confirmedRevenue = soldOrders.reduce((sum, order) => sum + order.total_price, 0);
+    const grossEnquiryValue = orders
+      .filter((order) => order.status !== "cancelled" && order.status !== "refunded")
+      .reduce((sum, order) => sum + order.total_price, 0);
+    const recentOrders = [...orders]
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 5);
 
     return {
       totalProducts,
@@ -104,29 +150,62 @@ export default function AdminDashboardPage() {
       averagePrice,
       categories,
       recentProducts,
+      pendingOrders,
+      soldOrders,
+      pendingUnits,
+      soldUnits,
+      requestedUnits,
+      confirmedRevenue,
+      grossEnquiryValue,
+      recentOrders,
     };
-  }, [products, stats]);
+  }, [orders, products, stats]);
 
   const metricCards = [
     {
       label: "Total Products",
-      value: number(details.totalProducts),
+      value: number(stats?.total_products ?? details.totalProducts),
       sub: `${number(details.activeProducts)} active / ${number(details.inactiveProducts)} hidden`,
     },
     {
-      label: "Total Stock",
+      label: "Stock On Hand",
       value: number(details.totalStock || stats?.total_stock || 0),
-      sub: `${number(details.outOfStock)} out of stock`,
+      sub: `${number(stats?.out_of_stock_products ?? details.outOfStock)} out of stock`,
     },
     {
-      label: "Inventory Value",
-      value: money(details.inventoryValue),
-      sub: `${money(details.averagePrice)} average unit`,
+      label: "Out Of Stock",
+      value: number(stats?.out_of_stock_products ?? details.outOfStock),
+      sub: "Needs restock before new enquiries",
+    },
+    {
+      label: `Low Stock < ${MIN_WHOLESALE_QUANTITY}`,
+      value: number(stats?.low_stock_products ?? details.lowStock.length),
+      sub: "Needs restock before wholesale sale",
+    },
+    {
+      label: "Pending Enquiries",
+      value: number(stats?.pending_enquiries ?? details.pendingOrders.length),
+      sub: `${number(stats?.units_pending ?? details.pendingUnits)} units in review`,
+    },
+    {
+      label: "Units Sold",
+      value: number(stats?.units_sold ?? details.soldUnits),
+      sub: `${number(stats?.units_requested ?? details.requestedUnits)} units requested total`,
+    },
+    {
+      label: "Confirmed Revenue",
+      value: money(stats?.confirmed_revenue ?? details.confirmedRevenue),
+      sub: `${money(stats?.gross_enquiry_value ?? details.grossEnquiryValue)} enquiry value`,
     },
     {
       label: "Sale Products",
       value: number(details.activeSales.length || stats?.active_sale_products || 0),
       sub: `${number(details.featuredProducts)} featured styles`,
+    },
+    {
+      label: "Inventory Value",
+      value: money(details.inventoryValue),
+      sub: `${money(details.averagePrice)} average unit`,
     },
   ];
 
@@ -141,7 +220,7 @@ export default function AdminDashboardPage() {
             Dashboard
           </h1>
           <p className="mt-3 max-w-2xl text-[12px] uppercase leading-relaxed tracking-[0.12em] text-black/45">
-            Inventory health, wholesale stock pressure, active sale status, and recent catalogue movement.
+            Inventory health, wholesale stock pressure, units pending review, confirmed sales, and recent enquiry movement.
           </p>
         </div>
         <Link
@@ -177,7 +256,7 @@ export default function AdminDashboardPage() {
           <div className="border-b border-black/10 p-5">
             <h2 className="text-[14px] uppercase tracking-[0.16em]">Stock Watchlist</h2>
             <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-black/45">
-              Products at 10 units or fewer.
+              Products below the wholesale minimum of {MIN_WHOLESALE_QUANTITY} units.
             </p>
           </div>
           <div className="divide-y divide-black/10">
@@ -234,6 +313,45 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
+        <section className="border border-black/10">
+          <div className="border-b border-black/10 p-5">
+            <h2 className="text-[14px] uppercase tracking-[0.16em]">Recent Enquiries</h2>
+            <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-black/45">
+              Track units requested, payment state, and customer follow-up.
+            </p>
+          </div>
+          <div className="divide-y divide-black/10">
+            {details.recentOrders.length === 0 ? (
+              <p className="p-5 text-[12px] uppercase tracking-[0.12em] text-black/45">
+                No wholesale enquiries yet.
+              </p>
+            ) : (
+              details.recentOrders.map((order) => (
+                <Link
+                  key={order.id}
+                  href="/admin/orders"
+                  className="grid gap-3 p-5 transition-colors hover:bg-neutral-50 sm:grid-cols-[1fr_auto]"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-[13px] uppercase tracking-[0.1em]">
+                      Enquiry #{order.id} / {order.shipping_name || order.user_name || "Customer"}
+                    </p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-black/45">
+                      {number(orderUnits(order))} units / {statusLabel(order.status)}
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <p className="text-[13px] tracking-[0.08em]">{money(order.total_price)}</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-black/45">
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </section>
+
         <section className="border border-black/10">
           <div className="border-b border-black/10 p-5">
             <h2 className="text-[14px] uppercase tracking-[0.16em]">Recent Updates</h2>

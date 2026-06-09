@@ -515,7 +515,7 @@ func SeedProducts(db *sql.DB) {
 	for i, p := range seedProductRows {
 		id := i + 1
 		featured := id <= 4
-		quantity := 24
+		quantity := 120
 		idText := strconv.Itoa(id)
 		images := seedImagesJSON(p.images)
 		sku := "SS26-" + strings.ToUpper(p.category) + "-" + strings.Repeat("0", 3-len(idText)) + idText

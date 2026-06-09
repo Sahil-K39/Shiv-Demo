@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 export default function ShopCollection() {
   const params = useParams();
@@ -31,7 +32,7 @@ export default function ShopCollection() {
     <div className="w-full bg-white min-h-[80vh] flex flex-col items-center">
       <div className="w-full border-b border-black py-20 text-center">
         <p className="mb-5 text-[10px] font-medium uppercase tracking-[0.28em] text-black/45">
-          Wholesale catalogue / MOQ 12 units per style
+          Wholesale catalogue / MOQ {MIN_WHOLESALE_QUANTITY} units per style
         </p>
         <motion.h1
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
@@ -42,7 +43,7 @@ export default function ShopCollection() {
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
         <p className="mx-auto mt-6 max-w-2xl px-6 text-[12px] uppercase leading-relaxed tracking-[0.14em] text-black/50">
-          Select sizes, colorways, and bulk quantities for boutique, studio, and partner purchase orders.
+          Select sizes, colorways, and bulk quantities for boutique, studio, and partner enquiries.
         </p>
       </div>
 

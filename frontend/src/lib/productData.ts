@@ -241,7 +241,7 @@ export const fallbackProducts: Product[] = groupedProductRows.map(
       images: product.images.map((image) => `/assets/images/${image}`),
       in_stock: true,
       featured,
-      quantity: 24,
+      quantity: 120,
       sku: `SS26-${product.category.toUpperCase()}-${String(id).padStart(3, "0")}`,
       is_featured: featured,
       is_active: true,

@@ -5,7 +5,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIV SHAKTI — Order Confirmed</title>
+    <title>SHIV SHAKTI — Wholesale Enquiry Received</title>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -168,12 +168,12 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
                 <div class="subtitle">Commerce Engine v2.0</div>
             </div>
 
-            <h1>Transmission Confirmed</h1>
-            <p>We have successfully processed your acquisition. Your order is registered in our ledger under ID #{{.Order.ID}}.</p>
+            <h1>Wholesale Enquiry Received</h1>
+            <p>We have received your wholesale enquiry under reference #{{.Order.ID}}. Our team will review quantities, stock, payment method, and delivery plan before final confirmation.</p>
 
             <div class="order-details">
                 <div class="detail-row">
-                    <span class="detail-label">Order Reference:</span>
+                    <span class="detail-label">Enquiry Reference:</span>
                     <span class="detail-value">#{{.Order.ID}}</span>
                 </div>
                 <div class="detail-row">
@@ -181,7 +181,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
                     <span class="detail-value">{{.Order.CreatedAt.Format "Jan 02, 2006 15:04 MST"}}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Status:</span>
+                    <span class="detail-label">Review Status:</span>
                     <span class="detail-value" style="color: #30d158;">{{.Order.Status}}</span>
                 </div>
             </div>
@@ -215,16 +215,16 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
                 </div>
                 <div class="total-row">
                     <span style="color: #666666;">SHIPPING / HANDLING</span>
-                    <span>$0.00</span>
+                    <span>Quoted after review</span>
                 </div>
                 <div class="total-row grand">
-                    <span>TOTAL ACQUISITION COST</span>
+                    <span>ESTIMATED ENQUIRY VALUE</span>
                     <span>${{printf "%.2f" .Order.TotalPrice}}</span>
                 </div>
             </div>
 
             <div class="shipping-card">
-                <div class="shipping-title">Shipping Manifest Details</div>
+                <div class="shipping-title">Requested Delivery Details</div>
                 <div class="shipping-text">
                     <strong>{{.Order.ShippingName}}</strong><br>
                     {{.Order.ShippingAddress}}<br>
@@ -235,7 +235,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
             </div>
 
             <p style="text-align: center; font-size: 10px; color: #555555; margin-top: 30px;">
-                If you need assistance regarding this shipment, please contact support referencing Order #{{.Order.ID}}.
+                We will contact you with payment instructions and delivery details after reviewing Enquiry #{{.Order.ID}}.
             </p>
 
             <div class="footer">

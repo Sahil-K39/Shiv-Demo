@@ -16,6 +16,7 @@ import {
   getProductImages,
   parseList,
 } from "@/lib/productMedia";
+import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 interface ProductCardProps {
   product: Product;
@@ -206,7 +207,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               ${product.price.toLocaleString()} wholesale unit
             </span>
             <span className="text-[9px] tracking-[0.2em] uppercase text-bone/45 border border-bone/15 px-2 py-0.5">
-              MOQ 12
+              MOQ {MIN_WHOLESALE_QUANTITY}
             </span>
             {!product.in_stock && (
               <span className="text-[9px] tracking-[0.2em] uppercase text-accent-ember/70 border border-accent-ember/30 px-2 py-0.5">

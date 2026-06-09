@@ -1,0 +1,3 @@
+export const MIN_WHOLESALE_QUANTITY = 50;
+
+export const WHOLESALE_PACK_SIZES = [50, 100, 150, 250];

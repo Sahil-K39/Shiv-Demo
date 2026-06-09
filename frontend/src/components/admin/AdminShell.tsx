@@ -8,9 +8,8 @@ import { adminAPI } from "@/lib/api";
 const links = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
-  { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/orders", label: "Enquiries" },
   { href: "/admin/users", label: "Users" },
-  { href: "/admin/ngo", label: "NGO Forms" },
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {

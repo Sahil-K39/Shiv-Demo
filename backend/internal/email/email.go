@@ -204,9 +204,9 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 		log.Printf("================ MOCK EMAIL START ================")
 		log.Printf("To: %s", userEmail)
 		log.Printf("From: %s", m.From)
-		log.Printf("Subject: Order Confirmation #%d — SHIV SHAKTI", order.ID)
+		log.Printf("Subject: Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
 		log.Printf("Content Length: %d bytes", body.Len())
-		log.Printf("--- Plaintext summary of email items ---")
+		log.Printf("--- Plaintext summary of enquiry items ---")
 		for _, item := range order.Items {
 			log.Printf(" - %s (Size: %s, Color: %s) x%d @ $%.2f", item.Name, item.Size, item.Color, item.Quantity, item.Price)
 		}
@@ -219,7 +219,7 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 	headers := make(map[string]string)
 	headers["From"] = m.From
 	headers["To"] = userEmail
-	headers["Subject"] = fmt.Sprintf("Order Confirmation #%d — SHIV SHAKTI", order.ID)
+	headers["Subject"] = fmt.Sprintf("Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
 	headers["MIME-Version"] = "1.0"
 	headers["Content-Type"] = "text/html; charset=UTF-8"
 
@@ -239,6 +239,6 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 		return fmt.Errorf("failed to send smtp email: %w", err)
 	}
 
-	log.Printf("✓ Order confirmation email sent to %s for Order #%d", userEmail, order.ID)
+	log.Printf("✓ Wholesale enquiry email sent to %s for Enquiry #%d", userEmail, order.ID)
 	return nil
 }

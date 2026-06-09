@@ -90,7 +90,7 @@ type CartItem struct {
 
 type AddToCartInput struct {
 	ProductID int64  `json:"product_id" binding:"required"`
-	Quantity  int    `json:"quantity" binding:"required,min=1,max=500"`
+	Quantity  int    `json:"quantity" binding:"required,min=50,max=500"`
 	Size      string `json:"size" binding:"required"`
 	Color     string `json:"color"`
 }
