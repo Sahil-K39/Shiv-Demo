@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"crypto/rand"
+	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"log"
@@ -9,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"shiv-shakti/internal/store"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -34,7 +37,18 @@ func Logger() gin.HandlerFunc {
 	}
 }
 
-func SecureHeaders() gin.HandlerFunc {
+func SecureHeaders(allowedOrigins string) gin.HandlerFunc {
+	connectSources := []string{"'self'"}
+	for _, origin := range strings.Split(allowedOrigins, ",") {
+		origin = strings.TrimSpace(origin)
+		if origin != "" {
+			connectSources = append(connectSources, origin)
+		}
+	}
+	if len(connectSources) == 1 {
+		connectSources = append(connectSources, "http://localhost:*", "http://127.0.0.1:*")
+	}
+
 	return func(c *gin.Context) {
 
 		c.Header("X-Frame-Options", "DENY")
@@ -53,7 +67,7 @@ func SecureHeaders() gin.HandlerFunc {
 				"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "+
 				"font-src 'self' https://fonts.gstatic.com; "+
 				"img-src 'self' data: blob:; "+
-				"connect-src 'self' http://localhost:* http://127.0.0.1:*",
+				"connect-src "+strings.Join(connectSources, " "),
 		)
 
 		c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
@@ -92,7 +106,7 @@ func CORS(allowedOrigin string) gin.HandlerFunc {
 	}
 }
 
-func JWTAuth(secret string) gin.HandlerFunc {
+func JWTAuth(secret string, db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		tokenStr, err := c.Cookie("shiv_session")
@@ -153,7 +167,19 @@ func JWTAuth(secret string) gin.HandlerFunc {
 
 		c.Set("user_id", userID)
 		c.Set("email", email)
-		if role, ok := claims["role"].(string); ok {
+		if db != nil {
+			var role string
+			var verified bool
+			err := db.QueryRow(store.Rebind("SELECT role, is_verified FROM users WHERE id = ? AND email = ?"), userID, email).Scan(&role, &verified)
+			if err != nil || !verified {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+					"error":   "authentication_required",
+					"message": "Valid verified session required. Please login.",
+				})
+				return
+			}
+			c.Set("role", role)
+		} else if role, ok := claims["role"].(string); ok {
 			c.Set("role", role)
 		}
 

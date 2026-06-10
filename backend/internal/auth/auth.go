@@ -7,6 +7,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"shiv-shakti/internal/models"
@@ -29,7 +30,7 @@ func NewService(secret string, db *sql.DB) *Service {
 }
 
 func (s *Service) EnsureAdminFromEnv() {
-	email := os.Getenv("ADMIN_EMAIL")
+	email := normalizeEmail(os.Getenv("ADMIN_EMAIL"))
 	password := os.Getenv("ADMIN_PASSWORD")
 	name := os.Getenv("ADMIN_NAME")
 	if email == "" || password == "" {
@@ -95,6 +96,9 @@ func (s *Service) GenerateToken(user *models.User) (string, error) {
 
 // Register creates a new user and returns the user object along with a verification token.
 func (s *Service) Register(input *models.RegisterInput) (*models.User, string, error) {
+	input.Email = normalizeEmail(input.Email)
+	input.Name = strings.TrimSpace(input.Name)
+
 	var exists int
 	err := store.QueryRow(s.db, "SELECT COUNT(*) FROM users WHERE email = ?", input.Email).Scan(&exists)
 	if err != nil {
@@ -109,8 +113,10 @@ func (s *Service) Register(input *models.RegisterInput) (*models.User, string, e
 		return nil, "", err
 	}
 
-	b := make([]byte, 16)
-	rand.Read(b)
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {
+		return nil, "", err
+	}
 	verificationToken := hex.EncodeToString(b)
 
 	id, err := store.InsertID(s.db,
@@ -132,16 +138,27 @@ func (s *Service) Register(input *models.RegisterInput) (*models.User, string, e
 	return user, verificationToken, nil
 }
 
+func (s *Service) DeleteUserByID(id int64) error {
+	_, err := store.Exec(s.db, "DELETE FROM users WHERE id = ?", id)
+	return err
+}
+
 // VerifyEmail verifies the token and activates the user account.
 func (s *Service) VerifyEmail(token string) (*models.User, error) {
 	var user models.User
-	err := store.QueryRow(s.db, "SELECT id, email, name, is_verified FROM users WHERE verification_token = ?", token).
-		Scan(&user.ID, &user.Email, &user.Name, &user.IsVerified)
+	var lastLogin sql.NullTime
+	err := store.QueryRow(s.db,
+		"SELECT id, email, name, role, created_at, updated_at, is_verified, last_login_at, COALESCE(login_count, 0) FROM users WHERE verification_token = ?",
+		token,
+	).Scan(&user.ID, &user.Email, &user.Name, &user.Role, &user.CreatedAt, &user.UpdatedAt, &user.IsVerified, &lastLogin, &user.LoginCount)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.New("invalid verification token")
 		}
 		return nil, err
+	}
+	if lastLogin.Valid {
+		user.LastLoginAt = &lastLogin.Time
 	}
 	if user.IsVerified {
 		return &user, nil // already verified
@@ -156,6 +173,7 @@ func (s *Service) VerifyEmail(token string) (*models.User, error) {
 }
 
 func (s *Service) Login(input *models.LoginInput) (*models.User, error) {
+	input.Email = normalizeEmail(input.Email)
 	var user models.User
 	var lastLogin sql.NullTime
 	err := store.QueryRow(s.db,
@@ -189,8 +207,13 @@ func (s *Service) Login(input *models.LoginInput) (*models.User, error) {
 	if lastLogin.Valid && user.LastLoginAt == nil {
 		user.LastLoginAt = &lastLogin.Time
 	}
+	user.PasswordHash = ""
 
 	return &user, nil
+}
+
+func normalizeEmail(email string) string {
+	return strings.ToLower(strings.TrimSpace(email))
 }
 
 func (s *Service) GetUserByID(id int64) (*models.User, error) {

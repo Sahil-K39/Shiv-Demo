@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -26,9 +26,13 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { toggleCart, itemCount, user } = useCartStore();
+  const { toggleCart, itemCount, user, checkSession } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const count = itemCount();
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
 
   const closeMenu = () => setIsMenuOpen(false);
 

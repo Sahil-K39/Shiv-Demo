@@ -21,11 +21,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setNotice("");
     setIsLoading(true);
     try {
       const res = await authAPI.login({ email, password });
@@ -41,11 +43,14 @@ export default function Login() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setNotice("");
     setIsLoading(true);
     try {
       const res = await authAPI.register({ email, password, name });
-      setUser(res.user);
-      router.push("/");
+      setNotice(res.message);
+      setTab("login");
+      setPassword("");
+      setName("");
     } catch (err: unknown) {
       setError(getErrorMessage(err, "Registration failed"));
     } finally {
@@ -56,6 +61,7 @@ export default function Login() {
   const handleTabChange = (newTab: "login" | "register") => {
     setTab(newTab);
     setError("");
+    setNotice("");
     setEmail("");
     setPassword("");
     setName("");
@@ -119,6 +125,9 @@ export default function Login() {
                   {error && (
                     <p className="text-red-500 text-[11px] tracking-[0.1em] uppercase mb-6">{error}</p>
                   )}
+                  {notice && (
+                    <p className="text-emerald-700 text-[11px] tracking-[0.1em] uppercase mb-6">{notice}</p>
+                  )}
 
                   <form className="space-y-6" onSubmit={handleLogin}>
                     <div className="relative mt-6">
@@ -165,6 +174,9 @@ export default function Login() {
                   
                   {error && (
                     <p className="text-red-500 text-[11px] tracking-[0.1em] uppercase mb-6">{error}</p>
+                  )}
+                  {notice && (
+                    <p className="text-emerald-700 text-[11px] tracking-[0.1em] uppercase mb-6">{notice}</p>
                   )}
 
                   <form className="space-y-6" onSubmit={handleRegister}>

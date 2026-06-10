@@ -99,7 +99,7 @@ func (h *AdminDataHandler) ListNGOInterests(c *gin.Context) {
 func (h *AdminDataHandler) ListOrders(c *gin.Context) {
 	orders, err := h.fetchOrders("", nil)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error", "message": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"orders": orders, "total": len(orders)})
@@ -114,7 +114,7 @@ func (h *AdminDataHandler) GetOrder(c *gin.Context) {
 
 	orders, err := h.fetchOrders("o.id = ?", []any{id})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error", "message": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error"})
 		return
 	}
 	if len(orders) == 0 {
@@ -170,7 +170,7 @@ func (h *AdminDataHandler) UpdateOrderStatus(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error": "stock_limit_exceeded", "message": conflict.Error()})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "inventory_update_failed", "message": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "inventory_update_failed"})
 		return
 	}
 
@@ -204,7 +204,7 @@ func (h *AdminDataHandler) UpdateOrderStatus(c *gin.Context) {
 
 	if err != nil {
 		tx.Rollback()
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_update_failed", "message": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_update_failed"})
 		return
 	}
 	if affected, err := result.RowsAffected(); err == nil && affected == 0 {

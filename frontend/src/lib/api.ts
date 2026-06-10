@@ -39,7 +39,7 @@ async function apiFetch<T>(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: "Request failed" }));
-    throw new Error(error.message || `HTTP ${res.status}`);
+    throw new Error(error.message || error.error || `HTTP ${res.status}`);
   }
 
   return res.json();
@@ -55,10 +55,15 @@ export async function getCSRFToken(): Promise<string> {
 
 export const authAPI = {
   register: (data: { email: string; password: string; name: string }) =>
-    apiFetch<{ message: string; user: User }>("/api/auth/register", {
+    apiFetch<{ message: string; user: User; requires_verification: boolean }>("/api/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
     }),
+
+  verify: (token: string) =>
+    apiFetch<{ message: string; user: User; csrf_token?: string }>(
+      `/api/auth/verify?token=${encodeURIComponent(token)}`
+    ),
 
   login: (data: { email: string; password: string }) =>
     apiFetch<{ message: string; user: User }>("/api/auth/login", {

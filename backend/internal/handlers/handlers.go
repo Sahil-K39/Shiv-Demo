@@ -54,21 +54,22 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	// Send verification email (mock mode logs)
 	if err := h.emailService.SendVerification(user.Email, user.Name, token); err != nil {
 		log.Printf("Failed to send verification email: %v", err)
+		if strings.EqualFold(os.Getenv("APP_ENV"), "production") {
+			if deleteErr := h.service.DeleteUserByID(user.ID); deleteErr != nil {
+				log.Printf("Failed to clean up unverified user after email failure: %v", deleteErr)
+			}
+			c.JSON(http.StatusBadGateway, gin.H{
+				"error":   "email_delivery_failed",
+				"message": "We could not send the verification email right now. Please try again shortly.",
+			})
+			return
+		}
 	}
 
-	tokenStr, err := h.service.GenerateToken(user)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
-		return
-	}
-	setSessionCookie(c, tokenStr)
-
-	// Generate CSRF token and include in response
-	csrfToken := middleware.GenerateCSRFToken()
 	c.JSON(http.StatusCreated, gin.H{
-		"message":    "Account created successfully. Verification email sent.",
-		"user":       user,
-		"csrf_token": csrfToken,
+		"message":               "Account created successfully. Check your email to verify your account before signing in.",
+		"user":                  user,
+		"requires_verification": true,
 	})
 }
 
@@ -170,7 +171,8 @@ func (h *AuthHandler) Verify(c *gin.Context) {
 		return
 	}
 	setSessionCookie(c, tokenStr)
-	c.JSON(http.StatusOK, gin.H{"message": "Email verified", "user": user})
+	csrfToken := middleware.GenerateCSRFToken()
+	c.JSON(http.StatusOK, gin.H{"message": "Email verified", "user": user, "csrf_token": csrfToken})
 }
 
 func (h *AuthHandler) Me(c *gin.Context) {
@@ -441,7 +443,8 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error": "product_already_exists", "message": "Slug or SKU already exists."})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_creation_failed", "message": err.Error()})
+		log.Printf("Product creation failed: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_creation_failed"})
 		return
 	}
 
@@ -508,10 +511,8 @@ func (h *ProductHandler) BulkUpsertProducts(c *gin.Context) {
 
 		if exists {
 			if err := updateProductByIDTx(tx, existingID, product); err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"error":   "product_update_failed",
-					"message": "Row " + strconv.Itoa(index+1) + ": " + err.Error(),
-				})
+				log.Printf("Bulk product update failed on row %d: %v", index+1, err)
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "product_update_failed"})
 				return
 			}
 			updated++
@@ -519,10 +520,8 @@ func (h *ProductHandler) BulkUpsertProducts(c *gin.Context) {
 		}
 
 		if err := insertProductTx(tx, product); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error":   "product_creation_failed",
-				"message": "Row " + strconv.Itoa(index+1) + ": " + err.Error(),
-			})
+			log.Printf("Bulk product creation failed on row %d: %v", index+1, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "product_creation_failed"})
 			return
 		}
 		created++
@@ -612,7 +611,8 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error": "product_already_exists", "message": "Slug or SKU already exists."})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_update_failed", "message": err.Error()})
+		log.Printf("Product update failed: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_update_failed"})
 		return
 	}
 	if affected, err := result.RowsAffected(); err == nil && affected == 0 {
@@ -632,7 +632,8 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 
 	result, err := store.Exec(h.db, "DELETE FROM products WHERE id = ?", id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_deletion_failed", "message": err.Error()})
+		log.Printf("Product deletion failed: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "product_deletion_failed"})
 		return
 	}
 	if affected, err := result.RowsAffected(); err == nil && affected == 0 {
@@ -1032,7 +1033,8 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	)
 	if err != nil {
 		tx.Rollback()
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_creation_failed", "details": err.Error()})
+		log.Printf("Order creation failed: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "order_creation_failed"})
 		return
 	}
 
@@ -1210,6 +1212,16 @@ func (h *CommunityHandler) LikePost(c *gin.Context) {
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "validation_failed"})
+		return
+	}
+
+	var exists int
+	if err := store.QueryRow(h.db, "SELECT COUNT(*) FROM community_posts WHERE id = ?", input.PostID).Scan(&exists); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "database_error"})
+		return
+	}
+	if exists == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "post_not_found"})
 		return
 	}
 

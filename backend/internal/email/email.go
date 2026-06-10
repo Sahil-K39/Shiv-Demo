@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"net/mail"
 	"net/smtp"
 	"os"
 	"strconv"
@@ -23,18 +24,18 @@ type MailService struct {
 }
 
 func NewMailService() *MailService {
-	host := os.Getenv("SMTP_HOST")
-	portStr := os.Getenv("SMTP_PORT")
-	username := os.Getenv("SMTP_USERNAME")
-	password := os.Getenv("SMTP_PASSWORD")
-	from := os.Getenv("SMTP_FROM")
+	host := firstEnv("SMTP_HOST")
+	portStr := firstEnv("SMTP_PORT")
+	username := firstEnv("SMTP_USERNAME", "SMTP_USER")
+	password := firstEnv("SMTP_PASSWORD", "SMTP_PASS")
+	from := firstEnv("SMTP_FROM")
 
 	mockMode := false
-	if host == "" || username == "" {
+	if host == "" || username == "" || password == "" || from == "" {
 		if strings.EqualFold(os.Getenv("REQUIRE_SMTP"), "true") || strings.EqualFold(os.Getenv("APP_ENV"), "production") {
-			log.Fatal("✗ SMTP_HOST and SMTP_USERNAME are required when email delivery is mandatory")
+			log.Fatal("✗ SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM are required when email delivery is mandatory")
 		}
-		log.Println("⚠ SMTP_HOST or SMTP_USERNAME not configured. Email service running in MOCK mode (logging to stdout).")
+		log.Println("⚠ SMTP settings are incomplete. Email service running in MOCK mode (logging to stdout).")
 		mockMode = true
 	}
 
@@ -128,9 +129,7 @@ func (m *MailService) SendWelcome(userEmail string, name string) error {
 	}
 	msg.WriteString("\r\n")
 	msg.Write(body.Bytes())
-	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-	if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
+	if err := m.sendRaw([]string{userEmail}, []byte(msg.String())); err != nil {
 		return fmt.Errorf("failed to send welcome email: %w", err)
 	}
 	log.Printf("✓ Welcome email sent to %s", userEmail)
@@ -139,7 +138,11 @@ func (m *MailService) SendWelcome(userEmail string, name string) error {
 
 // SendVerification sends an email with a verification link to the user.
 func (m *MailService) SendVerification(userEmail string, name string, token string) error {
-	verificationURL := fmt.Sprintf("%s/verify?token=%s", os.Getenv("FRONTEND_URL"), token)
+	frontendURL := strings.TrimRight(firstEnv("FRONTEND_URL", "BASE_URL"), "/")
+	if frontendURL == "" {
+		frontendURL = "http://localhost:3000"
+	}
+	verificationURL := fmt.Sprintf("%s/verify?token=%s", frontendURL, token)
 	tmpl, err := template.New("verify").Parse(VerifyEmailHTMLTemplate)
 	if err != nil {
 		return fmt.Errorf("failed to parse verification template: %w", err)
@@ -175,9 +178,7 @@ func (m *MailService) SendVerification(userEmail string, name string, token stri
 	}
 	msg.WriteString("\r\n")
 	msg.Write(body.Bytes())
-	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-	if err := smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String())); err != nil {
+	if err := m.sendRaw([]string{userEmail}, []byte(msg.String())); err != nil {
 		return fmt.Errorf("failed to send verification email: %w", err)
 	}
 	log.Printf("✓ Verification email sent to %s", userEmail)
@@ -230,11 +231,8 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 	msg.WriteString("\r\n")
 	msg.Write(body.Bytes())
 
-	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-
 	// Send email using standard SMTP client
-	err = smtp.SendMail(addr, auth, m.From, []string{userEmail}, []byte(msg.String()))
+	err = m.sendRaw([]string{userEmail}, []byte(msg.String()))
 	if err != nil {
 		return fmt.Errorf("failed to send smtp email: %w", err)
 	}
@@ -381,13 +379,34 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 	msg.WriteString("\r\n")
 	msg.Write(body)
 
+	return m.sendRaw(to, []byte(msg.String()))
+}
+
+func (m *MailService) sendRaw(to []string, msg []byte) error {
 	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
 	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-	return smtp.SendMail(addr, auth, m.From, to, []byte(msg.String()))
+	return smtp.SendMail(addr, auth, m.envelopeFrom(), to, msg)
+}
+
+func (m *MailService) envelopeFrom() string {
+	if address, err := mail.ParseAddress(m.From); err == nil {
+		return address.Address
+	}
+	return m.From
 }
 
 func cleanHeaderValue(value string) string {
 	value = strings.ReplaceAll(value, "\r", " ")
 	value = strings.ReplaceAll(value, "\n", " ")
 	return strings.TrimSpace(value)
+}
+
+func firstEnv(names ...string) string {
+	for _, name := range names {
+		value := strings.TrimSpace(os.Getenv(name))
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }

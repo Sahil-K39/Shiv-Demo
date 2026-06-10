@@ -47,6 +47,10 @@ func (h *AdminUploadHandler) UploadImages(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "missing_images", "message": "No image files were uploaded."})
 		return
 	}
+	if len(files) > 12 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "too_many_files", "message": "Upload up to 12 images at a time."})
+		return
+	}
 
 	if err := os.MkdirAll(h.uploadDir, 0755); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "upload_dir_failed"})

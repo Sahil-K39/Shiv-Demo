@@ -18,6 +18,7 @@ import (
 func main() {
 
 	appEnv := strings.ToLower(strings.TrimSpace(os.Getenv("APP_ENV")))
+	frontendURL := firstEnv("FRONTEND_URL", "BASE_URL")
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -31,6 +32,14 @@ func main() {
 	}
 	if appEnv == "production" && (jwtSecret == "shiv-shakti-dev-secret-change-in-production-2026" || len(jwtSecret) < 32) {
 		log.Fatal("✗ APP_ENV=production requires a strong JWT_SECRET with at least 32 characters")
+	}
+	if appEnv == "production" {
+		if frontendURL == "" {
+			log.Fatal("✗ APP_ENV=production requires FRONTEND_URL or BASE_URL")
+		}
+		if strings.TrimSpace(os.Getenv("CORS_ORIGIN")) == "" {
+			log.Fatal("✗ APP_ENV=production requires CORS_ORIGIN")
+		}
 	}
 
 	dbPath := os.Getenv("DB_PATH")
@@ -68,12 +77,12 @@ func main() {
 
 	r.Use(gin.Recovery())
 	r.Use(middleware.Logger())
-	r.Use(middleware.SecureHeaders())
 
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	if corsOrigin == "" {
 		corsOrigin = "http://localhost:3000,http://127.0.0.1:3000"
 	}
+	r.Use(middleware.SecureHeaders(corsOrigin))
 	r.Use(middleware.CORS(corsOrigin))
 	r.Use(middleware.RateLimiter(100, 60))
 	r.MaxMultipartMemory = 32 << 20
@@ -175,14 +184,14 @@ func main() {
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"status":  "operational",
+			"status":  "ok",
 			"service": "shiv-shakti-commerce-engine",
 			"version": "2.0.0",
 		})
 	})
 
 	r.POST("/send-email", func(c *gin.Context) {
-		if os.Getenv("ENABLE_DEMO_EMAIL") != "true" {
+		if appEnv == "production" || os.Getenv("ENABLE_DEMO_EMAIL") != "true" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "not_found"})
 			return
 		}
@@ -248,12 +257,13 @@ func main() {
 	}
 
 	admin := r.Group("/admin")
+	admin.Use(middleware.RateLimiter(10, 60))
 	{
 		admin.POST("/login", authHandler.AdminLogin)
 	}
 
 	protectedAdmin := r.Group("/admin")
-	protectedAdmin.Use(middleware.JWTAuth(jwtSecret))
+	protectedAdmin.Use(middleware.JWTAuth(jwtSecret, db))
 	protectedAdmin.Use(middleware.AdminOnly())
 	protectedAdmin.Use(middleware.CSRFProtection())
 	{
@@ -274,7 +284,7 @@ func main() {
 	}
 
 	protected := r.Group("/api")
-	protected.Use(middleware.JWTAuth(jwtSecret))
+	protected.Use(middleware.JWTAuth(jwtSecret, db))
 	{
 
 		protected.GET("/auth/me", authHandler.Me)
@@ -325,6 +335,16 @@ func main() {
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("✗ Server failed to start: %v", err)
 	}
+}
+
+func firstEnv(names ...string) string {
+	for _, name := range names {
+		value := strings.TrimSpace(os.Getenv(name))
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 // init function removed
