@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+import FabricQuoteForm from "@/components/fabric/FabricQuoteForm";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = {
@@ -15,25 +16,25 @@ const fabrics = [
     name: "Textured Cotton",
     image: "/assets/images/25-153A1093.jpg",
     use: "Daily wear, sampling, kurtas, relaxed dresses",
-    moq: "MOQ 25 meters",
+    moq: "MOQ 50 meters",
   },
   {
     name: "Linen Blend",
     image: "/assets/images/92-153A0185.jpg",
     use: "Summer sets, overlays, resort silhouettes",
-    moq: "MOQ 30 meters",
+    moq: "MOQ 50 meters",
   },
   {
     name: "Silk Touch",
     image: "/assets/images/20-153A1078.jpg",
     use: "Premium drapes, occasionwear, limited capsules",
-    moq: "MOQ 20 meters",
+    moq: "MOQ 50 meters",
   },
   {
     name: "Handloom Surface",
     image: "/assets/images/95-153A0198.jpg",
     use: "Statement panels, artisan capsules, slow fashion",
-    moq: "MOQ 15 meters",
+    moq: "MOQ 50 meters",
   },
 ];
 
@@ -83,7 +84,7 @@ export default function FabricSellingPage() {
                 <span className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
               </Link>
               <Link
-                href="/contact"
+                href="#fabric-quote"
                 className="inline-flex min-h-[54px] items-center justify-center border border-white/35 px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:border-white"
               >
                 Request Fabric Quote
@@ -152,12 +153,31 @@ export default function FabricSellingPage() {
             </h2>
           </div>
           <Link
-            href="/contact"
+            href="#fabric-quote"
             className="inline-flex min-h-[54px] items-center justify-center border border-white px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
           >
             Start Enquiry
           </Link>
         </div>
+      </section>
+
+      <section
+        id="fabric-quote"
+        className="mx-auto grid max-w-[1400px] gap-12 px-6 py-20 md:grid-cols-[0.75fr_1.25fr] md:px-10 md:py-28"
+      >
+        <div>
+          <p className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gray-500">
+            Email Quote Request
+          </p>
+          <h2 className="text-[34px] font-light uppercase leading-tight text-black md:text-[52px]">
+            Minimum 50 units. Quote, payment, and delivery details by email.
+          </h2>
+          <p className="mt-6 max-w-md text-[13px] uppercase leading-loose tracking-[0.12em] text-gray-500">
+            Share the fabric type, quantity, preferred color, and delivery city. We review the
+            request and reply from support with the next steps.
+          </p>
+        </div>
+        <FabricQuoteForm />
       </section>
     </div>
   );

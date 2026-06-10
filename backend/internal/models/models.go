@@ -144,6 +144,18 @@ type NGOInterest struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+type FabricQuoteInput struct {
+	Name           string `json:"name" binding:"required,min=2,max=100"`
+	Email          string `json:"email" binding:"required,email"`
+	Phone          string `json:"phone" binding:"required,min=5,max=30"`
+	FabricType     string `json:"fabric_type" binding:"required,min=2,max=120"`
+	Quantity       int    `json:"quantity" binding:"required,max=100000"`
+	PreferredColor string `json:"preferred_color" binding:"max=120"`
+	DeliveryCity   string `json:"delivery_city" binding:"required,min=2,max=120"`
+	Timeline       string `json:"timeline" binding:"max=120"`
+	Message        string `json:"message" binding:"max=1500"`
+}
+
 type AdminUser struct {
 	ID          int64      `json:"id"`
 	Email       string     `json:"email"`

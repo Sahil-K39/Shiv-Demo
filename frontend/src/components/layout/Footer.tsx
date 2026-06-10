@@ -52,20 +52,15 @@ export default function Footer() {
           <p className="text-[10px] tracking-[0.1em] text-gray-500 uppercase leading-loose">
             Join the Council for early access to drops, fabric lots, and wholesale updates.
           </p>
-          <div className="flex mt-4 border border-black/20 focus-within:border-black transition-colors">
-            <input 
-              type="email" 
-              placeholder="ENTER EMAIL" 
-              className="bg-transparent text-[11px] tracking-[0.1em] text-black px-4 py-3 w-full outline-none placeholder:text-gray-400"
-            />
-            <button
-              type="button"
-              aria-label="Submit email"
-              className="px-4 text-gray-500 transition-colors hover:text-black"
-            >
+          <Link
+            href="/contact"
+            className="mt-4 flex min-h-[46px] items-center justify-between border border-black/20 px-4 text-[11px] uppercase tracking-[0.1em] text-gray-500 transition-colors hover:border-black hover:text-black"
+          >
+            Contact Support
+            <span aria-hidden="true">
               <ArrowRightIcon className="h-4 w-4" />
-            </button>
-          </div>
+            </span>
+          </Link>
         </div>
 
       </div>

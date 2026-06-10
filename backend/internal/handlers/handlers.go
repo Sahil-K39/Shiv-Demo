@@ -1248,3 +1248,52 @@ func (h *NGOHandler) CreateInterest(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Interest received"})
 }
+
+type FabricQuoteHandler struct {
+	emailService *email.MailService
+}
+
+func NewFabricQuoteHandler() *FabricQuoteHandler {
+	return &FabricQuoteHandler{emailService: email.NewMailService()}
+}
+
+func (h *FabricQuoteHandler) Submit(c *gin.Context) {
+	var input models.FabricQuoteInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "validation_failed",
+			"message": "Invalid quote request: " + err.Error(),
+		})
+		return
+	}
+
+	input.Name = strings.TrimSpace(input.Name)
+	input.Email = strings.ToLower(strings.TrimSpace(input.Email))
+	input.Phone = strings.TrimSpace(input.Phone)
+	input.FabricType = strings.TrimSpace(input.FabricType)
+	input.PreferredColor = strings.TrimSpace(input.PreferredColor)
+	input.DeliveryCity = strings.TrimSpace(input.DeliveryCity)
+	input.Timeline = strings.TrimSpace(input.Timeline)
+	input.Message = strings.TrimSpace(input.Message)
+
+	if input.Quantity < minWholesaleQuantity {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "minimum_quantity_required",
+			"message": "Minimum enquiry quantity is 50 units.",
+		})
+		return
+	}
+
+	if err := h.emailService.SendFabricQuoteRequest(&input); err != nil {
+		log.Printf("Failed to send fabric quote request: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "email_failed",
+			"message": "We could not send this enquiry right now. Please try again shortly.",
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "Fabric quote request sent. We will reply by email with quote, payment, and delivery details.",
+	})
+}

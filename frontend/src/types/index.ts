@@ -159,3 +159,15 @@ export interface NGOInterest extends NGOInterestInput {
   id: number;
   created_at: string;
 }
+
+export interface FabricQuoteInput {
+  name: string;
+  email: string;
+  phone: string;
+  fabric_type: string;
+  quantity: number;
+  preferred_color: string;
+  delivery_city: string;
+  timeline: string;
+  message: string;
+}

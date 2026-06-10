@@ -57,6 +57,7 @@ func main() {
 	authHandler := handlers.NewAuthHandler(authService)
 	communityHandler := handlers.NewCommunityHandler(db)
 	ngoHandler := handlers.NewNGOHandler(db)
+	fabricQuoteHandler := handlers.NewFabricQuoteHandler()
 	adminDataHandler := handlers.NewAdminDataHandler(db)
 	adminUploadHandler := handlers.NewAdminUploadHandler()
 
@@ -237,6 +238,12 @@ func main() {
 		ngo.Use(middleware.RateLimiter(10, 60))
 		{
 			ngo.POST("/interest", ngoHandler.CreateInterest)
+		}
+
+		fabricQuote := api.Group("/fabric-quote")
+		fabricQuote.Use(middleware.RateLimiter(10, 60))
+		{
+			fabricQuote.POST("", fabricQuoteHandler.Submit)
 		}
 	}
 

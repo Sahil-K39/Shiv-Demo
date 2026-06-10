@@ -8,6 +8,7 @@ import type {
   CommunityPost,
   CheckoutInput,
   NGOInterestInput,
+  FabricQuoteInput,
   ProductInput,
   AdminOrder,
   AdminUser,
@@ -268,6 +269,14 @@ export const ordersAPI = {
 export const ngoAPI = {
   submitInterest: (data: NGOInterestInput) =>
     apiFetch<{ message: string }>("/api/ngo/interest", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+};
+
+export const fabricAPI = {
+  submitQuote: (data: FabricQuoteInput) =>
+    apiFetch<{ message: string }>("/api/fabric-quote", {
       method: "POST",
       body: JSON.stringify(data),
     }),
