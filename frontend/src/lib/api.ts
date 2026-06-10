@@ -131,6 +131,18 @@ export const adminAPI = {
     });
   },
 
+  bulkImportProducts: async (products: ProductInput[]) => {
+    const csrf = await getCSRFToken();
+    return apiFetch<{ message: string; total: number; created: number; updated: number }>(
+      `${ADMIN_API_PREFIX}/products/bulk`,
+      {
+        method: "POST",
+        headers: { "X-CSRF-Token": csrf },
+        body: JSON.stringify({ products }),
+      }
+    );
+  },
+
   listUsers: () =>
     apiFetch<{ users: AdminUser[]; total: number }>(`${ADMIN_API_PREFIX}/users`),
 

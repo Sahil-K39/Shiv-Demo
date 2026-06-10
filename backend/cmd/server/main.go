@@ -255,6 +255,7 @@ func main() {
 		protectedAdmin.GET("/products", productHandler.ListAdmin)
 		protectedAdmin.GET("/products/:id", productHandler.GetByID)
 		protectedAdmin.POST("/products", productHandler.CreateProduct)
+		protectedAdmin.POST("/products/bulk", productHandler.BulkUpsertProducts)
 		protectedAdmin.PUT("/products/:id", productHandler.UpdateProduct)
 		protectedAdmin.DELETE("/products/:id", productHandler.DeleteProduct)
 		protectedAdmin.GET("/users", adminDataHandler.ListUsers)

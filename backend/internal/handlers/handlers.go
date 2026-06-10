@@ -212,6 +212,10 @@ func NewProductHandler(db *sql.DB) *ProductHandler {
 	return &ProductHandler{db: db}
 }
 
+type productBulkImportInput struct {
+	Products []models.ProductInput `json:"products" binding:"required,min=1,max=500"`
+}
+
 const productSelectColumns = `
 	id, name, slug, description, price, sale_price, is_on_sale, currency, category, collection,
 	sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active,
@@ -444,6 +448,141 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Product created", "product_id": id})
 }
 
+func (h *ProductHandler) BulkUpsertProducts(c *gin.Context) {
+	var input productBulkImportInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "validation_failed", "message": err.Error()})
+		return
+	}
+
+	validationErrors := []gin.H{}
+	seenSlugs := map[string]int{}
+	seenSKUs := map[string]int{}
+	for index := range input.Products {
+		product := &input.Products[index]
+		normalizeProductInput(product)
+		if err := validateProductInput(product); err != nil {
+			validationErrors = append(validationErrors, gin.H{"row": index + 1, "message": err.Error()})
+			continue
+		}
+		slugKey := strings.ToLower(product.Slug)
+		if previous, exists := seenSlugs[slugKey]; exists {
+			validationErrors = append(validationErrors, gin.H{"row": index + 1, "message": "slug duplicates row " + strconv.Itoa(previous)})
+		} else {
+			seenSlugs[slugKey] = index + 1
+		}
+		skuKey := strings.ToLower(product.SKU)
+		if previous, exists := seenSKUs[skuKey]; exists {
+			validationErrors = append(validationErrors, gin.H{"row": index + 1, "message": "SKU duplicates row " + strconv.Itoa(previous)})
+		} else {
+			seenSKUs[skuKey] = index + 1
+		}
+	}
+	if len(validationErrors) > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "validation_failed",
+			"message": "Bulk import has invalid product rows.",
+			"errors":  validationErrors,
+		})
+		return
+	}
+
+	tx, err := h.db.Begin()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "transaction_failed"})
+		return
+	}
+	defer tx.Rollback()
+
+	created := 0
+	updated := 0
+	for index, product := range input.Products {
+		existingID, exists, err := findProductIDForBulkImport(tx, product.SKU, product.Slug)
+		if err != nil {
+			c.JSON(http.StatusConflict, gin.H{
+				"error":   "product_conflict",
+				"message": "Row " + strconv.Itoa(index+1) + ": " + err.Error(),
+			})
+			return
+		}
+
+		if exists {
+			if err := updateProductByIDTx(tx, existingID, product); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "product_update_failed",
+					"message": "Row " + strconv.Itoa(index+1) + ": " + err.Error(),
+				})
+				return
+			}
+			updated++
+			continue
+		}
+
+		if err := insertProductTx(tx, product); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":   "product_creation_failed",
+				"message": "Row " + strconv.Itoa(index+1) + ": " + err.Error(),
+			})
+			return
+		}
+		created++
+	}
+
+	if err := tx.Commit(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "commit_failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Products imported",
+		"total":   len(input.Products),
+		"created": created,
+		"updated": updated,
+	})
+}
+
+func findProductIDForBulkImport(tx *sql.Tx, sku string, slug string) (int64, bool, error) {
+	var skuID sql.NullInt64
+	err := tx.QueryRow(store.Rebind("SELECT id FROM products WHERE sku = ?"), sku).Scan(&skuID)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, false, err
+	}
+
+	var slugID sql.NullInt64
+	err = tx.QueryRow(store.Rebind("SELECT id FROM products WHERE slug = ?"), slug).Scan(&slugID)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, false, err
+	}
+
+	if skuID.Valid && slugID.Valid && skuID.Int64 != slugID.Int64 {
+		return 0, false, errors.New("SKU and slug already belong to different products")
+	}
+	if skuID.Valid {
+		return skuID.Int64, true, nil
+	}
+	if slugID.Valid {
+		return slugID.Int64, true, nil
+	}
+	return 0, false, nil
+}
+
+func insertProductTx(tx *sql.Tx, input models.ProductInput) error {
+	_, err := store.TxExec(tx, `
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate)
+	return err
+}
+
+func updateProductByIDTx(tx *sql.Tx, id int64, input models.ProductInput) error {
+	_, err := store.TxExec(tx, `
+		UPDATE products
+		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
+		WHERE id = ?
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)
+	return err
+}
+
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -463,7 +602,7 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	}
 
 	result, err := store.Exec(h.db, `
-		UPDATE products 
+		UPDATE products
 		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
 		WHERE id = ?
 	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)

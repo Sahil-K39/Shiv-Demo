@@ -114,6 +114,238 @@ function productToForm(product: Product): ProductInput {
   };
 }
 
+const bulkImportColumns = [
+  "name",
+  "description",
+  "price",
+  "sale_price",
+  "quantity",
+  "category",
+  "sku",
+  "images",
+  "sizes",
+  "colors",
+  "is_featured",
+  "is_active",
+  "sale_active",
+  "sale_start_date",
+  "sale_end_date",
+  "slug",
+  "collection",
+];
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function csvEscape(value: string | number | boolean) {
+  const text = String(value);
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function buildTemplateCSV() {
+  const rows = [
+    bulkImportColumns,
+    [
+      "Sample Bulk Dress",
+      "Wholesale product description",
+      "999",
+      "0",
+      "120",
+      "shakti",
+      "BULK-SAMPLE-001",
+      "/assets/images/1-153A0953.jpg|/assets/images/2-153A0956.jpg",
+      "S|M|L|XL",
+      "Void Black|Ivory",
+      "false",
+      "true",
+      "false",
+      "",
+      "",
+      "sample-bulk-dress",
+      "SS26",
+    ],
+  ];
+
+  return rows.map((row) => row.map(csvEscape).join(",")).join("\n");
+}
+
+function downloadBulkTemplate() {
+  const blob = new Blob([buildTemplateCSV()], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "shiv-shakti-product-import-template.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function parseCSV(text: string) {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      row.push(field);
+      field = "";
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(field);
+      if (row.some((cell) => cell.trim())) rows.push(row);
+      row = [];
+      field = "";
+      continue;
+    }
+
+    field += char;
+  }
+
+  row.push(field);
+  if (row.some((cell) => cell.trim())) rows.push(row);
+  return rows;
+}
+
+function normalizeHeader(value: string) {
+  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+}
+
+function rowsToRecords(rows: string[][]) {
+  const [headerRow, ...dataRows] = rows;
+  const headers = headerRow.map(normalizeHeader);
+  return dataRows.map((row) =>
+    headers.reduce<Record<string, string>>((record, header, index) => {
+      record[header] = row[index]?.trim() ?? "";
+      return record;
+    }, {})
+  );
+}
+
+function recordValue(record: Record<string, string>, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[normalizeHeader(key)];
+    if (value) return value;
+  }
+  return "";
+}
+
+function listField(value: string) {
+  if (!value.trim()) return "[]";
+
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return JSON.stringify(uniqueList(parsed.map(String)));
+  } catch {
+    // Fall through to separator parsing.
+  }
+
+  return JSON.stringify(
+    uniqueList(value.split(/\s*[|;\n]\s*/).map((item) => item.trim()))
+  );
+}
+
+function booleanField(value: string, fallback = false) {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return fallback;
+  return ["true", "1", "yes", "y", "active", "on"].includes(normalized);
+}
+
+function dateField(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (/\d{4}-\d{2}-\d{2}T/.test(trimmed)) return trimmed;
+  const date = new Date(`${trimmed}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function recordToProduct(record: Record<string, string>, index: number): ProductInput {
+  const name = recordValue(record, "name", "product_name", "product");
+  const slug = recordValue(record, "slug") || slugify(name);
+  const sku = recordValue(record, "sku") || `BULK-${slug.toUpperCase()}-${String(index + 1).padStart(3, "0")}`;
+  const price = Number(recordValue(record, "price", "unit_price") || 0);
+  const salePrice = Number(recordValue(record, "sale_price", "sale price") || 0);
+  const quantity = Number(recordValue(record, "quantity", "stock", "units") || 0);
+  const images =
+    recordValue(record, "images", "image_urls", "image_url") ||
+    Object.entries(record)
+      .filter(([key, value]) => key.startsWith("image_") && value)
+      .map(([, value]) => value)
+      .join("|");
+
+  return {
+    name,
+    slug,
+    description: recordValue(record, "description", "product_description"),
+    price: Number.isFinite(price) ? price : 0,
+    sale_price: Number.isFinite(salePrice) ? salePrice : 0,
+    category: recordValue(record, "category") || "shakti",
+    collection: recordValue(record, "collection") || "SS26",
+    sizes: listField(recordValue(record, "sizes", "size") || "OS"),
+    colors: listField(recordValue(record, "colors", "color") || "Default"),
+    images: listField(images),
+    quantity: Number.isFinite(quantity) ? quantity : 0,
+    sku,
+    is_featured: booleanField(recordValue(record, "is_featured", "featured")),
+    is_active: booleanField(recordValue(record, "is_active", "active"), true),
+    sale_active: booleanField(recordValue(record, "sale_active", "on_sale")),
+    sale_start_date: dateField(recordValue(record, "sale_start_date", "sale_start")),
+    sale_end_date: dateField(recordValue(record, "sale_end_date", "sale_end")),
+  };
+}
+
+function validateBulkProducts(products: ProductInput[]) {
+  const errors: string[] = [];
+  products.forEach((product, index) => {
+    const row = index + 1;
+    if (!product.name.trim()) errors.push(`Row ${row}: name is required.`);
+    if (!product.slug?.trim()) errors.push(`Row ${row}: slug is required.`);
+    if (!product.sku.trim()) errors.push(`Row ${row}: SKU is required.`);
+    if (!product.category.trim()) errors.push(`Row ${row}: category is required.`);
+    if (!Number.isFinite(product.price) || product.price <= 0) {
+      errors.push(`Row ${row}: price must be greater than 0.`);
+    }
+    if (!Number.isInteger(product.quantity) || product.quantity < 0) {
+      errors.push(`Row ${row}: quantity must be 0 or higher.`);
+    }
+  });
+  return errors;
+}
+
+async function parseBulkImportFile(file: File) {
+  const text = await file.text();
+  if (file.name.toLowerCase().endsWith(".json")) {
+    const parsed = JSON.parse(text) as ProductInput[] | { products?: ProductInput[] };
+    return Array.isArray(parsed) ? parsed : parsed.products ?? [];
+  }
+
+  const rows = parseCSV(text);
+  if (rows.length < 2) return [];
+  return rowsToRecords(rows).map(recordToProduct);
+}
+
 function StatusBadge({
   tone,
   children,
@@ -460,6 +692,9 @@ export default function AdminProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
   const [stockNotice, setStockNotice] = useState("");
+  const [bulkNotice, setBulkNotice] = useState("");
+  const [bulkErrors, setBulkErrors] = useState<string[]>([]);
+  const [isBulkImporting, setIsBulkImporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savingStockId, setSavingStockId] = useState<number | null>(null);
   const [stockDrafts, setStockDrafts] = useState<Record<number, string>>({});
@@ -551,6 +786,42 @@ export default function AdminProductsPage() {
     }
   }
 
+  async function importBulkProducts(fileList: FileList | null) {
+    const file = fileList?.[0];
+    if (!file) return;
+
+    setError("");
+    setBulkNotice("");
+    setBulkErrors([]);
+    setIsBulkImporting(true);
+
+    try {
+      const productsToImport = await parseBulkImportFile(file);
+      if (productsToImport.length === 0) {
+        throw new Error("Import file has no products.");
+      }
+      if (productsToImport.length > 500) {
+        throw new Error("Import limit is 500 products per file.");
+      }
+
+      const validationErrors = validateBulkProducts(productsToImport);
+      if (validationErrors.length > 0) {
+        setBulkErrors(validationErrors.slice(0, 20));
+        throw new Error(`${validationErrors.length} product rows need changes.`);
+      }
+
+      const response = await adminAPI.bulkImportProducts(productsToImport);
+      setBulkNotice(
+        `${response.total} products processed. ${response.created} created, ${response.updated} updated.`
+      );
+      await loadProducts();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not import products");
+    } finally {
+      setIsBulkImporting(false);
+    }
+  }
+
   function stockDraft(product: Product) {
     return stockDrafts[product.id] ?? String(productQuantity(product));
   }
@@ -633,6 +904,52 @@ export default function AdminProductsPage() {
           {stockNotice}
         </p>
       )}
+
+      {bulkNotice && (
+        <p className="mb-5 border border-green-200 bg-green-50 p-3 text-[11px] uppercase tracking-[0.12em] text-green-700">
+          {bulkNotice}
+        </p>
+      )}
+
+      <div className="mb-6 border border-black/10 p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-black/45">
+              Bulk Import
+            </p>
+            <h2 className="text-[16px] uppercase tracking-[0.14em]">Upload Products</h2>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={downloadBulkTemplate}
+              className="border border-black/15 px-4 py-3 text-[10px] uppercase tracking-[0.14em] text-black/65 hover:border-black hover:text-black"
+            >
+              Download CSV Template
+            </button>
+            <label className="relative inline-flex cursor-pointer items-center justify-center border border-black bg-black px-4 py-3 text-[10px] uppercase tracking-[0.14em] text-white">
+              {isBulkImporting ? "Importing..." : "Choose CSV / JSON"}
+              <input
+                type="file"
+                accept=".csv,.json,text/csv,application/json"
+                disabled={isBulkImporting}
+                className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
+                onChange={(event) => {
+                  void importBulkProducts(event.currentTarget.files);
+                  event.currentTarget.value = "";
+                }}
+              />
+            </label>
+          </div>
+        </div>
+        {bulkErrors.length > 0 && (
+          <div className="mt-4 border border-red-200 bg-red-50 p-3 text-[11px] uppercase tracking-[0.1em] text-red-700">
+            {bulkErrors.map((message) => (
+              <p key={message}>{message}</p>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         {[
