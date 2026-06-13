@@ -97,3 +97,41 @@ func TestWrongPasswordRejected(t *testing.T) {
 		t.Fatal("wrong password login succeeded")
 	}
 }
+
+func TestEnsureAdminFromEnvUpdatesExistingUserPasswordAndRole(t *testing.T) {
+	service := newTestService(t)
+	_, token, err := service.Register(&models.RegisterInput{
+		Email:    "admin@example.com",
+		Password: "OldPass123!",
+		Name:     "Old Name",
+	})
+	if err != nil {
+		t.Fatalf("Register failed: %v", err)
+	}
+	if _, err := service.VerifyEmail(token); err != nil {
+		t.Fatalf("VerifyEmail failed: %v", err)
+	}
+
+	t.Setenv("ADMIN_EMAIL", "admin@example.com")
+	t.Setenv("ADMIN_PASSWORD", "NewAdminPass123!")
+	t.Setenv("ADMIN_NAME", "Product Admin")
+	service.EnsureAdminFromEnv()
+
+	if _, err := service.Login(&models.LoginInput{Email: "admin@example.com", Password: "OldPass123!"}); err == nil {
+		t.Fatal("old admin password still works")
+	}
+
+	admin, err := service.Login(&models.LoginInput{Email: "admin@example.com", Password: "NewAdminPass123!"})
+	if err != nil {
+		t.Fatalf("new admin password login failed: %v", err)
+	}
+	if admin.Role != "admin" {
+		t.Fatalf("role = %q, want admin", admin.Role)
+	}
+	if !admin.IsVerified {
+		t.Fatal("admin user is not verified")
+	}
+	if admin.Name != "Product Admin" {
+		t.Fatalf("name = %q, want Product Admin", admin.Name)
+	}
+}

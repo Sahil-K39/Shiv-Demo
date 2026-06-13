@@ -45,19 +45,25 @@ func (s *Service) EnsureAdminFromEnv() {
 		log.Printf("Admin bootstrap check failed: %v", err)
 		return
 	}
-	if exists > 0 {
-		_, err := store.Exec(s.db, "UPDATE users SET role = ?, is_verified = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?", "admin", true, email)
-		if err != nil {
-			log.Printf("Admin bootstrap update failed: %v", err)
-		}
-		return
-	}
 
 	hash, err := s.HashPassword(password)
 	if err != nil {
 		log.Printf("Admin bootstrap password hash failed: %v", err)
 		return
 	}
+
+	if exists > 0 {
+		_, err := store.Exec(
+			s.db,
+			"UPDATE users SET password_hash = ?, name = ?, role = ?, is_verified = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?",
+			hash, name, "admin", true, email,
+		)
+		if err != nil {
+			log.Printf("Admin bootstrap update failed: %v", err)
+		}
+		return
+	}
+
 	_, err = store.InsertID(s.db,
 		"INSERT INTO users (email, password_hash, name, role, is_verified, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		"INSERT INTO users (email, password_hash, name, role, is_verified, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id",
