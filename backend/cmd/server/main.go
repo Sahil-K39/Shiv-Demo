@@ -15,6 +15,8 @@ import (
 	"github.com/resend/resend-go/v3"
 )
 
+const defaultCORSOrigins = "http://localhost:3000,http://127.0.0.1:3000,https://shiv-demo.vercel.app,https://shivshaktiproject.com,https://www.shivshaktiproject.com"
+
 func main() {
 
 	appEnv := strings.ToLower(strings.TrimSpace(os.Getenv("APP_ENV")))
@@ -80,7 +82,7 @@ func main() {
 
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	if corsOrigin == "" {
-		corsOrigin = "http://localhost:3000,http://127.0.0.1:3000"
+		corsOrigin = defaultCORSOrigins
 	}
 	r.Use(middleware.SecureHeaders(corsOrigin))
 	r.Use(middleware.CORS(corsOrigin))
