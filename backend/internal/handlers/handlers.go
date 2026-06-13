@@ -729,11 +729,15 @@ func (h *ProductHandler) Dashboard(c *gin.Context) {
 }
 
 type CartHandler struct {
-	db *sql.DB
+	db           *sql.DB
+	emailService *email.MailService
 }
 
 func NewCartHandler(db *sql.DB) *CartHandler {
-	return &CartHandler{db: db}
+	return &CartHandler{
+		db:           db,
+		emailService: email.NewMailService(),
+	}
 }
 
 func (h *CartHandler) GetCart(c *gin.Context) {
@@ -793,6 +797,7 @@ func (h *CartHandler) GetCart(c *gin.Context) {
 
 func (h *CartHandler) AddItem(c *gin.Context) {
 	userID := c.GetInt64("user_id")
+	userEmail := c.GetString("email")
 
 	var input models.AddToCartInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -802,7 +807,14 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 
 	var inStock bool
 	var available int
-	err := store.QueryRow(h.db, "SELECT in_stock, quantity FROM products WHERE id = ? AND is_active = ?", input.ProductID, true).Scan(&inStock, &available)
+	var productName string
+	var unitPrice float64
+	err := store.QueryRow(h.db, `
+		SELECT in_stock, quantity, name,
+		       CASE WHEN (sale_active = ? OR is_on_sale = ?) AND sale_price > 0 THEN sale_price ELSE price END
+		FROM products
+		WHERE id = ? AND is_active = ?
+	`, true, true, input.ProductID, true).Scan(&inStock, &available, &productName, &unitPrice)
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, gin.H{"error": "product_not_found"})
 		return
@@ -845,6 +857,12 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "cart_update_failed"})
 		return
 	}
+
+	go func() {
+		if err := h.emailService.SendCartItemNotification(userEmail, productName, input.Quantity, input.Size, input.Color, unitPrice); err != nil {
+			log.Printf("✗ Cart notification failed for user %d product %d: %v", userID, input.ProductID, err)
+		}
+	}()
 
 	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart"})
 }

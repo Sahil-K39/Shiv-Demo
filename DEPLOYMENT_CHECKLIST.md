@@ -33,6 +33,10 @@ SMTP_USER=shivshaktiproject.support@gmail.com
 SMTP_PASSWORD=your-gmail-app-password
 SMTP_PASS=your-gmail-app-password
 SMTP_FROM="Shiv Shakti <shivshaktiproject.support@gmail.com>"
+SUPPORT_EMAIL=shivshaktiproject.support@gmail.com
+CART_TO_EMAIL=shivshaktiproject.support@gmail.com
+ORDER_TO_EMAIL=shivshaktiproject.support@gmail.com
+QUOTE_TO_EMAIL=shivshaktiproject.support@gmail.com
 REQUIRE_SMTP=true
 PAYMENT_PROVIDER=manual_wholesale
 ```

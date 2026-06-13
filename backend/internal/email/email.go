@@ -190,6 +190,7 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 	if err != nil {
 		return fmt.Errorf("failed to parse email template: %w", err)
 	}
+	supportEmail := m.supportRecipient("ORDER_TO_EMAIL")
 
 	type TemplateData struct {
 		Order *models.Order
@@ -204,6 +205,7 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 	if m.MockMode {
 		log.Printf("================ MOCK EMAIL START ================")
 		log.Printf("To: %s", userEmail)
+		log.Printf("To Support: %s", supportEmail)
 		log.Printf("From: %s", m.From)
 		log.Printf("Subject: Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
 		log.Printf("Content Length: %d bytes", body.Len())
@@ -216,45 +218,102 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 		return nil
 	}
 
-	// Prepare email headers
-	headers := make(map[string]string)
-	headers["From"] = m.From
-	headers["To"] = userEmail
-	headers["Subject"] = fmt.Sprintf("Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
-	headers["MIME-Version"] = "1.0"
-	headers["Content-Type"] = "text/html; charset=UTF-8"
-
-	var msg strings.Builder
-	for k, v := range headers {
-		msg.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
-	}
-	msg.WriteString("\r\n")
-	msg.Write(body.Bytes())
-
-	// Send email using standard SMTP client
-	err = m.sendRaw([]string{userEmail}, []byte(msg.String()))
-	if err != nil {
-		return fmt.Errorf("failed to send smtp email: %w", err)
+	subject := fmt.Sprintf("Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
+	if err := m.sendHTML(
+		[]string{userEmail},
+		map[string]string{
+			"From":         m.From,
+			"To":           userEmail,
+			"Subject":      subject,
+			"MIME-Version": "1.0",
+			"Content-Type": "text/html; charset=UTF-8",
+		},
+		body.Bytes(),
+	); err != nil {
+		return fmt.Errorf("failed to send customer enquiry email: %w", err)
 	}
 
-	log.Printf("✓ Wholesale enquiry email sent to %s for Enquiry #%d", userEmail, order.ID)
+	if err := m.sendHTML(
+		[]string{supportEmail},
+		map[string]string{
+			"From":         m.From,
+			"To":           supportEmail,
+			"Reply-To":     userEmail,
+			"Subject":      fmt.Sprintf("New Wholesale Enquiry #%d - SHIV SHAKTI", order.ID),
+			"MIME-Version": "1.0",
+			"Content-Type": "text/html; charset=UTF-8",
+		},
+		body.Bytes(),
+	); err != nil {
+		return fmt.Errorf("failed to send support enquiry notification: %w", err)
+	}
+
+	log.Printf("✓ Wholesale enquiry emails sent to %s and %s for Enquiry #%d", userEmail, supportEmail, order.ID)
+	return nil
+}
+
+func (m *MailService) SendCartItemNotification(userEmail string, productName string, quantity int, size string, color string, unitPrice float64) error {
+	supportEmail := m.supportRecipient("CART_TO_EMAIL")
+	total := unitPrice * float64(quantity)
+	body := []byte(fmt.Sprintf(`
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Cart Activity</title></head>
+<body style="font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;padding:20px;">
+<div style="max-width:640px;margin:auto;background:#fff;padding:28px;border:1px solid #e5e5e5;">
+<h2 style="margin-top:0;color:#111;">Product Added To Cart</h2>
+<p style="color:#555;">A customer added a wholesale product to their cart.</p>
+<table style="width:100%%;border-collapse:collapse;color:#222;">
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Customer</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Product</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Size</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Color</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Quantity</strong></td><td style="padding:8px;border-top:1px solid #eee;">%d</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Estimated Value</strong></td><td style="padding:8px;border-top:1px solid #eee;">$%.2f</td></tr>
+</table>
+<p style="color:#777;font-size:12px;">This is an early cart notification. Full delivery details are sent after the customer submits the wholesale enquiry.</p>
+</div>
+</body>
+</html>`,
+		template.HTMLEscapeString(userEmail),
+		template.HTMLEscapeString(productName),
+		template.HTMLEscapeString(size),
+		template.HTMLEscapeString(color),
+		quantity,
+		total,
+	))
+
+	if m.MockMode {
+		log.Printf("================ MOCK CART EMAIL START ================")
+		log.Printf("To Support: %s", supportEmail)
+		log.Printf("Customer: %s", userEmail)
+		log.Printf("Product: %s", productName)
+		log.Printf("Quantity: %d", quantity)
+		log.Printf("================= MOCK CART EMAIL END =================")
+		return nil
+	}
+
+	if err := m.sendHTML(
+		[]string{supportEmail},
+		map[string]string{
+			"From":         m.From,
+			"To":           supportEmail,
+			"Reply-To":     userEmail,
+			"Subject":      "Product Added To Cart - SHIV SHAKTI",
+			"MIME-Version": "1.0",
+			"Content-Type": "text/html; charset=UTF-8",
+		},
+		body,
+	); err != nil {
+		return fmt.Errorf("failed to send cart notification: %w", err)
+	}
+
+	log.Printf("✓ Cart notification sent to %s for %s", supportEmail, productName)
 	return nil
 }
 
 func (m *MailService) SendFabricQuoteRequest(input *models.FabricQuoteInput) error {
-	supportEmail := strings.TrimSpace(os.Getenv("QUOTE_TO_EMAIL"))
-	if supportEmail == "" {
-		supportEmail = strings.TrimSpace(os.Getenv("SUPPORT_EMAIL"))
-	}
-	if supportEmail == "" {
-		supportEmail = strings.TrimSpace(os.Getenv("SMTP_FROM"))
-	}
-	if supportEmail == "" {
-		supportEmail = strings.TrimSpace(os.Getenv("SMTP_USERNAME"))
-	}
-	if supportEmail == "" {
-		supportEmail = m.From
-	}
+	supportEmail := m.supportRecipient("QUOTE_TO_EMAIL")
 
 	type TemplateData struct {
 		Input *models.FabricQuoteInput
@@ -385,7 +444,11 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 func (m *MailService) sendRaw(to []string, msg []byte) error {
 	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
 	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
-	return smtp.SendMail(addr, auth, m.envelopeFrom(), to, msg)
+	recipients := make([]string, 0, len(to))
+	for _, recipient := range to {
+		recipients = append(recipients, recipientAddress(recipient))
+	}
+	return smtp.SendMail(addr, auth, m.envelopeFrom(), recipients, msg)
 }
 
 func (m *MailService) envelopeFrom() string {
@@ -398,6 +461,30 @@ func (m *MailService) envelopeFrom() string {
 func cleanHeaderValue(value string) string {
 	value = strings.ReplaceAll(value, "\r", " ")
 	value = strings.ReplaceAll(value, "\n", " ")
+	return strings.TrimSpace(value)
+}
+
+func (m *MailService) supportRecipient(primaryEnv string) string {
+	candidates := []string{
+		firstEnv(primaryEnv),
+		firstEnv("SUPPORT_EMAIL"),
+		firstEnv("SMTP_USERNAME", "SMTP_USER"),
+		firstEnv("SMTP_FROM"),
+		m.From,
+	}
+	for _, candidate := range candidates {
+		candidate = strings.TrimSpace(candidate)
+		if candidate != "" {
+			return recipientAddress(candidate)
+		}
+	}
+	return "no-reply@shiv-shakti.local"
+}
+
+func recipientAddress(value string) string {
+	if address, err := mail.ParseAddress(value); err == nil {
+		return address.Address
+	}
 	return strings.TrimSpace(value)
 }
 
