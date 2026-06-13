@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   description:
     "Avant-garde clothing for the post-apocalyptic era. Deconstructed silhouettes, ritual textures, and ceremonial armor designed for the Council of Light.",
   keywords: ["fashion", "avant-garde", "luxury", "neo-primitive", "post-apocalyptic"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=trident-only-2" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
