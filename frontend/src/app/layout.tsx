@@ -6,7 +6,7 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
-  title: "SHIV SHAKTI PROJECT — Neo-Primitive Fashion",
+  title: "Shiv Shakti Project",
   description:
     "Avant-garde clothing for the post-apocalyptic era. Deconstructed silhouettes, ritual textures, and ceremonial armor designed for the Council of Light.",
   keywords: ["fashion", "avant-garde", "luxury", "neo-primitive", "post-apocalyptic"],

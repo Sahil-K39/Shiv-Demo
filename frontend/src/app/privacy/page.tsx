@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — SHIV SHAKTI PROJECT",
+  title: "Shiv Shakti Project",
   description: "Privacy policy for Shiv Shakti enquiry, account, and wholesale order data.",
 };
 

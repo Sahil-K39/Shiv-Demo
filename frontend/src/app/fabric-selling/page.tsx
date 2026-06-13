@@ -6,7 +6,7 @@ import FabricQuoteForm from "@/components/fabric/FabricQuoteForm";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 
 export const metadata: Metadata = {
-  title: "Fabric Selling — SHIV SHAKTI PROJECT",
+  title: "Shiv Shakti Project",
   description:
     "Bulk fabric selling for studios, boutiques, designers, and production partners, including cotton, linen, silk blends, handloom textures, trims, dyeing, and sampling support.",
 };
