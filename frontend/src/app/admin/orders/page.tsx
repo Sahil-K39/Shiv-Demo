@@ -3,16 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
+import { formatPriceINR } from "@/lib/pricing";
 import type { AdminOrder, OrderStatus } from "@/types";
 
 const statusFilters = ["all", "payment_pending", "confirmed", "shipped", "delivered"] as const;
 
 function money(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatPriceINR(value);
 }
 
 function formatDate(value?: string | null) {

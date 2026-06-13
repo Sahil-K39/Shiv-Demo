@@ -16,6 +16,7 @@ import {
   parseList,
 } from "@/lib/productMedia";
 import { getAllProducts } from "@/lib/productData";
+import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY, WHOLESALE_PACK_SIZES } from "@/lib/wholesale";
 
 export default function ProductDetail() {
@@ -148,7 +149,7 @@ export default function ProductDetail() {
               {product.name}
             </h1>
             <p className="text-[18px] tracking-[0.1em] text-bone/70 mt-6">
-              ${product.price.toLocaleString()} wholesale unit
+              {formatPriceINR(product.price)} wholesale unit
             </p>
             <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-stone">
               MOQ {MIN_WHOLESALE_QUANTITY} units per style. Pack quantities can be adjusted before enquiry review.
@@ -267,7 +268,7 @@ export default function ProductDetail() {
                 Estimated line total
               </span>
               <span className="text-[16px] tracking-[0.08em] text-bone">
-                ${wholesaleSubtotal.toLocaleString()}
+                {formatPriceINR(wholesaleSubtotal)}
               </span>
             </div>
           </div>

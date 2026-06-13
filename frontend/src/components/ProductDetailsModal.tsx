@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { formatPriceINR } from '@/lib/pricing';
 import { MIN_WHOLESALE_QUANTITY } from '@/lib/wholesale';
 
 interface ProductDetailsModalProps {
@@ -45,7 +46,7 @@ export default function ProductDetailsModal({ isOpen, onClose, product }: Produc
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
-            <p className="text-xl text-gray-800 mb-1">${product.price.toLocaleString()} wholesale unit</p>
+            <p className="text-xl text-gray-800 mb-1">{formatPriceINR(product.price)} wholesale unit</p>
             <p className="mb-4 text-xs uppercase tracking-[0.14em] text-gray-500">
               MOQ {MIN_WHOLESALE_QUANTITY} units per style
             </p>

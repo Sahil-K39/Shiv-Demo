@@ -9,6 +9,7 @@ import { useCartStore } from "@/store/cart";
 import { CloseIcon, MinusIcon, PlusIcon } from "@/components/ui/Icons";
 import { ordersAPI } from "@/lib/api";
 import { getCartItemImage } from "@/lib/productMedia";
+import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 const emptyEnquiryForm = {
@@ -176,7 +177,7 @@ export default function CartDrawer() {
                         </div>
 
                         <span className="text-[12px] tracking-[0.1em] text-black/70">
-                          ${(item.price * item.quantity).toLocaleString()}
+                          {formatPriceINR(item.price * item.quantity)}
                         </span>
 
                         <button
@@ -199,7 +200,7 @@ export default function CartDrawer() {
                     ENQUIRY SUBTOTAL
                   </span>
                   <span className="text-[18px] tracking-[0.05em] text-black font-light">
-                    ${total.toLocaleString()}
+                    {formatPriceINR(total)}
                   </span>
                 </div>
 

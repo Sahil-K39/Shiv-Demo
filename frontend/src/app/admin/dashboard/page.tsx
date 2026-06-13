@@ -6,6 +6,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
 import type { AdminOrder, OrderStatus, Product } from "@/types";
 import { getProductImages } from "@/lib/productMedia";
+import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 type DashboardStats = {
@@ -28,11 +29,7 @@ type DashboardStats = {
 };
 
 function money(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatPriceINR(value);
 }
 
 function number(value: number) {

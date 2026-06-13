@@ -5,6 +5,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
 import type { Product, ProductInput } from "@/types";
 import { getColorSwatch, getProductImages, parseList } from "@/lib/productMedia";
+import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 const emptyForm: ProductInput = {
@@ -55,11 +56,7 @@ const colorOptions = [
 ];
 
 function money(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatPriceINR(value);
 }
 
 function toDateInput(value: string | null | undefined) {
