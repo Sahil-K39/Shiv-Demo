@@ -58,6 +58,9 @@ func main() {
 	defer db.Close()
 
 	store.SeedProducts(db)
+	if err := store.SyncFinalProducts(db); err != nil {
+		log.Printf("Failed to sync final product catalogue: %v", err)
+	}
 
 	authService := auth.NewService(jwtSecret, db)
 	authService.EnsureAdminFromEnv()

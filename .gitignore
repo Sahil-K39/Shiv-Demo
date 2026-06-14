@@ -47,5 +47,6 @@ __pycache__/
 
 # Project specific binaries
 backend/main.py
+Final Products/
 .env
 .vercel
