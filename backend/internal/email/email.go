@@ -14,20 +14,25 @@ import (
 	"strings"
 	"time"
 
+	"github.com/resend/resend-go/v3"
 	"shiv-shakti/internal/models"
 )
 
 type MailService struct {
-	Host     string
-	Port     int
-	Username string
-	Password string
-	From     string
-	MockMode bool
-	Timeout  time.Duration
+	Host       string
+	Port       int
+	Username   string
+	Password   string
+	From       string
+	MockMode   bool
+	Timeout    time.Duration
+	Resend     *resend.Client
+	ResendFrom string
 }
 
 func NewMailService() *MailService {
+	resendAPIKey := firstEnv("RESEND_API_KEY")
+	resendFrom := firstEnv("RESEND_FROM")
 	host := firstEnv("SMTP_HOST")
 	portStr := firstEnv("SMTP_PORT")
 	username := firstEnv("SMTP_USERNAME", "SMTP_USER")
@@ -35,9 +40,11 @@ func NewMailService() *MailService {
 	from := firstEnv("SMTP_FROM")
 
 	mockMode := false
-	if host == "" || username == "" || password == "" || from == "" {
+	hasResend := resendAPIKey != ""
+	hasSMTP := host != "" && username != "" && password != "" && from != ""
+	if !hasResend && !hasSMTP {
 		if strings.EqualFold(os.Getenv("REQUIRE_SMTP"), "true") || strings.EqualFold(os.Getenv("APP_ENV"), "production") {
-			log.Fatal("✗ SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM are required when email delivery is mandatory")
+			log.Fatal("✗ RESEND_API_KEY or SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM are required when email delivery is mandatory")
 		}
 		log.Println("⚠ SMTP settings are incomplete. Email service running in MOCK mode (logging to stdout).")
 		mockMode = true
@@ -60,17 +67,32 @@ func NewMailService() *MailService {
 		from = username
 	}
 	if from == "" {
+		from = resendFrom
+	}
+	if resendFrom == "" {
+		resendFrom = from
+	}
+	if resendFrom == "" && resendAPIKey != "" {
+		resendFrom = "onboarding@resend.dev"
+	}
+	if from == "" {
 		from = "no-reply@shiv-shakti.local"
+	}
+	var resendClient *resend.Client
+	if resendAPIKey != "" {
+		resendClient = resend.NewClient(resendAPIKey)
 	}
 
 	return &MailService{
-		Host:     host,
-		Port:     port,
-		Username: username,
-		Password: password,
-		From:     from,
-		MockMode: mockMode,
-		Timeout:  timeout,
+		Host:       host,
+		Port:       port,
+		Username:   username,
+		Password:   password,
+		From:       from,
+		MockMode:   mockMode,
+		Timeout:    timeout,
+		Resend:     resendClient,
+		ResendFrom: resendFrom,
 	}
 }
 
@@ -453,6 +475,9 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 }
 
 func (m *MailService) sendRaw(to []string, msg []byte) error {
+	if m.Resend != nil {
+		return m.sendResend(to, msg)
+	}
 	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
 	recipients := make([]string, 0, len(to))
 	for _, recipient := range to {
@@ -466,6 +491,32 @@ func (m *MailService) sendRaw(to []string, msg []byte) error {
 			}
 		}
 		return err
+	}
+	return nil
+}
+
+func (m *MailService) sendResend(to []string, msg []byte) error {
+	headers, body := splitRawMessage(msg)
+	subject := headers["subject"]
+	if subject == "" {
+		subject = "Shiv Shakti Project"
+	}
+	from := m.ResendFrom
+	if from == "" {
+		from = m.From
+	}
+	recipients := make([]string, 0, len(to))
+	for _, recipient := range to {
+		recipients = append(recipients, recipientAddress(recipient))
+	}
+	params := &resend.SendEmailRequest{
+		From:    from,
+		To:      recipients,
+		Subject: cleanHeaderValue(subject),
+		Html:    string(body),
+	}
+	if _, err := m.Resend.Emails.Send(params); err != nil {
+		return fmt.Errorf("resend send failed: %w", err)
 	}
 	return nil
 }
@@ -542,6 +593,32 @@ func cleanHeaderValue(value string) string {
 	value = strings.ReplaceAll(value, "\r", " ")
 	value = strings.ReplaceAll(value, "\n", " ")
 	return strings.TrimSpace(value)
+}
+
+func splitRawMessage(msg []byte) (map[string]string, []byte) {
+	raw := string(msg)
+	separator := "\r\n\r\n"
+	index := strings.Index(raw, separator)
+	if index == -1 {
+		separator = "\n\n"
+		index = strings.Index(raw, separator)
+	}
+	if index == -1 {
+		return map[string]string{}, msg
+	}
+	headers := map[string]string{}
+	for _, line := range strings.Split(raw[:index], "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		key, value, ok := strings.Cut(line, ":")
+		if !ok {
+			continue
+		}
+		headers[strings.ToLower(strings.TrimSpace(key))] = strings.TrimSpace(value)
+	}
+	return headers, []byte(raw[index+len(separator):])
 }
 
 func (m *MailService) supportRecipient(primaryEnv string) string {

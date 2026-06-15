@@ -26,6 +26,8 @@ CORS_ORIGIN=https://your-vercel-domain
 FRONTEND_URL=https://your-vercel-domain
 BASE_URL=https://your-vercel-domain
 DATABASE_URL=postgresql://postgres:[YOUR-SUPABASE-DATABASE-PASSWORD]@db.bmyghobfovkzchhuhnss.supabase.co:5432/postgres?sslmode=require
+RESEND_API_KEY=re_xxxxxxxxx
+RESEND_FROM=onboarding@resend.dev
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USERNAME=shivshaktiproject.support@gmail.com
@@ -40,6 +42,8 @@ QUOTE_TO_EMAIL=shivshaktiproject.support@gmail.com
 REQUIRE_SMTP=true
 PAYMENT_PROVIDER=manual_wholesale
 ```
+
+Replace `re_xxxxxxxxx` with your real Resend API key in Render. Do not commit the real key.
 
 Validation:
 
