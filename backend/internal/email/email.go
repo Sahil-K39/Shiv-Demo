@@ -458,16 +458,25 @@ func (m *MailService) sendRaw(to []string, msg []byte) error {
 	for _, recipient := range to {
 		recipients = append(recipients, recipientAddress(recipient))
 	}
-	return m.sendSMTP(addr, recipients, msg)
+	if err := m.sendSMTP(addr, m.Port, recipients, msg); err != nil {
+		if m.Port == 587 && strings.Contains(err.Error(), "smtp dial failed") {
+			fallbackAddr := fmt.Sprintf("%s:%d", m.Host, 465)
+			if fallbackErr := m.sendSMTP(fallbackAddr, 465, recipients, msg); fallbackErr == nil {
+				return nil
+			}
+		}
+		return err
+	}
+	return nil
 }
 
-func (m *MailService) sendSMTP(addr string, recipients []string, msg []byte) error {
+func (m *MailService) sendSMTP(addr string, port int, recipients []string, msg []byte) error {
 	dialer := net.Dialer{Timeout: m.Timeout}
 	var (
 		conn net.Conn
 		err  error
 	)
-	if m.Port == 465 {
+	if port == 465 {
 		conn, err = tls.DialWithDialer(&dialer, "tcp", addr, &tls.Config{ServerName: m.Host, MinVersion: tls.VersionTLS12})
 	} else {
 		conn, err = dialer.Dial("tcp", addr)
@@ -486,7 +495,7 @@ func (m *MailService) sendSMTP(addr string, recipients []string, msg []byte) err
 	}
 	defer client.Close()
 
-	if m.Port != 465 {
+	if port != 465 {
 		if ok, _ := client.Extension("STARTTLS"); ok {
 			if err := client.StartTLS(&tls.Config{ServerName: m.Host, MinVersion: tls.VersionTLS12}); err != nil {
 				return fmt.Errorf("smtp starttls failed: %w", err)
