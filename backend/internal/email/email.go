@@ -2,14 +2,17 @@ package email
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"html/template"
 	"log"
+	"net"
 	"net/mail"
 	"net/smtp"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"shiv-shakti/internal/models"
 )
@@ -21,6 +24,7 @@ type MailService struct {
 	Password string
 	From     string
 	MockMode bool
+	Timeout  time.Duration
 }
 
 func NewMailService() *MailService {
@@ -45,6 +49,12 @@ func NewMailService() *MailService {
 			port = p
 		}
 	}
+	timeout := 15 * time.Second
+	if timeoutStr := firstEnv("SMTP_TIMEOUT_SECONDS"); timeoutStr != "" {
+		if seconds, err := strconv.Atoi(timeoutStr); err == nil && seconds > 0 {
+			timeout = time.Duration(seconds) * time.Second
+		}
+	}
 
 	if from == "" {
 		from = username
@@ -60,6 +70,7 @@ func NewMailService() *MailService {
 		Password: password,
 		From:     from,
 		MockMode: mockMode,
+		Timeout:  timeout,
 	}
 }
 
@@ -443,12 +454,72 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 
 func (m *MailService) sendRaw(to []string, msg []byte) error {
 	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
-	auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
 	recipients := make([]string, 0, len(to))
 	for _, recipient := range to {
 		recipients = append(recipients, recipientAddress(recipient))
 	}
-	return smtp.SendMail(addr, auth, m.envelopeFrom(), recipients, msg)
+	return m.sendSMTP(addr, recipients, msg)
+}
+
+func (m *MailService) sendSMTP(addr string, recipients []string, msg []byte) error {
+	dialer := net.Dialer{Timeout: m.Timeout}
+	var (
+		conn net.Conn
+		err  error
+	)
+	if m.Port == 465 {
+		conn, err = tls.DialWithDialer(&dialer, "tcp", addr, &tls.Config{ServerName: m.Host, MinVersion: tls.VersionTLS12})
+	} else {
+		conn, err = dialer.Dial("tcp", addr)
+	}
+	if err != nil {
+		return fmt.Errorf("smtp dial failed: %w", err)
+	}
+	defer conn.Close()
+	if err := conn.SetDeadline(time.Now().Add(m.Timeout)); err != nil {
+		return fmt.Errorf("smtp deadline failed: %w", err)
+	}
+
+	client, err := smtp.NewClient(conn, m.Host)
+	if err != nil {
+		return fmt.Errorf("smtp client failed: %w", err)
+	}
+	defer client.Close()
+
+	if m.Port != 465 {
+		if ok, _ := client.Extension("STARTTLS"); ok {
+			if err := client.StartTLS(&tls.Config{ServerName: m.Host, MinVersion: tls.VersionTLS12}); err != nil {
+				return fmt.Errorf("smtp starttls failed: %w", err)
+			}
+		}
+	}
+
+	if ok, _ := client.Extension("AUTH"); ok {
+		auth := smtp.PlainAuth("", m.Username, m.Password, m.Host)
+		if err := client.Auth(auth); err != nil {
+			return fmt.Errorf("smtp auth failed: %w", err)
+		}
+	}
+	if err := client.Mail(m.envelopeFrom()); err != nil {
+		return fmt.Errorf("smtp mail from failed: %w", err)
+	}
+	for _, recipient := range recipients {
+		if err := client.Rcpt(recipient); err != nil {
+			return fmt.Errorf("smtp recipient failed for %s: %w", recipient, err)
+		}
+	}
+	writer, err := client.Data()
+	if err != nil {
+		return fmt.Errorf("smtp data failed: %w", err)
+	}
+	if _, err := writer.Write(msg); err != nil {
+		writer.Close()
+		return fmt.Errorf("smtp write failed: %w", err)
+	}
+	if err := writer.Close(); err != nil {
+		return fmt.Errorf("smtp close data failed: %w", err)
+	}
+	return client.Quit()
 }
 
 func (m *MailService) envelopeFrom() string {
