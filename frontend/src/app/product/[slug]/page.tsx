@@ -149,8 +149,8 @@ export default function ProductDetail() {
 
       <div className="flex w-full min-w-0 flex-col pt-8 lg:w-1/2 lg:pt-16">
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="space-y-8"
         >
