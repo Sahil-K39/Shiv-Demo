@@ -93,10 +93,10 @@ export default function ProductDetail() {
   const wholesaleSubtotal = product.price * quantity;
 
   return (
-    <div className="max-w-[1600px] mx-auto px-6 md:px-10 py-12 lg:py-20 flex flex-col lg:flex-row gap-12 lg:gap-24">
-      <div className="w-full lg:w-1/2 flex flex-col gap-4">
+    <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-12 px-6 pb-12 pt-28 md:px-10 md:pt-32 lg:flex-row lg:gap-24 lg:pb-20">
+      <div className="flex w-full min-w-0 flex-col gap-4 lg:w-1/2">
         <motion.div 
-          className="relative aspect-[3/4] bg-obsidian overflow-hidden"
+          className="relative flex h-[min(72vh,760px)] min-h-[420px] items-center justify-center overflow-hidden border border-black/10 bg-[#f4f1ec] lg:sticky lg:top-28 lg:h-[calc(100vh-9rem)] lg:max-h-[860px]"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -106,7 +106,10 @@ export default function ProductDetail() {
               key={currentImageIdx}
               src={images[currentImageIdx] || images[0]}
               alt={product.name}
-              className="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="h-full w-full object-contain p-2 md:p-4"
               onError={(event) => {
                 event.currentTarget.src = fallbackImage;
               }}
@@ -122,12 +125,12 @@ export default function ProductDetail() {
         </motion.div>
 
         {images.length > 1 && (
-          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="scrollbar-hide flex w-full min-w-0 gap-4 overflow-x-auto pb-2">
             {images.map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentImageIdx(idx)}
-                className={`relative w-20 aspect-[3/4] flex-shrink-0 border transition-colors ${
+                className={`relative aspect-[3/4] w-20 flex-shrink-0 overflow-hidden border bg-[#f4f1ec] transition-colors ${
                   idx === currentImageIdx ? "border-bone" : "border-black/10 hover:border-black/30"
                 }`}
               >
@@ -136,7 +139,7 @@ export default function ProductDetail() {
                   alt=""
                   fill
                   sizes="80px"
-                  className="object-cover"
+                  className="object-contain p-1"
                 />
               </button>
             ))}
@@ -144,7 +147,7 @@ export default function ProductDetail() {
         )}
       </div>
 
-      <div className="w-full lg:w-1/2 flex flex-col pt-8 lg:pt-16">
+      <div className="flex w-full min-w-0 flex-col pt-8 lg:w-1/2 lg:pt-16">
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
