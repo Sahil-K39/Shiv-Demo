@@ -515,22 +515,73 @@ func seedImagesJSON(images []string) string {
 }
 
 func SeedProducts(db *sql.DB) {
-	var count int
-	QueryRow(db, "SELECT COUNT(*) FROM products").Scan(&count)
-	if count > 0 {
-		if isLegacySeedCatalogue(db, count) {
-			if err := replaceLegacySeedCatalogue(db); err != nil {
-				log.Printf("Failed to replace legacy product seed: %v", err)
-			}
-		}
-		return
+	if err := cleanupRetiredSeedProducts(db); err != nil {
+		log.Printf("Failed to remove retired seed products: %v", err)
+	}
+}
+
+func cleanupRetiredSeedProducts(db *sql.DB) error {
+	slugs := retiredSeedProductSlugs()
+	if len(slugs) == 0 {
+		return nil
 	}
 
-	if err := seedProducts(db); err != nil {
-		log.Printf("Failed to seed product catalogue: %v", err)
-		return
+	tx, err := db.Begin()
+	if err != nil {
+		return err
 	}
-	log.Printf("✓ Seeded %d products into catalogue", len(seedProductRows))
+	defer tx.Rollback()
+
+	args := anySlice(slugs)
+	deleteQuery := `
+		DELETE FROM products
+		WHERE slug IN (` + placeholders(len(slugs)) + `)
+		  AND NOT EXISTS (SELECT 1 FROM cart_items ci WHERE ci.product_id = products.id)
+		  AND NOT EXISTS (SELECT 1 FROM order_items oi WHERE oi.product_id = products.id)
+	`
+	deleteResult, err := tx.Exec(Rebind(deleteQuery), args...)
+	if err != nil {
+		return err
+	}
+	deleted, _ := deleteResult.RowsAffected()
+
+	updateArgs := append([]any{false, false}, args...)
+	updateResult, err := tx.Exec(Rebind(`
+		UPDATE products
+		SET is_active = ?, in_stock = ?, quantity = 0, updated_at = CURRENT_TIMESTAMP
+		WHERE slug IN (`+placeholders(len(slugs))+`)
+	`), updateArgs...)
+	if err != nil {
+		return err
+	}
+	hidden, _ := updateResult.RowsAffected()
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+	if deleted > 0 || hidden > 0 {
+		log.Printf("✓ Removed retired seed catalogue products: %d deleted, %d hidden", deleted, hidden)
+	}
+	return nil
+}
+
+func retiredSeedProductSlugs() []string {
+	seen := map[string]bool{}
+	slugs := make([]string, 0, len(seedProductRows)+len(legacySeedSlugs))
+	for _, product := range seedProductRows {
+		slug := seedProductSlug(product.name)
+		if !seen[slug] {
+			slugs = append(slugs, slug)
+			seen[slug] = true
+		}
+	}
+	for _, slug := range legacySeedSlugs {
+		if !seen[slug] {
+			slugs = append(slugs, slug)
+			seen[slug] = true
+		}
+	}
+	return slugs
 }
 
 func seedProducts(db *sql.DB) error {

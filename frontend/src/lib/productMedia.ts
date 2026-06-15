@@ -1,57 +1,16 @@
 import type { Product } from "@/types";
 import { getRandomProductImage } from "@/lib/siteImageProvider";
 
-const productImageAliases: Record<string, string[]> = {
-  "void-walker-trench": [
-    "/assets/images/1-153A0953.jpg",
-    "/assets/images/2-153A0956.jpg",
-  ],
-  "asymmetric-drape-dress": [
-    "/assets/images/3-153A0960.jpg",
-    "/assets/images/4-153A0965.jpg",
-  ],
-  "tactical-survival-suit": [
-    "/assets/images/15-153A1040.jpg",
-    "/assets/images/16-153A1042.jpg",
-  ],
-  "deconstructed-blazer": [
-    "/assets/images/32-153A9973.jpg",
-    "/assets/images/33-153A9976.jpg",
-  ],
-  "nomad-cargo-trousers": [
-    "/assets/images/40-153A0003.jpg",
-    "/assets/images/41-153A0011.jpg",
-  ],
-  "ritual-wrap-coat": [
-    "/assets/images/20-153A1078.jpg",
-    "/assets/images/21-153A1081.jpg",
-  ],
-  "mystic-silk-shirt": [
-    "/assets/images/50-153A0039.jpg",
-    "/assets/images/51-153A0043.jpg",
-  ],
-  "urban-utility-jacket": [
-    "/assets/images/60-153A0067.jpg",
-    "/assets/images/61-153A0068.jpg",
-  ],
-  "riverstone-denim-jeans": [
-    "/assets/images/75-153A0113.jpg",
-    "/assets/images/76-153A0115.jpg",
-  ],
-  "eclipse-leather-boots": [
-    "/assets/images/85-153A0164.jpg",
-    "/assets/images/86-153A0165.jpg",
-  ],
-};
+const productImageAliases: Record<string, string[]> = {};
 
 const categoryFallbacks: Record<string, string[]> = {
   shakti: [
-    "/assets/images/1-153A0953.jpg",
-    "/assets/images/3-153A0960.jpg",
+    "/final-products/go01/go01-01.webp",
+    "/final-products/go02/go02-01.webp",
   ],
   shiva: [
-    "/assets/images/32-153A9973.jpg",
-    "/assets/images/40-153A0003.jpg",
+    "/final-products/go15/go15-01.webp",
+    "/final-products/go16/go16-01.webp",
   ],
 };
 

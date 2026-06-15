@@ -1,18 +1,12 @@
-import { fallbackProducts } from "@/lib/productData";
+const finalProductFallbackImages = [
+  "/final-products/go01/go01-01.webp",
+  "/final-products/go02/go02-01.webp",
+  "/final-products/go03/go03-01.webp",
+  "/final-products/go04/go04-01.webp",
+  "/final-products/go05/go05-01.webp",
+];
 
-/**
- * Returns a random product image URL from the fallback product data.
- * This function is used to replace static placeholder images throughout the site.
- */
 export function getRandomProductImage(): string {
-  if (!fallbackProducts || fallbackProducts.length === 0) {
-    // Fallback to a generic placeholder if product data is unavailable.
-    return "/assets/images/placeholder.jpg";
-  }
-  const randomIndex = Math.floor(Math.random() * fallbackProducts.length);
-  const product = fallbackProducts[randomIndex];
-  // Return the first image of the selected product, or a placeholder if none.
-  return product.images && product.images.length > 0
-    ? product.images[0]
-    : "/assets/images/placeholder.jpg";
+  const randomIndex = Math.floor(Math.random() * finalProductFallbackImages.length);
+  return finalProductFallbackImages[randomIndex];
 }
