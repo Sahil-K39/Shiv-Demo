@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/cart";
 import type { Product } from "@/types";
 import { CheckIcon } from "@/components/ui/Icons";
@@ -22,7 +23,7 @@ import { MIN_WHOLESALE_QUANTITY, WHOLESALE_PACK_SIZES } from "@/lib/wholesale";
 export default function ProductDetail() {
   const params = useParams();
   const slug = params.slug as string;
-  const { addItem } = useCartStore();
+  const { addItem, openCart, user } = useCartStore();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +32,7 @@ export default function ProductDetail() {
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
   const [quantity, setQuantity] = useState(MIN_WHOLESALE_QUANTITY);
+  const [addNotice, setAddNotice] = useState("");
 
   useEffect(() => {
     
@@ -75,6 +77,14 @@ export default function ProductDetail() {
 
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) return;
+
+    if (!user) {
+      setAddNotice("Log in or create an identity before adding wholesale enquiry items.");
+      openCart();
+      return;
+    }
+
+    setAddNotice("");
     setIsAdding(true);
     await addItem(product.id, selectedSize, selectedColor, quantity);
     setIsAdding(false);
@@ -295,6 +305,15 @@ export default function ProductDetail() {
                 <span>OUT OF STOCK</span>
             )}
           </motion.button>
+
+          {addNotice && (
+            <p className="text-[10px] uppercase leading-relaxed tracking-[0.14em] text-stone">
+              {addNotice}{" "}
+              <Link href="/login" className="underline underline-offset-4 transition-colors hover:text-black">
+                Log in
+              </Link>
+            </p>
+          )}
           
           <ul className="space-y-2 pt-6 text-[10px] uppercase tracking-[0.15em] text-stone">
             {["WHOLESALE ENQUIRY REVIEW", "PAYMENT METHOD SHARED AFTER APPROVAL", "BULK SHIPPING QUOTED AFTER REVIEW"].map((item) => (

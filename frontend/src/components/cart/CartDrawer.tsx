@@ -5,6 +5,7 @@
 import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/cart";
 import { CloseIcon, MinusIcon, PlusIcon } from "@/components/ui/Icons";
 import { ordersAPI } from "@/lib/api";
@@ -114,8 +115,19 @@ export default function CartDrawer() {
                     YOUR WHOLESALE ENQUIRY IS EMPTY
                   </p>
                   <p className="text-[11px] text-gray-400 mt-2">
-                    Add at least {MIN_WHOLESALE_QUANTITY} units to begin a buyer enquiry.
+                    {user
+                      ? `Add at least ${MIN_WHOLESALE_QUANTITY} units to begin a buyer enquiry.`
+                      : "Log in or create an identity before adding wholesale enquiry items."}
                   </p>
+                  {!user && (
+                    <Link
+                      href="/login"
+                      onClick={closeCart}
+                      className="mt-5 border border-black px-5 py-3 text-[10px] uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white"
+                    >
+                      Log in
+                    </Link>
+                  )}
                 </div>
               )}
 
