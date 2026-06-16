@@ -154,7 +154,7 @@ func migrateSQLite(db *sql.DB) error {
 		price REAL NOT NULL,
 		sale_price REAL DEFAULT 0,
 		is_on_sale BOOLEAN DEFAULT 0,
-		currency TEXT DEFAULT 'USD',
+		currency TEXT DEFAULT 'INR',
 		category TEXT NOT NULL,
 		collection TEXT DEFAULT 'SS26',
 		sizes TEXT DEFAULT '["XS","S","M","L","XL"]',
@@ -263,6 +263,7 @@ func migrateSQLite(db *sql.DB) error {
 		{"users", "login_count", "INTEGER DEFAULT 0"},
 		{"products", "sale_price", "REAL DEFAULT 0"},
 		{"products", "is_on_sale", "BOOLEAN DEFAULT 0"},
+		{"products", "currency", "TEXT DEFAULT 'INR'"},
 		{"products", "quantity", "INTEGER DEFAULT 0"},
 		{"products", "sku", "TEXT DEFAULT ''"},
 		{"products", "is_featured", "BOOLEAN DEFAULT 0"},
@@ -288,6 +289,7 @@ func migrateSQLite(db *sql.DB) error {
 	}
 	db.Exec("UPDATE products SET updated_at = COALESCE(updated_at, created_at, CURRENT_TIMESTAMP)")
 	db.Exec("UPDATE orders SET updated_at = COALESCE(updated_at, created_at, CURRENT_TIMESTAMP)")
+	normalizeProductCurrency(db)
 	if _, err := db.Exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_products_sku_not_empty ON products(sku) WHERE sku <> ''"); err != nil {
 		log.Printf("Could not create unique SKU index: %v", err)
 	}
@@ -347,7 +349,7 @@ func migratePostgres(db *sql.DB) error {
 		price DOUBLE PRECISION NOT NULL,
 		sale_price DOUBLE PRECISION DEFAULT 0,
 		is_on_sale BOOLEAN DEFAULT FALSE,
-		currency TEXT DEFAULT 'USD',
+		currency TEXT DEFAULT 'INR',
 		category TEXT NOT NULL,
 		collection TEXT DEFAULT 'SS26',
 		sizes TEXT DEFAULT '["XS","S","M","L","XL"]',
@@ -439,6 +441,8 @@ func migratePostgres(db *sql.DB) error {
 	db.Exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMPTZ")
 	db.Exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS login_count INTEGER DEFAULT 0")
 	db.Exec("ALTER TABLE products ADD COLUMN IF NOT EXISTS quantity INTEGER DEFAULT 0")
+	db.Exec("ALTER TABLE products ADD COLUMN IF NOT EXISTS currency TEXT DEFAULT 'INR'")
+	db.Exec("ALTER TABLE products ALTER COLUMN currency SET DEFAULT 'INR'")
 	db.Exec("ALTER TABLE products ADD COLUMN IF NOT EXISTS sku TEXT DEFAULT ''")
 	db.Exec("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT FALSE")
 	db.Exec("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE")
@@ -450,7 +454,14 @@ func migratePostgres(db *sql.DB) error {
 	db.Exec("ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_confirmed_at TIMESTAMPTZ")
 	db.Exec("ALTER TABLE orders ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()")
 	db.Exec("UPDATE orders SET updated_at = COALESCE(updated_at, created_at, NOW())")
+	normalizeProductCurrency(db)
 	return err
+}
+
+func normalizeProductCurrency(db *sql.DB) {
+	if _, err := Exec(db, "UPDATE products SET currency = ? WHERE currency IS NULL OR currency = '' OR currency = 'USD'", "INR"); err != nil {
+		log.Printf("Could not normalize product currency: %v", err)
+	}
 }
 
 func InsertNGOInterest(db *sql.DB, name, email, phone, message string) error {
@@ -675,9 +686,9 @@ func insertSeedProductWithExec(exec func(string, ...any) (sql.Result, error), in
 	sku := "SS26-" + strings.ToUpper(category) + "-" + strings.Repeat("0", 3-len(idText)) + idText
 
 	_, err := exec(`
-		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, sizes, colors, images, featured, quantity, sku, is_featured, is_active, sale_active, in_stock, updated_at)
-		VALUES (?, ?, ?, ?, 0, false, ?, ?, ?, ?, ?, ?, ?, ?, true, false, ?, CURRENT_TIMESTAMP)
-	`, name, seedProductSlug(name), "Studio photographed wholesale style with matching front, back, and detail views.", price, category, `["XS","S","M","L","XL"]`, `["Void Black"]`, imagesJSON, featured, quantity, sku, featured, quantity > 0)
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, currency, category, sizes, colors, images, featured, quantity, sku, is_featured, is_active, sale_active, in_stock, updated_at)
+		VALUES (?, ?, ?, ?, 0, false, ?, ?, ?, ?, ?, ?, ?, ?, ?, true, false, ?, CURRENT_TIMESTAMP)
+	`, name, seedProductSlug(name), "Studio photographed wholesale style with matching front, back, and detail views.", price, "INR", category, `["XS","S","M","L","XL"]`, `["Void Black"]`, imagesJSON, featured, quantity, sku, featured, quantity > 0)
 	if err != nil {
 		return err
 	}

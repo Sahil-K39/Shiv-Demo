@@ -224,6 +224,8 @@ const productSelectColumns = `
 	sale_start_date, sale_end_date, created_at, updated_at
 `
 
+const productCurrency = "INR"
+
 type rowScanner interface {
 	Scan(dest ...any) error
 }
@@ -430,13 +432,13 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	}
 
 	id, err := store.InsertID(h.db, `
-		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, currency, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 	`, `
-		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, currency, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
 		RETURNING id
-	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate)
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, productCurrency, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate)
 
 	if err != nil {
 		if isUniqueConstraintError(err) {
@@ -567,18 +569,18 @@ func findProductIDForBulkImport(tx *sql.Tx, sku string, slug string) (int64, boo
 
 func insertProductTx(tx *sql.Tx, input models.ProductInput) error {
 	_, err := store.TxExec(tx, `
-		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate)
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, currency, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, productCurrency, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate)
 	return err
 }
 
 func updateProductByIDTx(tx *sql.Tx, id int64, input models.ProductInput) error {
 	_, err := store.TxExec(tx, `
 		UPDATE products
-		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
+		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, currency = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
 		WHERE id = ?
-	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, productCurrency, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)
 	return err
 }
 
@@ -602,9 +604,9 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 
 	result, err := store.Exec(h.db, `
 		UPDATE products
-		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
+		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, currency = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
 		WHERE id = ?
-	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)
+	`, input.Name, input.Slug, input.Description, input.Price, input.SalePrice, input.IsOnSale, productCurrency, input.Category, input.Collection, input.Sizes, input.Colors, input.Images, input.InStock, input.Featured, input.Quantity, input.SKU, input.IsFeatured, input.IsActive, input.SaleActive, input.SaleStartDate, input.SaleEndDate, id)
 
 	if err != nil {
 		if isUniqueConstraintError(err) {
@@ -791,7 +793,7 @@ func (h *CartHandler) GetCart(c *gin.Context) {
 		"items":      items,
 		"item_count": len(items),
 		"total":      total,
-		"currency":   "USD",
+		"currency":   productCurrency,
 	})
 }
 

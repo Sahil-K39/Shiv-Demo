@@ -2,6 +2,7 @@ package store
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -84,5 +85,43 @@ func TestSeedProductsHidesReferencedRetiredProducts(t *testing.T) {
 	}
 	if isActive || inStock || quantity != 0 {
 		t.Fatalf("referenced retired product active=%v inStock=%v quantity=%d, want hidden/out/0", isActive, inStock, quantity)
+	}
+}
+
+func TestSyncFinalProductsNormalizesCurrencyAndPNGImages(t *testing.T) {
+	t.Setenv("DATABASE_URL", "")
+
+	db, err := InitDB(filepath.Join(t.TempDir(), "final-products.db"))
+	if err != nil {
+		t.Fatalf("InitDB() error = %v", err)
+	}
+	defer db.Close()
+
+	if _, err := Exec(db, `
+		INSERT INTO products (name, slug, description, price, currency, category, sku)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+	`, "Old Final Product", "shiv-shakti-final-style-01", "old row", 100.0, "USD", "shakti", "SS-FINAL-001"); err != nil {
+		t.Fatalf("insert existing final product: %v", err)
+	}
+
+	if err := SyncFinalProducts(db); err != nil {
+		t.Fatalf("SyncFinalProducts() error = %v", err)
+	}
+
+	var currency string
+	var images string
+	if err := QueryRow(db, `
+		SELECT currency, images
+		FROM products
+		WHERE sku = ?
+	`, "SS-FINAL-001").Scan(&currency, &images); err != nil {
+		t.Fatalf("select synced product: %v", err)
+	}
+
+	if currency != "INR" {
+		t.Fatalf("currency = %q, want INR", currency)
+	}
+	if !strings.Contains(images, ".png") || strings.Contains(images, ".webp") {
+		t.Fatalf("images = %q, want PNG-only final product paths", images)
 	}
 }

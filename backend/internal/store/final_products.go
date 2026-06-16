@@ -104,17 +104,17 @@ func findProductIDBySKUOrSlug(tx *sql.Tx, sku string, slug string) (int64, bool,
 
 func insertFinalProduct(tx *sql.Tx, product finalProduct) error {
 	_, err := tx.Exec(Rebind(`
-		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-	`), product.Name, product.Slug, product.Description, product.Price, product.SalePrice, product.SaleActive, product.Category, product.Collection, product.Sizes, product.Colors, product.Images, product.Quantity > 0, product.IsFeatured, product.Quantity, product.SKU, product.IsFeatured, product.IsActive, product.SaleActive, product.SaleStartDate, product.SaleEndDate)
+		INSERT INTO products (name, slug, description, price, sale_price, is_on_sale, currency, category, collection, sizes, colors, images, in_stock, featured, quantity, sku, is_featured, is_active, sale_active, sale_start_date, sale_end_date, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+	`), product.Name, product.Slug, product.Description, product.Price, product.SalePrice, product.SaleActive, "INR", product.Category, product.Collection, product.Sizes, product.Colors, product.Images, product.Quantity > 0, product.IsFeatured, product.Quantity, product.SKU, product.IsFeatured, product.IsActive, product.SaleActive, product.SaleStartDate, product.SaleEndDate)
 	return err
 }
 
 func updateFinalProduct(tx *sql.Tx, id int64, product finalProduct) error {
 	_, err := tx.Exec(Rebind(`
 		UPDATE products
-		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
+		SET name = ?, slug = ?, description = ?, price = ?, sale_price = ?, is_on_sale = ?, currency = ?, category = ?, collection = ?, sizes = ?, colors = ?, images = ?, in_stock = ?, featured = ?, quantity = ?, sku = ?, is_featured = ?, is_active = ?, sale_active = ?, sale_start_date = ?, sale_end_date = ?, updated_at = CURRENT_TIMESTAMP
 		WHERE id = ?
-	`), product.Name, product.Slug, product.Description, product.Price, product.SalePrice, product.SaleActive, product.Category, product.Collection, product.Sizes, product.Colors, product.Images, product.Quantity > 0, product.IsFeatured, product.Quantity, product.SKU, product.IsFeatured, product.IsActive, product.SaleActive, product.SaleStartDate, product.SaleEndDate, id)
+	`), product.Name, product.Slug, product.Description, product.Price, product.SalePrice, product.SaleActive, "INR", product.Category, product.Collection, product.Sizes, product.Colors, product.Images, product.Quantity > 0, product.IsFeatured, product.Quantity, product.SKU, product.IsFeatured, product.IsActive, product.SaleActive, product.SaleStartDate, product.SaleEndDate, id)
 	return err
 }
