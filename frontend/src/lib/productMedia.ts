@@ -5,12 +5,12 @@ const productImageAliases: Record<string, string[]> = {};
 
 const categoryFallbacks: Record<string, string[]> = {
   shakti: [
-    "/final-products/go01/go01-01.webp",
-    "/final-products/go02/go02-01.webp",
+    "/final-products/go01/go01-01.png",
+    "/final-products/go02/go02-01.png",
   ],
   shiva: [
-    "/final-products/go15/go15-01.webp",
-    "/final-products/go16/go16-01.webp",
+    "/final-products/go15/go15-01.png",
+    "/final-products/go16/go16-01.png",
   ],
 };
 
