@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/Icons";
 
 const navLinks = [
-  { href: "/shop/shakti", label: "SHAKTI" },
   { href: "/shop/shiva", label: "SHIVA" },
+  { href: "/shop/shakti", label: "SHAKTI" },
   { href: "/", label: "WHOLESALE" },
   { href: "/fabric-selling", label: "FABRIC SELLING" },
   { href: "/council", label: "COUNCIL" },
