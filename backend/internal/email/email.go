@@ -625,8 +625,10 @@ func (m *MailService) supportRecipient(primaryEnv string) string {
 	candidates := []string{
 		firstEnv(primaryEnv),
 		firstEnv("SUPPORT_EMAIL"),
+		firstEnv("ADMIN_EMAIL"),
 		firstEnv("SMTP_USERNAME", "SMTP_USER"),
 		firstEnv("SMTP_FROM"),
+		firstEnv("RESEND_FROM"),
 		m.From,
 	}
 	for _, candidate := range candidates {
