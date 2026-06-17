@@ -14,25 +14,25 @@ export const metadata: Metadata = {
 const fabrics = [
   {
     name: "Textured Cotton",
-    image: "/assets/images/25-153A1093.jpg",
+    image: "/final-products/go15/go15-01.png",
     use: "Daily wear, sampling, kurtas, relaxed dresses",
     moq: "MOQ 50 meters",
   },
   {
     name: "Linen Blend",
-    image: "/assets/images/92-153A0185.jpg",
+    image: "/final-products/go22/go22-01.png",
     use: "Summer sets, overlays, resort silhouettes",
     moq: "MOQ 50 meters",
   },
   {
     name: "Silk Touch",
-    image: "/assets/images/20-153A1078.jpg",
+    image: "/final-products/go01/go01-01.png",
     use: "Premium drapes, occasionwear, limited capsules",
     moq: "MOQ 50 meters",
   },
   {
     name: "Handloom Surface",
-    image: "/assets/images/95-153A0198.jpg",
+    image: "/final-products/go44/go44-01.png",
     use: "Statement panels, artisan capsules, slow fashion",
     moq: "MOQ 50 meters",
   },
@@ -52,12 +52,12 @@ export default function FabricSellingPage() {
     <div className="bg-white text-black">
       <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
         <Image
-          src="/assets/images/121-153A0335.jpg"
+          src="/final-products/go22/go22-01.png"
           alt="Fabric textures for wholesale selling"
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-contain object-center"
         />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">

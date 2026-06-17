@@ -155,7 +155,7 @@ function buildTemplateCSV() {
       "120",
       "shakti",
       "BULK-SAMPLE-001",
-      "/assets/images/1-153A0953.jpg|/assets/images/2-153A0956.jpg",
+      "/final-products/go01/go01-01.png|/final-products/go01/go01-02.png",
       "S|M|L|XL",
       "Void Black|Ivory",
       "false",

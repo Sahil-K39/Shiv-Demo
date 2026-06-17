@@ -30,18 +30,18 @@ export default function Home() {
     <>
       <section className="relative flex h-[calc(100svh-80px)] min-h-[620px] w-full items-end overflow-hidden border-b border-black p-6 md:p-10">
         <motion.div 
-          className="absolute inset-0 w-full h-[120%] -top-[10%]"
+          className="absolute inset-0 w-full h-[120%] -top-[10%] bg-[radial-gradient(circle_at_60%_35%,rgba(255,255,255,0.18),transparent_38%),linear-gradient(135deg,#090909,#2f2a28_48%,#050505)]"
           style={{ y: heroY }}
         >
           <Image
-            src="/assets/images/5-153A0979.jpg"
+            src="/final-products/go22/go22-01.png"
             alt="Shiv Shakti SS26 editorial look" 
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-90"
+            className="object-contain object-center opacity-95"
           />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/30" />
         </motion.div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-start gap-10 pb-16">
@@ -80,11 +80,11 @@ export default function Home() {
         <Link href="/shop/shakti" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/assets/images/1-153A0953.jpg"
+              src="/final-products/go01/go01-01.png"
               alt="Shakti" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
+              className="object-contain p-8 transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -94,11 +94,11 @@ export default function Home() {
         <Link href="/shop/shiva" className="relative aspect-[3/4] bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/assets/images/32-153A9973.jpg"
+              src="/final-products/go44/go44-01.png"
               alt="Shiva" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-all duration-[1500ms] ease-out group-hover:scale-110 group-hover:grayscale-0"
+              className="object-contain p-8 transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
