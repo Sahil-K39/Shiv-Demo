@@ -202,7 +202,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
                             <div class="item-meta">Size: {{.Size}} | Color: {{if .Color}}{{.Color}}{{else}}Default{{end}}</div>
                         </td>
                         <td style="text-align: center; color: #ffffff;">{{.Quantity}}</td>
-                        <td class="item-price">${{printf "%.2f" .Price}}</td>
+                        <td class="item-price">₹{{printf "%.2f" .Price}}</td>
                     </tr>
                     {{end}}
                 </tbody>
@@ -211,7 +211,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
             <div class="totals-section">
                 <div class="total-row">
                     <span style="color: #666666;">SUBTOTAL</span>
-                    <span>${{printf "%.2f" .Order.TotalPrice}}</span>
+                    <span>₹{{printf "%.2f" .Order.TotalPrice}}</span>
                 </div>
                 <div class="total-row">
                     <span style="color: #666666;">SHIPPING / HANDLING</span>
@@ -219,7 +219,7 @@ const OrderConfirmationHTMLTemplate = `<!DOCTYPE html>
                 </div>
                 <div class="total-row grand">
                     <span>ESTIMATED ENQUIRY VALUE</span>
-                    <span>${{printf "%.2f" .Order.TotalPrice}}</span>
+                    <span>₹{{printf "%.2f" .Order.TotalPrice}}</span>
                 </div>
             </div>
 

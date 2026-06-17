@@ -244,7 +244,7 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 		log.Printf("Content Length: %d bytes", body.Len())
 		log.Printf("--- Plaintext summary of enquiry items ---")
 		for _, item := range order.Items {
-			log.Printf(" - %s (Size: %s, Color: %s) x%d @ $%.2f", item.Name, item.Size, item.Color, item.Quantity, item.Price)
+			log.Printf(" - %s (Size: %s, Color: %s) x%d @ ₹%.2f", item.Name, item.Size, item.Color, item.Quantity, item.Price)
 		}
 		log.Printf("Shipping To: %s, %s, %s, %s, %s", order.ShippingName, order.ShippingAddress, order.ShippingCity, order.ShippingState, order.ShippingZip)
 		log.Printf("================= MOCK EMAIL END =================")
@@ -302,7 +302,7 @@ func (m *MailService) SendCartItemNotification(userEmail string, productName str
 <tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Size</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
 <tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Color</strong></td><td style="padding:8px;border-top:1px solid #eee;">%s</td></tr>
 <tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Quantity</strong></td><td style="padding:8px;border-top:1px solid #eee;">%d</td></tr>
-<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Estimated Value</strong></td><td style="padding:8px;border-top:1px solid #eee;">$%.2f</td></tr>
+<tr><td style="padding:8px;border-top:1px solid #eee;"><strong>Estimated Value</strong></td><td style="padding:8px;border-top:1px solid #eee;">₹%.2f</td></tr>
 </table>
 <p style="color:#777;font-size:12px;">This is an early cart notification. Full delivery details are sent after the customer submits the wholesale enquiry.</p>
 </div>
