@@ -39,11 +39,16 @@ SUPPORT_EMAIL=shivshaktiproject.support@gmail.com
 CART_TO_EMAIL=shivshaktiproject.support@gmail.com
 ORDER_TO_EMAIL=shivshaktiproject.support@gmail.com
 QUOTE_TO_EMAIL=shivshaktiproject.support@gmail.com
+SUPABASE_URL=https://bmyghobfovkzchhuhnss.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+SUPABASE_STORAGE_BUCKET=product-images
+SUPABASE_STORAGE_PREFIX=admin-products
 REQUIRE_SMTP=true
 PAYMENT_PROVIDER=manual_wholesale
 ```
 
 Replace `re_xxxxxxxxx` with your real Resend API key in Render. Do not commit the real key.
+Create a public Supabase Storage bucket named `product-images` before testing admin image uploads.
 
 Validation:
 
@@ -66,6 +71,8 @@ Required environment variables:
 NEXT_PUBLIC_API_URL=https://your-render-backend
 INTERNAL_BACKEND_URL=https://your-render-backend
 NEXT_PUBLIC_IMAGE_HOSTNAME=your-render-backend-hostname
+NEXT_PUBLIC_SUPABASE_URL=https://bmyghobfovkzchhuhnss.supabase.co
+NEXT_PUBLIC_SUPABASE_IMAGE_HOSTNAME=bmyghobfovkzchhuhnss.supabase.co
 ```
 
 Validation:

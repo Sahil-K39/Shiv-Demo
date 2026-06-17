@@ -48,12 +48,26 @@ npm run dev
 
 ## Production Upload Storage
 
-Admin product image uploads are stored by the backend and returned as `/assets/uploads/...` URLs. For Render production, add a persistent disk and set:
+Admin product image uploads use Supabase Storage in production. Create a public Supabase Storage bucket named `product-images`, then set these on Render:
+
+```bash
+SUPABASE_URL=https://bmyghobfovkzchhuhnss.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+SUPABASE_STORAGE_BUCKET=product-images
+SUPABASE_STORAGE_PREFIX=admin-products
+```
+
+Set these on Vercel so Next.js can render uploaded product images:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://bmyghobfovkzchhuhnss.supabase.co
+NEXT_PUBLIC_SUPABASE_IMAGE_HOSTNAME=bmyghobfovkzchhuhnss.supabase.co
+```
+
+For local development only, uploads can fall back to the backend asset folder:
 
 ```bash
 ASSETS_DIR=/app/assets
 UPLOAD_DIR=/app/assets/uploads
 UPLOAD_PUBLIC_PATH=/assets/uploads
 ```
-
-Without a persistent disk, uploads can work temporarily but may disappear after a Render restart or redeploy.

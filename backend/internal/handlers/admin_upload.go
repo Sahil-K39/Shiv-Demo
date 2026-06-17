@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -14,8 +16,14 @@ import (
 )
 
 type AdminUploadHandler struct {
-	uploadDir string
-	publicDir string
+	uploadDir       string
+	publicDir       string
+	supabaseURL     string
+	supabaseAPIKey  string
+	supabaseBucket  string
+	supabasePrefix  string
+	supabaseStorage bool
+	httpClient      *http.Client
 }
 
 func NewAdminUploadHandler() *AdminUploadHandler {
@@ -29,7 +37,30 @@ func NewAdminUploadHandler() *AdminUploadHandler {
 		publicDir = "/assets/uploads"
 	}
 
-	return &AdminUploadHandler{uploadDir: uploadDir, publicDir: strings.TrimRight(publicDir, "/")}
+	supabaseURL := strings.TrimRight(firstSetEnv("SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_URL"), "/")
+	supabaseAPIKey := firstSetEnv("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_STORAGE_KEY")
+	if supabaseURL == "" && supabaseAPIKey != "" {
+		supabaseURL = "https://bmyghobfovkzchhuhnss.supabase.co"
+	}
+	supabaseBucket := firstSetEnv("SUPABASE_STORAGE_BUCKET")
+	if supabaseBucket == "" {
+		supabaseBucket = "product-images"
+	}
+	supabasePrefix := strings.Trim(firstSetEnv("SUPABASE_STORAGE_PREFIX"), "/")
+	if supabasePrefix == "" {
+		supabasePrefix = "admin-products"
+	}
+
+	return &AdminUploadHandler{
+		uploadDir:       uploadDir,
+		publicDir:       strings.TrimRight(publicDir, "/"),
+		supabaseURL:     supabaseURL,
+		supabaseAPIKey:  supabaseAPIKey,
+		supabaseBucket:  supabaseBucket,
+		supabasePrefix:  supabasePrefix,
+		supabaseStorage: supabaseURL != "" && supabaseAPIKey != "",
+		httpClient:      &http.Client{Timeout: 30 * time.Second},
+	}
 }
 
 func (h *AdminUploadHandler) UploadImages(c *gin.Context) {
@@ -52,9 +83,16 @@ func (h *AdminUploadHandler) UploadImages(c *gin.Context) {
 		return
 	}
 
-	if err := os.MkdirAll(h.uploadDir, 0755); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "upload_dir_failed"})
+	if strings.EqualFold(os.Getenv("APP_ENV"), "production") && !h.supabaseStorage {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "storage_not_configured", "message": "Supabase Storage is required for production uploads."})
 		return
+	}
+
+	if !h.supabaseStorage {
+		if err := os.MkdirAll(h.uploadDir, 0755); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "upload_dir_failed"})
+			return
+		}
 	}
 
 	uploaded := make([]string, 0, len(files))
@@ -89,19 +127,53 @@ func (h *AdminUploadHandler) UploadImages(c *gin.Context) {
 			return
 		}
 
-		path := filepath.Join(h.uploadDir, name)
-		if err := os.WriteFile(path, bytes, 0644); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "file_write_failed"})
-			return
+		if h.supabaseStorage {
+			url, err := h.uploadToSupabaseStorage(name, bytes, http.DetectContentType(bytes))
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "storage_upload_failed", "message": "Could not upload image to storage."})
+				return
+			}
+			uploaded = append(uploaded, url)
+		} else {
+			path := filepath.Join(h.uploadDir, name)
+			if err := os.WriteFile(path, bytes, 0644); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "file_write_failed"})
+				return
+			}
+			uploaded = append(uploaded, h.publicDir+"/"+name)
 		}
-
-		uploaded = append(uploaded, h.publicDir+"/"+name)
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"images": uploaded,
 		"total":  len(uploaded),
 	})
+}
+
+func (h *AdminUploadHandler) uploadToSupabaseStorage(name string, data []byte, contentType string) (string, error) {
+	objectPath := strings.Trim(strings.Trim(h.supabasePrefix, "/")+"/"+name, "/")
+	uploadURL := fmt.Sprintf("%s/storage/v1/object/%s/%s", h.supabaseURL, h.supabaseBucket, objectPath)
+
+	req, err := http.NewRequest(http.MethodPost, uploadURL, bytes.NewReader(data))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Authorization", "Bearer "+h.supabaseAPIKey)
+	req.Header.Set("apikey", h.supabaseAPIKey)
+	req.Header.Set("Content-Type", contentType)
+	req.Header.Set("Cache-Control", "public, max-age=31536000, immutable")
+	req.Header.Set("x-upsert", "false")
+
+	res, err := h.httpClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return "", fmt.Errorf("supabase storage returned %s", res.Status)
+	}
+
+	return fmt.Sprintf("%s/storage/v1/object/public/%s/%s", h.supabaseURL, h.supabaseBucket, objectPath), nil
 }
 
 func uploadFileName(extension string) (string, error) {
@@ -111,6 +183,16 @@ func uploadFileName(extension string) (string, error) {
 	}
 
 	return time.Now().UTC().Format("20060102-150405") + "-" + hex.EncodeToString(random) + extension, nil
+}
+
+func firstSetEnv(names ...string) string {
+	for _, name := range names {
+		value := strings.TrimSpace(os.Getenv(name))
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 func imageExtension(bytes []byte) (string, bool) {
