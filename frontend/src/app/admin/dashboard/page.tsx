@@ -358,7 +358,7 @@ export default function AdminDashboardPage() {
               <div key={product.id} className="flex items-center gap-4 p-5">
                 <div className="h-14 w-11 shrink-0 overflow-hidden bg-neutral-100">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={getProductImages(product)[0]} alt="" className="h-full w-full object-cover" />
+                  <img src={getProductImages(product)[0]} alt="" className="h-full w-full object-contain object-bottom p-1" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] uppercase tracking-[0.1em]">

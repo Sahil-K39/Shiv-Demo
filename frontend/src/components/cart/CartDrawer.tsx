@@ -148,7 +148,7 @@ export default function CartDrawer() {
                         alt={item.name}
                         width={80}
                         height={112}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain object-bottom p-1"
                       />
                     </div>
 

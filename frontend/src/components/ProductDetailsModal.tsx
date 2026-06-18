@@ -41,7 +41,7 @@ export default function ProductDetailsModal({ isOpen, onClose, product }: Produc
               alt={product.name}
               width={500}
               height={500}
-              className="object-cover rounded"
+              className="rounded bg-[#f4f1ec] object-contain object-bottom p-4"
             />
           </div>
           <div className="flex-1">

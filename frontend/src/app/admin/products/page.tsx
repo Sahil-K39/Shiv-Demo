@@ -656,7 +656,7 @@ function ProductForm({
               {images.map((src, index) => (
                 <div key={`${src}-${index}`} className="group relative aspect-[3/4] overflow-hidden border border-black/10 bg-neutral-100">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={src} alt="" className="h-full w-full object-cover" />
+                  <img src={src} alt="" className="h-full w-full object-contain object-bottom p-1" />
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
@@ -1023,7 +1023,7 @@ export default function AdminProductsPage() {
                       <div className="flex gap-3">
                         <div className="h-20 w-14 shrink-0 overflow-hidden bg-neutral-100">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={image} alt="" className="h-full w-full object-cover" />
+                          <img src={image} alt="" className="h-full w-full object-contain object-bottom p-1" />
                         </div>
                         <div className="min-w-0">
                           <p className="max-w-[260px] truncate font-medium uppercase tracking-[0.08em]">

@@ -106,7 +106,7 @@ export default function FabricSellingPage() {
                 alt={fabric.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover transition-transform duration-700 hover:scale-105"
+                className="object-contain object-bottom p-4 transition-transform duration-700 hover:scale-[1.01]"
               />
             </div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{fabric.moq}</p>

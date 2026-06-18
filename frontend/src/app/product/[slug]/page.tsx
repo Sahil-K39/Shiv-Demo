@@ -109,7 +109,7 @@ export default function ProductDetail() {
               loading="eager"
               decoding="async"
               fetchPriority="high"
-              className="h-full w-full object-contain p-2 md:p-4"
+              className="h-full w-full object-contain object-bottom p-5 md:p-8"
               onError={(event) => {
                 event.currentTarget.src = fallbackImage;
               }}
@@ -139,7 +139,7 @@ export default function ProductDetail() {
                   alt=""
                   fill
                   sizes="80px"
-                  className="object-contain p-1"
+                  className="object-contain object-bottom p-2"
                 />
               </button>
             ))}
