@@ -39,7 +39,7 @@ export default function Home() {
             fill
             priority
             sizes="100vw"
-            className="object-contain object-center opacity-95"
+            className="object-cover object-top opacity-95"
           />
           <div className="absolute inset-0 bg-black/30" />
         </motion.div>
@@ -77,28 +77,28 @@ export default function Home() {
       </div>
 
       <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-black mt-[1px] border-b border-black">
-        <Link href="/shop/shakti" className="relative aspect-[3/4] bg-white group block overflow-hidden">
+        <Link href="/shop/shakti" className="relative aspect-square bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
               src="/final-products/go01/go01-01.png"
               alt="Shakti" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain p-8 transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
+              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <h2 className="text-[50px] md:text-[70px] text-white uppercase tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHAKTI</h2>
           </div>
         </Link>
-        <Link href="/shop/shiva" className="relative aspect-[3/4] bg-white group block overflow-hidden">
+        <Link href="/shop/shiva" className="relative aspect-square bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
               src="/final-products/go44/go44-01.png"
               alt="Shiva" 
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain p-8 transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
+              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

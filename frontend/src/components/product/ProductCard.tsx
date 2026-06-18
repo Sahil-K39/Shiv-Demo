@@ -80,7 +80,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className="relative mb-4 aspect-[4/5] overflow-hidden border border-black/10 bg-[#f4f1ec]"
+        className="relative mb-4 aspect-square overflow-hidden border border-black/10 bg-[#f4f1ec]"
         onClick={() => router.push(`/product/${product.slug}`)}
       >
         <Image
@@ -90,12 +90,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             height={667}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             priority={index < 4}
-            className="h-full w-full cursor-pointer object-contain object-bottom p-5 transition-transform duration-500 ease-out sm:p-6"
+            className="h-full w-full cursor-pointer object-cover object-top transition-transform duration-700 ease-out"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = fallbackImage;
             }}
             style={{
-              transform: `scale(${isHovered ? 1.01 : 1})`,
+              transform: `scale(${isHovered ? 1.04 : 1})`,
             }}
             onClick={(e) => { e.stopPropagation(); setLightboxOpen(true); }}
           />
@@ -108,7 +108,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             height={667}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-contain object-bottom p-5 opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 sm:p-6"
+            className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
             aria-hidden={true}
             onError={(event) => {
               event.currentTarget.style.display = "none";

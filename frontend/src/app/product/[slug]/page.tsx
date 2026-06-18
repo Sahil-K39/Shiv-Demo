@@ -109,12 +109,12 @@ export default function ProductDetail() {
               loading="eager"
               decoding="async"
               fetchPriority="high"
-              className="h-full w-full object-contain object-bottom p-5 md:p-8"
+              className="h-full w-full object-cover object-top"
               onError={(event) => {
                 event.currentTarget.src = fallbackImage;
               }}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 1.12 }}
+              animate={{ opacity: 1, scale: 1.08 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             />

@@ -76,7 +76,7 @@ export default function Login() {
           fill
           priority
           sizes="50vw"
-          className="object-contain opacity-90"
+          className="object-cover object-top opacity-90"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-end p-16">

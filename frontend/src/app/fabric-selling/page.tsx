@@ -57,7 +57,7 @@ export default function FabricSellingPage() {
           fill
           priority
           sizes="100vw"
-          className="object-contain object-center"
+          className="object-cover object-top"
         />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">
@@ -100,13 +100,13 @@ export default function FabricSellingPage() {
             key={fabric.name}
             className="border-b border-black/10 p-6 md:border-b-0 md:border-r md:p-8 last:md:border-r-0"
           >
-            <div className="relative mb-6 aspect-[4/5] w-full overflow-hidden bg-neutral-100">
+            <div className="relative mb-6 aspect-square w-full overflow-hidden bg-neutral-100">
               <Image
                 src={fabric.image}
                 alt={fabric.name}
                 fill
                 sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-contain object-bottom p-4 transition-transform duration-700 hover:scale-[1.01]"
+                className="object-cover object-top transition-transform duration-700 hover:scale-105"
               />
             </div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{fabric.moq}</p>
