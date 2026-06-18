@@ -52,7 +52,9 @@ func SyncFinalProducts(db *sql.DB) error {
 
 	created := 0
 	updated := 0
+	activeSKUs := make([]string, 0, len(payload.Products))
 	for _, product := range payload.Products {
+		activeSKUs = append(activeSKUs, product.SKU)
 		existingID, exists, err := findProductIDBySKUOrSlug(tx, product.SKU, product.Slug)
 		if err != nil {
 			return err
@@ -70,11 +72,55 @@ func SyncFinalProducts(db *sql.DB) error {
 		created++
 	}
 
+	deleted, hidden, err := removeMissingFinalProducts(tx, activeSKUs)
+	if err != nil {
+		return err
+	}
+
 	if err := tx.Commit(); err != nil {
 		return err
 	}
-	log.Printf("✓ Synced final product catalogue: %d created, %d updated", created, updated)
+	log.Printf("✓ Synced final product catalogue: %d created, %d updated, %d deleted, %d hidden", created, updated, deleted, hidden)
 	return nil
+}
+
+func removeMissingFinalProducts(tx *sql.Tx, activeSKUs []string) (int64, int64, error) {
+	if len(activeSKUs) == 0 {
+		return 0, 0, nil
+	}
+
+	args := []any{}
+	for _, sku := range activeSKUs {
+		args = append(args, sku)
+	}
+	deleteQuery := `
+		DELETE FROM products
+		WHERE (sku LIKE 'SS-FINAL-%' OR sku LIKE 'SS-PHOTO-%')
+		  AND sku NOT IN (` + placeholders(len(activeSKUs)) + `)
+		  AND NOT EXISTS (SELECT 1 FROM cart_items ci WHERE ci.product_id = products.id)
+		  AND NOT EXISTS (SELECT 1 FROM order_items oi WHERE oi.product_id = products.id)
+	`
+	deleteResult, err := tx.Exec(Rebind(deleteQuery), args...)
+	if err != nil {
+		return 0, 0, err
+	}
+	deleted, _ := deleteResult.RowsAffected()
+
+	updateArgs := []any{false, false}
+	updateArgs = append(updateArgs, args...)
+	updateQuery := `
+		UPDATE products
+		SET is_active = ?, in_stock = ?, quantity = 0, updated_at = CURRENT_TIMESTAMP
+		WHERE (sku LIKE 'SS-FINAL-%' OR sku LIKE 'SS-PHOTO-%')
+		  AND sku NOT IN (` + placeholders(len(activeSKUs)) + `)
+		  AND is_active = true
+	`
+	updateResult, err := tx.Exec(Rebind(updateQuery), updateArgs...)
+	if err != nil {
+		return 0, 0, err
+	}
+	hidden, _ := updateResult.RowsAffected()
+	return deleted, hidden, nil
 }
 
 func findProductIDBySKUOrSlug(tx *sql.Tx, sku string, slug string) (int64, bool, error) {

@@ -100,7 +100,7 @@ func TestSyncFinalProductsNormalizesCurrencyAndPNGImages(t *testing.T) {
 	if _, err := Exec(db, `
 		INSERT INTO products (name, slug, description, price, currency, category, sku)
 		VALUES (?, ?, ?, ?, ?, ?, ?)
-	`, "Old Final Product", "shiv-shakti-final-style-01", "old row", 100.0, "USD", "shakti", "SS-FINAL-001"); err != nil {
+	`, "Old Final Product", "shiv-shakti-photoroom-style-01", "old row", 100.0, "USD", "shakti", "SS-PHOTO-01"); err != nil {
 		t.Fatalf("insert existing final product: %v", err)
 	}
 
@@ -114,7 +114,7 @@ func TestSyncFinalProductsNormalizesCurrencyAndPNGImages(t *testing.T) {
 		SELECT currency, images
 		FROM products
 		WHERE sku = ?
-	`, "SS-FINAL-001").Scan(&currency, &images); err != nil {
+	`, "SS-PHOTO-01").Scan(&currency, &images); err != nil {
 		t.Fatalf("select synced product: %v", err)
 	}
 
@@ -123,5 +123,34 @@ func TestSyncFinalProductsNormalizesCurrencyAndPNGImages(t *testing.T) {
 	}
 	if !strings.Contains(images, ".png") || strings.Contains(images, ".webp") {
 		t.Fatalf("images = %q, want PNG-only final product paths", images)
+	}
+}
+
+func TestSyncFinalProductsRemovesOldFinalCatalogueRows(t *testing.T) {
+	t.Setenv("DATABASE_URL", "")
+
+	db, err := InitDB(filepath.Join(t.TempDir(), "old-final-products.db"))
+	if err != nil {
+		t.Fatalf("InitDB() error = %v", err)
+	}
+	defer db.Close()
+
+	if _, err := Exec(db, `
+		INSERT INTO products (name, slug, description, price, currency, category, sku)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
+	`, "Retired Final Product", "shiv-shakti-final-style-47", "old row", 100.0, "INR", "shiva", "SS-FINAL-047"); err != nil {
+		t.Fatalf("insert retired final product: %v", err)
+	}
+
+	if err := SyncFinalProducts(db); err != nil {
+		t.Fatalf("SyncFinalProducts() error = %v", err)
+	}
+
+	var retiredCount int
+	if err := QueryRow(db, "SELECT COUNT(*) FROM products WHERE sku = ?", "SS-FINAL-047").Scan(&retiredCount); err != nil {
+		t.Fatalf("count retired final product: %v", err)
+	}
+	if retiredCount != 0 {
+		t.Fatalf("retired final products = %d, want 0", retiredCount)
 	}
 }
