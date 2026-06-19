@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { authAPI } from "@/lib/api";
@@ -13,8 +14,15 @@ function getErrorMessage(error: unknown, fallback: string) {
 }
 
 export default function Login() {
-  const [tab, setTab] = useState<"login" | "register">("login");
   const router = useRouter();
+  const [tab, setTab] = useState<"login" | "register">(() => {
+    if (typeof window === "undefined") {
+      return "login";
+    }
+    return new URLSearchParams(window.location.search).get("tab") === "register"
+      ? "register"
+      : "login";
+  });
   const setUser = useCartStore((state) => state.setUser);
   
   const [email, setEmail] = useState("");
@@ -51,6 +59,7 @@ export default function Login() {
       setTab("login");
       setPassword("");
       setName("");
+      router.replace("/login");
     } catch (err: unknown) {
       setError(getErrorMessage(err, "Registration failed"));
     } finally {
@@ -90,20 +99,20 @@ export default function Login() {
       <div className="w-full md:w-1/2 h-full bg-white flex items-center justify-center p-10 md:p-20 overflow-y-auto">
         <div className="w-full max-w-md">
           <div className="relative flex mb-16 border-b border-black/10">
-            <button 
-              type="button"
-              onClick={() => handleTabChange("login")} 
+            <Link
+              href="/login"
+              onClick={() => handleTabChange("login")}
               className={`flex-1 py-4 text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 text-center ${tab === "login" ? "text-black" : "text-gray-400"}`}
             >
               AUTHORIZE
-            </button>
-            <button 
-              type="button"
-              onClick={() => handleTabChange("register")} 
+            </Link>
+            <Link
+              href="/login?tab=register"
+              onClick={() => handleTabChange("register")}
               className={`flex-1 py-4 text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 text-center ${tab === "register" ? "text-black" : "text-gray-400"}`}
             >
               CREATE IDENTITY
-            </button>
+            </Link>
             <div 
               className="absolute bottom-0 left-0 h-[2px] bg-black w-1/2 transition-transform duration-300"
               style={{ transform: tab === "register" ? "translateX(100%)" : "translateX(0%)" }}
