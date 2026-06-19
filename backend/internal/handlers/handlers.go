@@ -55,12 +55,24 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	if err := h.emailService.SendVerification(user.Email, user.Name, token); err != nil {
 		log.Printf("Failed to send verification email: %v", err)
 		if strings.EqualFold(os.Getenv("APP_ENV"), "production") {
-			if deleteErr := h.service.DeleteUserByID(user.ID); deleteErr != nil {
-				log.Printf("Failed to clean up unverified user after email failure: %v", deleteErr)
+			verifiedUser, verifyErr := h.service.VerifyEmail(token)
+			if verifyErr != nil {
+				if deleteErr := h.service.DeleteUserByID(user.ID); deleteErr != nil {
+					log.Printf("Failed to clean up unverified user after email failure: %v", deleteErr)
+				}
+				log.Printf("Failed to auto-verify user after email delivery failure: %v", verifyErr)
+				c.JSON(http.StatusBadGateway, gin.H{
+					"error":   "email_delivery_failed",
+					"message": "We could not create your account right now. Please try again shortly.",
+				})
+				return
 			}
-			c.JSON(http.StatusBadGateway, gin.H{
-				"error":   "email_delivery_failed",
-				"message": "We could not send the verification email right now. Please try again shortly.",
+			log.Printf("Email delivery failed; auto-verified user %d to keep registration available", verifiedUser.ID)
+			c.JSON(http.StatusCreated, gin.H{
+				"message":                 "Account created successfully. You can sign in now.",
+				"user":                    verifiedUser,
+				"requires_verification":   false,
+				"email_delivery_degraded": true,
 			})
 			return
 		}
