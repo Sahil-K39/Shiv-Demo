@@ -476,7 +476,27 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 
 func (m *MailService) sendRaw(to []string, msg []byte) error {
 	if m.Resend != nil {
-		return m.sendResend(to, msg)
+		if err := m.sendResend(to, msg); err == nil {
+			return nil
+		} else if !m.hasSMTPConfig() {
+			return err
+		} else {
+			log.Printf("Resend email delivery failed; falling back to SMTP: %v", err)
+		}
+	}
+	return m.sendRawSMTP(to, msg)
+}
+
+func (m *MailService) hasSMTPConfig() bool {
+	return strings.TrimSpace(m.Host) != "" &&
+		strings.TrimSpace(m.Username) != "" &&
+		strings.TrimSpace(m.Password) != "" &&
+		strings.TrimSpace(m.From) != ""
+}
+
+func (m *MailService) sendRawSMTP(to []string, msg []byte) error {
+	if !m.hasSMTPConfig() {
+		return fmt.Errorf("smtp delivery is not configured")
 	}
 	addr := fmt.Sprintf("%s:%d", m.Host, m.Port)
 	recipients := make([]string, 0, len(to))
