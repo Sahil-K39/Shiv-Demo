@@ -13,27 +13,51 @@ export const metadata: Metadata = {
 
 const fabrics = [
   {
-    name: "Textured Cotton",
-    image: "/final-products/go15/go15-01.png",
-    use: "Daily wear, sampling, kurtas, relaxed dresses",
+    name: "Golden Floral Mesh",
+    image: "/fabric/fabric-01.jpg",
+    use: "Statement overlays, resort panels, occasion capsules",
     moq: "MOQ 50 meters",
   },
   {
-    name: "Linen Blend",
-    image: "/final-products/go22/go22-01.png",
-    use: "Summer sets, overlays, resort silhouettes",
+    name: "Ivory Washed Jacquard",
+    image: "/fabric/fabric-02.jpg",
+    use: "Soft tailoring, resort layers, tonal coordinates",
     moq: "MOQ 50 meters",
   },
   {
-    name: "Silk Touch",
-    image: "/final-products/go01/go01-01.png",
-    use: "Premium drapes, occasionwear, limited capsules",
+    name: "Ivory Lace Surface",
+    image: "/fabric/fabric-03.jpg",
+    use: "Premium dresses, bridal separates, delicate panels",
     moq: "MOQ 50 meters",
   },
   {
-    name: "Handloom Surface",
-    image: "/final-products/go44/go44-01.png",
-    use: "Statement panels, artisan capsules, slow fashion",
+    name: "Rose Embroidered Lace",
+    image: "/fabric/fabric-04.jpg",
+    use: "Occasionwear, overlays, soft statement capsules",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Open Weave Cotton",
+    image: "/fabric/fabric-05.jpg",
+    use: "Layering pieces, breathable panels, craft textures",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Teal Dobby Texture",
+    image: "/fabric/fabric-06.jpg",
+    use: "Casual sets, shirts, dresses, small batch uniforms",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Noir Floral Net",
+    image: "/fabric/fabric-07.jpg",
+    use: "Evening overlays, gothic lace, statement trims",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Smoked Floral Mesh",
+    image: "/fabric/fabric-08.jpg",
+    use: "Layered silhouettes, panels, boutique capsules",
     moq: "MOQ 50 meters",
   },
 ];
@@ -52,7 +76,7 @@ export default function FabricSellingPage() {
     <div className="bg-white text-black">
       <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
         <Image
-          src="/final-products/go22/go22-01.png"
+          src="/fabric/fabric-07.jpg"
           alt="Fabric textures for wholesale selling"
           fill
           priority
