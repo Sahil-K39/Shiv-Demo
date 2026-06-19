@@ -11,56 +11,42 @@ export const metadata: Metadata = {
     "Bulk fabric selling for studios, boutiques, designers, and production partners, including cotton, linen, silk blends, handloom textures, trims, dyeing, and sampling support.",
 };
 
-const fabrics = [
-  {
-    name: "Golden Floral Mesh",
-    image: "/fabric/fabric-01.jpg",
-    use: "Statement overlays, resort panels, occasion capsules",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Ivory Washed Jacquard",
-    image: "/fabric/fabric-02.jpg",
-    use: "Soft tailoring, resort layers, tonal coordinates",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Ivory Lace Surface",
-    image: "/fabric/fabric-03.jpg",
-    use: "Premium dresses, bridal separates, delicate panels",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Rose Embroidered Lace",
-    image: "/fabric/fabric-04.jpg",
-    use: "Occasionwear, overlays, soft statement capsules",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Open Weave Cotton",
-    image: "/fabric/fabric-05.jpg",
-    use: "Layering pieces, breathable panels, craft textures",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Teal Dobby Texture",
-    image: "/fabric/fabric-06.jpg",
-    use: "Casual sets, shirts, dresses, small batch uniforms",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Noir Floral Net",
-    image: "/fabric/fabric-07.jpg",
-    use: "Evening overlays, gothic lace, statement trims",
-    moq: "MOQ 50 meters",
-  },
-  {
-    name: "Smoked Floral Mesh",
-    image: "/fabric/fabric-08.jpg",
-    use: "Layered silhouettes, panels, boutique capsules",
-    moq: "MOQ 50 meters",
-  },
+const fabricFamilies = [
+  "Floral Mesh",
+  "Washed Jacquard",
+  "Lace Surface",
+  "Embroidered Net",
+  "Open Weave",
+  "Dobby Texture",
+  "Printed Cotton",
+  "Artisan Surface",
+  "Textured Overlay",
+  "Boutique Fabric",
+  "Resort Weave",
+  "Statement Textile",
 ];
+
+const fabricUses = [
+  "Statement overlays, resort panels, occasion capsules",
+  "Soft tailoring, resort layers, tonal coordinates",
+  "Premium dresses, bridal separates, delicate panels",
+  "Occasionwear, overlays, soft statement capsules",
+  "Layering pieces, breathable panels, craft textures",
+  "Casual sets, shirts, dresses, small batch uniforms",
+  "Evening overlays, lace panels, statement trims",
+  "Layered silhouettes, panels, boutique capsules",
+];
+
+const fabrics = Array.from({ length: 92 }, (_, index) => {
+  const number = String(index + 1).padStart(3, "0");
+
+  return {
+    name: `${fabricFamilies[index % fabricFamilies.length]} ${number}`,
+    image: `/fabric/fabric-${number}.jpg`,
+    use: fabricUses[index % fabricUses.length],
+    moq: "MOQ 50 meters",
+  };
+});
 
 const services = [
   "Bulk meterage supply",
@@ -76,7 +62,7 @@ export default function FabricSellingPage() {
     <div className="bg-white text-black">
       <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
         <Image
-          src="/fabric/fabric-07.jpg"
+          src="/fabric/fabric-007.jpg"
           alt="Fabric textures for wholesale selling"
           fill
           priority
