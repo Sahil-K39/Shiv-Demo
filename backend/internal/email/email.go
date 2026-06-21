@@ -39,6 +39,8 @@ func NewMailService() *MailService {
 	username := firstEnv("SMTP_USERNAME", "SMTP_USER")
 	password := firstEnv("SMTP_PASSWORD", "SMTP_PASS")
 	from := firstEnv("SMTP_FROM")
+	preferSMTP := strings.EqualFold(firstEnv("EMAIL_PROVIDER"), "smtp") ||
+		strings.EqualFold(firstEnv("PREFER_SMTP"), "true")
 
 	mockMode := false
 	hasResend := resendAPIKey != ""
@@ -56,6 +58,9 @@ func NewMailService() *MailService {
 		if p, err := strconv.Atoi(portStr); err == nil {
 			port = p
 		}
+	}
+	if preferSMTP && strings.EqualFold(strings.TrimSpace(host), "smtp.gmail.com") && port == 587 {
+		port = 465
 	}
 	timeout := 15 * time.Second
 	if timeoutStr := firstEnv("SMTP_TIMEOUT_SECONDS"); timeoutStr != "" {
@@ -83,9 +88,6 @@ func NewMailService() *MailService {
 	if resendAPIKey != "" {
 		resendClient = resend.NewClient(resendAPIKey)
 	}
-	preferSMTP := strings.EqualFold(firstEnv("EMAIL_PROVIDER"), "smtp") ||
-		strings.EqualFold(firstEnv("PREFER_SMTP"), "true")
-
 	return &MailService{
 		Host:       host,
 		Port:       port,

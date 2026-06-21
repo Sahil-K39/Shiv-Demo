@@ -93,4 +93,7 @@ func TestNewMailServiceCanPreferSMTP(t *testing.T) {
 	if !service.hasSMTPConfig() {
 		t.Fatal("hasSMTPConfig() = false, want true")
 	}
+	if service.Port != 465 {
+		t.Fatalf("Port = %d, want 465 for Gmail SMTP-first delivery", service.Port)
+	}
 }
