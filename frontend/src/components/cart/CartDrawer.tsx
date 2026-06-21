@@ -44,6 +44,26 @@ export default function CartDrawer() {
     setForm((current) => ({ ...current, [field]: value }));
   }
 
+  async function handleUpdateQuantity(itemId: number, quantity: number) {
+    setError("");
+    setMessage("");
+    try {
+      await updateQuantity(itemId, quantity);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update quantity.");
+    }
+  }
+
+  async function handleRemoveItem(itemId: number) {
+    setError("");
+    setMessage("");
+    try {
+      await removeItem(itemId);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not remove item.");
+    }
+  }
+
   async function handleEnquirySubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -166,7 +186,7 @@ export default function CartDrawer() {
                         <div className="flex items-center border border-black/10">
                           <button
                             onClick={() =>
-                              updateQuantity(
+                              handleUpdateQuantity(
                                 item.id,
                                 Math.max(MIN_WHOLESALE_QUANTITY, item.quantity - 1)
                               )
@@ -180,7 +200,7 @@ export default function CartDrawer() {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, Math.min(500, item.quantity + 1))}
+                            onClick={() => handleUpdateQuantity(item.id, Math.min(500, item.quantity + 1))}
                             aria-label={`Increase quantity for ${item.name}`}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:text-black"
                           >
@@ -193,7 +213,7 @@ export default function CartDrawer() {
                         </span>
 
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleRemoveItem(item.id)}
                           className="text-[10px] tracking-[0.15em] uppercase text-gray-500 hover:text-red-600 transition-colors"
                         >
                           REMOVE

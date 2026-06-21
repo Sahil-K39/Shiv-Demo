@@ -2,20 +2,37 @@
 
 import { useCartStore } from "@/store/cart";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function AccountPage() {
-  const { user, logout } = useCartStore();
+  const { user, logout, checkSession } = useCartStore();
   const router = useRouter();
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
+    let cancelled = false;
+    checkSession().finally(() => {
+      if (!cancelled) {
+        setIsCheckingSession(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [checkSession]);
 
-  if (!user) {
-    return null;
+  useEffect(() => {
+    if (!isCheckingSession && !user) {
+      router.replace("/login");
+    }
+  }, [isCheckingSession, user, router]);
+
+  if (isCheckingSession || !user) {
+    return (
+      <div className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-white">
+        <div className="h-6 w-6 animate-spin border border-black/30 border-t-black" />
+      </div>
+    );
   }
 
   const handleLogout = () => {

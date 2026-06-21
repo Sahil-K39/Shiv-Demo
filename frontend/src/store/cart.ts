@@ -71,8 +71,9 @@ export const useCartStore = create<CartState>()(
           });
           await get().fetchCart();
           set({ isOpen: true }); 
-        } catch {
+        } catch (error) {
           set({ isLoading: false });
+          throw error;
         }
       },
 
@@ -87,8 +88,9 @@ export const useCartStore = create<CartState>()(
         try {
           await cartAPI.updateItem(itemId, quantity);
           await get().fetchCart();
-        } catch {
+        } catch (error) {
           await get().fetchCart(); 
+          throw error;
         }
       },
 
@@ -101,8 +103,9 @@ export const useCartStore = create<CartState>()(
         try {
           await cartAPI.removeItem(itemId);
           await get().fetchCart();
-        } catch {
+        } catch (error) {
           await get().fetchCart();
+          throw error;
         }
       },
 

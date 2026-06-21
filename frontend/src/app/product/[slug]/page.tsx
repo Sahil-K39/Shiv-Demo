@@ -86,8 +86,14 @@ export default function ProductDetail() {
 
     setAddNotice("");
     setIsAdding(true);
-    await addItem(product.id, selectedSize, selectedColor, quantity);
-    setIsAdding(false);
+    try {
+      await addItem(product.id, selectedSize, selectedColor, quantity);
+      setAddNotice("Added to wholesale enquiry.");
+    } catch (error) {
+      setAddNotice(error instanceof Error ? error.message : "Could not add this item.");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const wholesaleSubtotal = product.price * quantity;
