@@ -16,7 +16,10 @@ import type {
   OrderStatus,
 } from "@/types";
 
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+const configuredApiBase = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+const useSameOriginProxy =
+  typeof window !== "undefined" && process.env.NODE_ENV === "production";
+const API_BASE = useSameOriginProxy ? "" : configuredApiBase;
 const ADMIN_API_PREFIX = API_BASE ? "/admin" : "/backend-admin";
 
 function apiURL(path: string) {
