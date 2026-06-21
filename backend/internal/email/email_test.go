@@ -74,3 +74,23 @@ func TestHasSMTPConfigRequiresAllDeliveryFields(t *testing.T) {
 		})
 	}
 }
+
+func TestNewMailServiceCanPreferSMTP(t *testing.T) {
+	t.Setenv("EMAIL_PROVIDER", "smtp")
+	t.Setenv("SMTP_HOST", "smtp.gmail.com")
+	t.Setenv("SMTP_PORT", "587")
+	t.Setenv("SMTP_USERNAME", "support@example.com")
+	t.Setenv("SMTP_PASSWORD", "app-password")
+	t.Setenv("SMTP_FROM", "Shiv Shakti <support@example.com>")
+	t.Setenv("RESEND_API_KEY", "re_test")
+	t.Setenv("RESEND_FROM", "onboarding@resend.dev")
+
+	service := NewMailService()
+
+	if !service.PreferSMTP {
+		t.Fatal("PreferSMTP = false, want true when EMAIL_PROVIDER=smtp")
+	}
+	if !service.hasSMTPConfig() {
+		t.Fatal("hasSMTPConfig() = false, want true")
+	}
+}

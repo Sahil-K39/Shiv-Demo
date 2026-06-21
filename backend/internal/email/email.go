@@ -26,6 +26,7 @@ type MailService struct {
 	From       string
 	MockMode   bool
 	Timeout    time.Duration
+	PreferSMTP bool
 	Resend     *resend.Client
 	ResendFrom string
 }
@@ -82,6 +83,8 @@ func NewMailService() *MailService {
 	if resendAPIKey != "" {
 		resendClient = resend.NewClient(resendAPIKey)
 	}
+	preferSMTP := strings.EqualFold(firstEnv("EMAIL_PROVIDER"), "smtp") ||
+		strings.EqualFold(firstEnv("PREFER_SMTP"), "true")
 
 	return &MailService{
 		Host:       host,
@@ -91,6 +94,7 @@ func NewMailService() *MailService {
 		From:       from,
 		MockMode:   mockMode,
 		Timeout:    timeout,
+		PreferSMTP: preferSMTP,
 		Resend:     resendClient,
 		ResendFrom: resendFrom,
 	}
@@ -479,6 +483,15 @@ func (m *MailService) sendHTML(to []string, headers map[string]string, body []by
 }
 
 func (m *MailService) sendRaw(to []string, msg []byte) error {
+	if m.PreferSMTP && m.hasSMTPConfig() {
+		if err := m.sendRawSMTP(to, msg); err == nil {
+			return nil
+		} else if m.Resend == nil {
+			return err
+		} else {
+			log.Printf("SMTP email delivery failed; falling back to Resend: %v", err)
+		}
+	}
 	if m.Resend != nil {
 		if err := m.sendResend(to, msg); err == nil {
 			return nil
