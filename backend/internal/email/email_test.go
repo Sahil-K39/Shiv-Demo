@@ -76,7 +76,7 @@ func TestHasSMTPConfigRequiresAllDeliveryFields(t *testing.T) {
 }
 
 func TestNewMailServiceCanPreferSMTP(t *testing.T) {
-	t.Setenv("EMAIL_PROVIDER", "smtp")
+	t.Setenv("PREFER_SMTP", "true")
 	t.Setenv("SMTP_HOST", "smtp.gmail.com")
 	t.Setenv("SMTP_PORT", "587")
 	t.Setenv("SMTP_USERNAME", "support@example.com")

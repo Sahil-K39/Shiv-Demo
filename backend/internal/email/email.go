@@ -39,8 +39,7 @@ func NewMailService() *MailService {
 	username := firstEnv("SMTP_USERNAME", "SMTP_USER")
 	password := firstEnv("SMTP_PASSWORD", "SMTP_PASS")
 	from := firstEnv("SMTP_FROM")
-	preferSMTP := strings.EqualFold(firstEnv("EMAIL_PROVIDER"), "smtp") ||
-		strings.EqualFold(firstEnv("PREFER_SMTP"), "true")
+	preferSMTP := strings.EqualFold(firstEnv("PREFER_SMTP"), "true")
 
 	mockMode := false
 	hasResend := resendAPIKey != ""
@@ -440,21 +439,23 @@ func (m *MailService) SendFabricQuoteRequest(input *models.FabricQuoteInput) err
 		return fmt.Errorf("failed to send fabric quote notification: %w", err)
 	}
 
-	if err := m.sendHTML(
-		[]string{input.Email},
-		map[string]string{
-			"From":         m.From,
-			"To":           input.Email,
-			"Subject":      "Fabric Quote Request Received - SHIV SHAKTI",
-			"MIME-Version": "1.0",
-			"Content-Type": "text/html; charset=UTF-8",
-		},
-		customerBody,
-	); err != nil {
-		log.Printf("Fabric quote acknowledgement failed for %s: %v", input.Email, err)
-	} else {
-		log.Printf("✓ Fabric quote acknowledgement sent to %s", input.Email)
-	}
+	go func() {
+		if err := m.sendHTML(
+			[]string{input.Email},
+			map[string]string{
+				"From":         m.From,
+				"To":           input.Email,
+				"Subject":      "Fabric Quote Request Received - SHIV SHAKTI",
+				"MIME-Version": "1.0",
+				"Content-Type": "text/html; charset=UTF-8",
+			},
+			customerBody,
+		); err != nil {
+			log.Printf("Fabric quote acknowledgement failed for %s: %v", input.Email, err)
+		} else {
+			log.Printf("✓ Fabric quote acknowledgement sent to %s", input.Email)
+		}
+	}()
 
 	log.Printf("✓ Fabric quote request emailed to %s", supportEmail)
 	return nil
