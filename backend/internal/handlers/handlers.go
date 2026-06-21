@@ -860,14 +860,21 @@ func (h *CartHandler) AddItem(c *gin.Context) {
 		return
 	}
 
-	_, err = store.Exec(h.db, `
-		INSERT INTO cart_items (user_id, product_id, quantity, size, color)
-		VALUES (?, ?, ?, ?, ?)
-		ON CONFLICT(user_id, product_id, size, color)
-		DO UPDATE SET quantity = quantity + ?
-	`, userID, input.ProductID, input.Quantity, input.Size, input.Color, input.Quantity)
+	if currentQuantity > 0 {
+		_, err = store.Exec(h.db, `
+			UPDATE cart_items
+			SET quantity = quantity + ?
+			WHERE user_id = ? AND product_id = ? AND size = ? AND color = ?
+		`, input.Quantity, userID, input.ProductID, input.Size, input.Color)
+	} else {
+		_, err = store.Exec(h.db, `
+			INSERT INTO cart_items (user_id, product_id, quantity, size, color)
+			VALUES (?, ?, ?, ?, ?)
+		`, userID, input.ProductID, input.Quantity, input.Size, input.Color)
+	}
 
 	if err != nil {
+		log.Printf("Cart update failed for user %d product %d: %v", userID, input.ProductID, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "cart_update_failed"})
 		return
 	}
