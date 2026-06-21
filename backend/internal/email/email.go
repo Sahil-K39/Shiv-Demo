@@ -253,20 +253,6 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 
 	subject := fmt.Sprintf("Wholesale Enquiry #%d Received - SHIV SHAKTI", order.ID)
 	if err := m.sendHTML(
-		[]string{userEmail},
-		map[string]string{
-			"From":         m.From,
-			"To":           userEmail,
-			"Subject":      subject,
-			"MIME-Version": "1.0",
-			"Content-Type": "text/html; charset=UTF-8",
-		},
-		body.Bytes(),
-	); err != nil {
-		return fmt.Errorf("failed to send customer enquiry email: %w", err)
-	}
-
-	if err := m.sendHTML(
 		[]string{supportEmail},
 		map[string]string{
 			"From":         m.From,
@@ -281,7 +267,23 @@ func (m *MailService) SendOrderConfirmation(userEmail string, order *models.Orde
 		return fmt.Errorf("failed to send support enquiry notification: %w", err)
 	}
 
-	log.Printf("✓ Wholesale enquiry emails sent to %s and %s for Enquiry #%d", userEmail, supportEmail, order.ID)
+	if err := m.sendHTML(
+		[]string{userEmail},
+		map[string]string{
+			"From":         m.From,
+			"To":           userEmail,
+			"Subject":      subject,
+			"MIME-Version": "1.0",
+			"Content-Type": "text/html; charset=UTF-8",
+		},
+		body.Bytes(),
+	); err != nil {
+		log.Printf("Customer enquiry acknowledgement failed for Order #%d (%s): %v", order.ID, userEmail, err)
+	} else {
+		log.Printf("✓ Customer enquiry acknowledgement sent to %s for Enquiry #%d", userEmail, order.ID)
+	}
+
+	log.Printf("✓ Wholesale enquiry notification sent to %s for Enquiry #%d", supportEmail, order.ID)
 	return nil
 }
 
@@ -443,10 +445,12 @@ func (m *MailService) SendFabricQuoteRequest(input *models.FabricQuoteInput) err
 		},
 		customerBody,
 	); err != nil {
-		return fmt.Errorf("failed to send fabric quote acknowledgement: %w", err)
+		log.Printf("Fabric quote acknowledgement failed for %s: %v", input.Email, err)
+	} else {
+		log.Printf("✓ Fabric quote acknowledgement sent to %s", input.Email)
 	}
 
-	log.Printf("✓ Fabric quote request emailed to %s and acknowledged to %s", supportEmail, input.Email)
+	log.Printf("✓ Fabric quote request emailed to %s", supportEmail)
 	return nil
 }
 
