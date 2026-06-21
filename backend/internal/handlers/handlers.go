@@ -104,17 +104,18 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Send welcome email on each login
-	if err := h.emailService.SendWelcome(user.Email, user.Name); err != nil {
-		log.Printf("Failed to send login welcome email: %v", err)
-	}
-
 	token, err := h.service.GenerateToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token_failed"})
 		return
 	}
 	setSessionCookie(c, token)
+
+	go func() {
+		if err := h.emailService.SendWelcome(user.Email, user.Name); err != nil {
+			log.Printf("Failed to send login welcome email: %v", err)
+		}
+	}()
 
 	// Generate CSRF token for subsequent state‑changing requests
 	csrfToken := middleware.GenerateCSRFToken()
