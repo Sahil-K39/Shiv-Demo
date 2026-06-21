@@ -187,13 +187,11 @@ func main() {
 </html>`))
 	})
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "ok",
-			"service": "shiv-shakti-commerce-engine",
-			"version": "2.0.0",
-		})
-	})
+	healthHandler := func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	}
+	r.GET("/health", healthHandler)
+	r.GET("/api/health", healthHandler)
 
 	r.POST("/send-email", func(c *gin.Context) {
 		if appEnv == "production" || os.Getenv("ENABLE_DEMO_EMAIL") != "true" {
