@@ -27,9 +27,9 @@ FRONTEND_URL=https://your-vercel-domain
 BASE_URL=https://your-vercel-domain
 DATABASE_URL=postgresql://postgres:[YOUR-SUPABASE-DATABASE-PASSWORD]@db.bmyghobfovkzchhuhnss.supabase.co:5432/postgres?sslmode=require
 RESEND_API_KEY=re_xxxxxxxxx
-RESEND_FROM=onboarding@resend.dev
+RESEND_FROM="Shiv Shakti Project <support@shivshaktiproject.com>"
 SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
+SMTP_PORT=465
 SMTP_USERNAME=shivshaktiproject.support@gmail.com
 SMTP_USER=shivshaktiproject.support@gmail.com
 SMTP_PASSWORD=your-gmail-app-password
@@ -43,11 +43,12 @@ SUPABASE_URL=https://bmyghobfovkzchhuhnss.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 SUPABASE_STORAGE_BUCKET=product-images
 SUPABASE_STORAGE_PREFIX=admin-products
-REQUIRE_SMTP=true
+REQUIRE_SMTP=false
 PAYMENT_PROVIDER=manual_wholesale
 ```
 
 Replace `re_xxxxxxxxx` with your real Resend API key in Render. Do not commit the real key.
+Verify `shivshaktiproject.com` in Resend before setting `RESEND_FROM` to a `shivshaktiproject.com` sender. Resend requires the DNS records shown in its Domains dashboard before it can send customer emails to outside addresses reliably.
 Create a public Supabase Storage bucket named `product-images` before testing admin image uploads.
 
 Validation:

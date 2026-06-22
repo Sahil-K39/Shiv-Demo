@@ -31,6 +31,8 @@ type MailService struct {
 	ResendFrom string
 }
 
+const defaultVerifiedResendFrom = "Shiv Shakti Project <support@shivshaktiproject.com>"
+
 func NewMailService() *MailService {
 	resendAPIKey := firstEnv("RESEND_API_KEY")
 	resendFrom := firstEnv("RESEND_FROM")
@@ -74,11 +76,8 @@ func NewMailService() *MailService {
 	if from == "" {
 		from = resendFrom
 	}
-	if resendFrom == "" {
-		resendFrom = from
-	}
 	if resendFrom == "" && resendAPIKey != "" {
-		resendFrom = "onboarding@resend.dev"
+		resendFrom = defaultVerifiedResendFrom
 	}
 	if from == "" {
 		from = "no-reply@shiv-shakti.local"
@@ -445,6 +444,7 @@ func (m *MailService) SendFabricQuoteRequest(input *models.FabricQuoteInput) err
 			map[string]string{
 				"From":         m.From,
 				"To":           input.Email,
+				"Reply-To":     supportEmail,
 				"Subject":      "Fabric Quote Request Received - SHIV SHAKTI",
 				"MIME-Version": "1.0",
 				"Content-Type": "text/html; charset=UTF-8",
@@ -554,6 +554,9 @@ func (m *MailService) sendResend(to []string, msg []byte) error {
 		To:      recipients,
 		Subject: cleanHeaderValue(subject),
 		Html:    string(body),
+	}
+	if replyTo := headers["reply-to"]; replyTo != "" {
+		params.ReplyTo = recipientAddress(replyTo)
 	}
 	if _, err := m.Resend.Emails.Send(params); err != nil {
 		return fmt.Errorf("resend send failed: %w", err)

@@ -97,3 +97,19 @@ func TestNewMailServiceCanPreferSMTP(t *testing.T) {
 		t.Fatalf("Port = %d, want 465 for Gmail SMTP-first delivery", service.Port)
 	}
 }
+
+func TestNewMailServiceUsesVerifiedResendSenderWhenSMTPFromIsGmail(t *testing.T) {
+	t.Setenv("SMTP_HOST", "smtp.gmail.com")
+	t.Setenv("SMTP_PORT", "465")
+	t.Setenv("SMTP_USERNAME", "shivshaktiproject.support@gmail.com")
+	t.Setenv("SMTP_PASSWORD", "app-password")
+	t.Setenv("SMTP_FROM", "Shiv Shakti <shivshaktiproject.support@gmail.com>")
+	t.Setenv("RESEND_API_KEY", "re_test")
+	t.Setenv("RESEND_FROM", "")
+
+	service := NewMailService()
+
+	if service.ResendFrom != defaultVerifiedResendFrom {
+		t.Fatalf("ResendFrom = %q, want %q", service.ResendFrom, defaultVerifiedResendFrom)
+	}
+}
