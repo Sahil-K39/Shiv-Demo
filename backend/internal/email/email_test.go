@@ -113,3 +113,18 @@ func TestNewMailServiceUsesVerifiedResendSenderWhenSMTPFromIsGmail(t *testing.T)
 		t.Fatalf("ResendFrom = %q, want %q", service.ResendFrom, defaultVerifiedResendFrom)
 	}
 }
+
+func TestNewMailServiceReplacesResendOnboardingSender(t *testing.T) {
+	t.Setenv("SMTP_HOST", "")
+	t.Setenv("SMTP_USERNAME", "")
+	t.Setenv("SMTP_PASSWORD", "")
+	t.Setenv("SMTP_FROM", "")
+	t.Setenv("RESEND_API_KEY", "re_test")
+	t.Setenv("RESEND_FROM", "onboarding@resend.dev")
+
+	service := NewMailService()
+
+	if service.ResendFrom != defaultVerifiedResendFrom {
+		t.Fatalf("ResendFrom = %q, want %q", service.ResendFrom, defaultVerifiedResendFrom)
+	}
+}

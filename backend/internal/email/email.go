@@ -76,8 +76,8 @@ func NewMailService() *MailService {
 	if from == "" {
 		from = resendFrom
 	}
-	if resendFrom == "" && resendAPIKey != "" {
-		resendFrom = defaultVerifiedResendFrom
+	if resendAPIKey != "" {
+		resendFrom = safeResendFrom(resendFrom)
 	}
 	if from == "" {
 		from = "no-reply@shiv-shakti.local"
@@ -98,6 +98,17 @@ func NewMailService() *MailService {
 		Resend:     resendClient,
 		ResendFrom: resendFrom,
 	}
+}
+
+func safeResendFrom(value string) string {
+	value = strings.TrimSpace(value)
+	address := strings.ToLower(recipientAddress(value))
+	if value == "" ||
+		address == "onboarding@resend.dev" ||
+		strings.HasSuffix(address, "@gmail.com") {
+		return defaultVerifiedResendFrom
+	}
+	return value
 }
 
 const WelcomeEmailHTMLTemplate = `
