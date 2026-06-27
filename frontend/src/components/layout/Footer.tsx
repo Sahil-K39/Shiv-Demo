@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
         <div className="space-y-6">
           <BrandLogo variant="footer" />
-          <p className="max-w-[280px] text-[13px] font-medium uppercase leading-[1.8] tracking-[0.12em] text-neutral-700">
+          <p className="max-w-[250px] text-[13px] uppercase leading-loose tracking-[0.2em] text-gray-500">
             Neo-primitive fashion for ritual silhouettes, structured layers, and limited seasonal releases.
           </p>
         </div>
@@ -49,7 +49,7 @@ export default function Footer() {
 
         <div className="space-y-4">
           <h4 className="text-[12px] tracking-[0.3em] text-black uppercase mb-6">Transmission</h4>
-          <p className="text-[12px] font-medium uppercase leading-[1.8] tracking-[0.08em] text-neutral-700">
+          <p className="text-[12px] uppercase leading-loose tracking-[0.1em] text-gray-500">
             Join the Council for early access to drops, fabric lots, and wholesale updates.
           </p>
           <Link

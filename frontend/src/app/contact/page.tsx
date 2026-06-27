@@ -15,13 +15,13 @@ export default function ContactPage() {
       <section className="border-b border-black px-6 py-24 md:px-10 md:py-32">
         <div className="mx-auto grid max-w-[1400px] gap-12 md:grid-cols-[0.85fr_1.15fr]">
           <div>
-            <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.22em] text-neutral-700">
+            <p className="mb-5 text-[12px] uppercase tracking-[0.28em] text-gray-500">
               Contact
             </p>
             <h1 className="max-w-2xl text-[42px] font-light uppercase leading-tight md:text-[72px]">
               Enquiries by email only.
             </h1>
-            <p className="mt-8 max-w-xl text-[15px] font-medium uppercase leading-[1.8] tracking-[0.08em] text-neutral-800 md:text-[16px]">
+            <p className="mt-8 max-w-xl text-[15px] uppercase leading-loose tracking-[0.12em] text-gray-500 md:text-[16px]">
               Send your requirement and our team will reply with quote, payment instructions, and
               delivery details. The website does not collect payment.
             </p>
