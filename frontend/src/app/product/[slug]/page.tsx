@@ -177,7 +177,7 @@ export default function ProductDetail() {
 
           <div className="glow-line w-full" />
 
-          <p className="text-[14px] leading-[1.8] text-stone tracking-wide">
+          <p className="text-[15px] font-medium leading-[1.8] tracking-[0.04em] text-neutral-800 md:text-[16px]">
             {product.description}
           </p>
 

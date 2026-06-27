@@ -72,13 +72,13 @@ export default function FabricSellingPage() {
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">
           <div className="max-w-[1120px] animate-soft-reveal">
-            <p className="mb-5 text-[11px] uppercase tracking-[0.28em] text-white/70">
+            <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.22em] text-white/90">
               Fabric supply / wholesale sourcing
             </p>
             <h1 className="max-w-[1040px] text-[44px] font-light uppercase leading-[0.95] text-white md:text-[84px] lg:text-[104px]">
               Fabric Selling
             </h1>
-            <p className="mt-8 max-w-2xl text-[14px] uppercase leading-loose tracking-[0.12em] text-white/75">
+            <p className="mt-8 max-w-2xl text-[15px] font-medium uppercase leading-[1.8] tracking-[0.08em] text-white/90 md:text-[16px]">
               Bulk fabrics, swatches, dye lots, and production-ready material sourcing for boutiques,
               designers, studios, and small manufacturing partners.
             </p>
@@ -119,11 +119,11 @@ export default function FabricSellingPage() {
                 className="object-cover object-top transition-transform duration-700 hover:scale-105"
               />
             </div>
-            <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{fabric.moq}</p>
+            <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-neutral-700">{fabric.moq}</p>
             <h2 className="mt-3 text-[20px] font-light uppercase tracking-[0.12em] text-black">
               {fabric.name}
             </h2>
-            <p className="mt-4 text-[13px] uppercase leading-loose tracking-[0.1em] text-gray-500">
+            <p className="mt-4 text-[14px] font-medium uppercase leading-[1.75] tracking-[0.08em] text-neutral-700">
               {fabric.use}
             </p>
           </article>
@@ -132,7 +132,7 @@ export default function FabricSellingPage() {
 
       <section className="mx-auto grid max-w-[1400px] gap-12 px-6 py-20 md:grid-cols-[0.85fr_1.15fr] md:px-10 md:py-28">
         <div className="animate-soft-reveal">
-          <p className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gray-500">
+          <p className="mb-4 text-[12px] font-medium uppercase tracking-[0.2em] text-neutral-700">
             Buying Support
           </p>
           <h2 className="text-[36px] font-light uppercase leading-tight text-black md:text-[56px]">
@@ -144,7 +144,7 @@ export default function FabricSellingPage() {
           {services.map((service) => (
             <div key={service} className="flex items-center gap-3 border border-black/10 p-5">
               <CheckIcon className="h-4 w-4 shrink-0" />
-              <span className="text-[12px] uppercase tracking-[0.14em] text-gray-600">
+              <span className="text-[13px] font-medium uppercase tracking-[0.1em] text-neutral-800">
                 {service}
               </span>
             </div>
@@ -155,7 +155,7 @@ export default function FabricSellingPage() {
       <section className="border-y border-black bg-black px-6 py-16 text-white md:px-10">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-white/45">
+            <p className="mb-4 text-[12px] font-medium uppercase tracking-[0.22em] text-white/75">
               Quote Process
             </p>
             <h2 className="max-w-3xl text-[32px] font-light uppercase leading-tight md:text-[54px]">
@@ -176,13 +176,13 @@ export default function FabricSellingPage() {
         className="mx-auto grid max-w-[1400px] gap-12 px-6 py-20 md:grid-cols-[0.75fr_1.25fr] md:px-10 md:py-28"
       >
         <div>
-          <p className="mb-4 text-[10px] uppercase tracking-[0.24em] text-gray-500">
+          <p className="mb-4 text-[12px] font-medium uppercase tracking-[0.2em] text-neutral-700">
             Email Quote Request
           </p>
           <h2 className="text-[34px] font-light uppercase leading-tight text-black md:text-[52px]">
             Minimum 50 units. Quote, payment, and delivery details by email.
           </h2>
-          <p className="mt-6 max-w-md text-[13px] uppercase leading-loose tracking-[0.12em] text-gray-500">
+          <p className="mt-6 max-w-md text-[15px] font-medium uppercase leading-[1.8] tracking-[0.08em] text-neutral-800 md:text-[16px]">
             Share the fabric type, quantity, preferred color, and delivery city. We review the
             request and reply from support with the next steps.
           </p>

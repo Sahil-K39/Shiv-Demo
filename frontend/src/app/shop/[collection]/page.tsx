@@ -31,7 +31,7 @@ export default function ShopCollection() {
   return (
     <div className="w-full bg-white min-h-[80vh] flex flex-col items-center">
       <div className="w-full border-b border-black py-20 text-center">
-        <p className="mb-5 text-[10px] font-medium uppercase tracking-[0.28em] text-black/45">
+        <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.22em] text-black/70">
           Wholesale catalogue / MOQ {MIN_WHOLESALE_QUANTITY} units per style
         </p>
         <motion.h1
@@ -42,7 +42,7 @@ export default function ShopCollection() {
         >
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
-        <p className="mx-auto mt-6 max-w-2xl px-6 text-[12px] uppercase leading-relaxed tracking-[0.14em] text-black/50">
+        <p className="mx-auto mt-6 max-w-2xl px-6 text-[15px] font-medium uppercase leading-[1.8] tracking-[0.08em] text-black/80 md:text-[16px]">
           Select sizes, colorways, and bulk quantities for boutique, studio, and partner enquiries.
         </p>
       </div>
