@@ -25,31 +25,86 @@ func TestFinalProductCatalogueCorrections(t *testing.T) {
 		}
 	}
 
-	checks := map[string]struct {
-		name  string
-		price float64
-	}{
-		"SS-PHOTO-02": {name: "Obsidian Cutwork Halter Dress", price: 1499},
-		"SS-PHOTO-12": {name: "Black Lace Column Kaftan", price: 1749},
-		"SS-PHOTO-16": {name: "Black Temple Mini Pants", price: 2349},
-		"SS-PHOTO-20": {name: "Handloom Open Kimono", price: 1749},
-		"SS-PHOTO-29": {name: "Temple Print Dress", price: 1899},
-		"SS-PHOTO-34": {name: "Ivory Minimal Dress", price: 1349},
-		"SS-PHOTO-36": {name: "Handloom Resort Dress", price: 1649},
-		"SS-PHOTO-38": {name: "Ivory Casual Ritual Kimono", price: 1949},
-		"SS-PHOTO-39": {name: "Black Tie Detail Top & Skirt Set", price: 2099},
-		"SS-PHOTO-40": {name: "Temple Surface Crop Set", price: 2749},
+	names := map[string]string{
+		"SS-PHOTO-02": "Obsidian Cutwork Halter Dress",
+		"SS-PHOTO-12": "Black Lace Column Kaftan",
+		"SS-PHOTO-16": "Black Temple Mini Pants",
+		"SS-PHOTO-20": "Handloom Open Kimono",
+		"SS-PHOTO-29": "Temple Print Dress",
+		"SS-PHOTO-34": "Ivory Minimal Dress",
+		"SS-PHOTO-36": "Handloom Resort Dress",
+		"SS-PHOTO-38": "Ivory Casual Ritual Kimono",
+		"SS-PHOTO-39": "Black Tie Detail Top & Skirt Set",
+		"SS-PHOTO-40": "Temple Surface Crop Set",
 	}
-	for sku, want := range checks {
+	for sku, wantName := range names {
 		product, ok := productsBySKU[sku]
 		if !ok {
 			t.Fatalf("missing corrected product %s", sku)
 		}
-		if product.Name != want.name || product.Price != want.price {
-			t.Fatalf("%s = %q/%.0f, want %q/%.0f", sku, product.Name, product.Price, want.name, want.price)
+		if product.Name != wantName {
+			t.Fatalf("%s name = %q, want %q", sku, product.Name, wantName)
 		}
-		if !strings.HasPrefix(product.Description, want.name+" ") {
+		if !strings.HasPrefix(product.Description, wantName+" ") {
 			t.Fatalf("%s description does not start with corrected name", sku)
+		}
+	}
+
+	wantPrices := map[string]float64{
+		"SS-PHOTO-01": 1300,
+		"SS-PHOTO-02": 1400,
+		"SS-PHOTO-03": 1400,
+		"SS-PHOTO-04": 1600,
+		"SS-PHOTO-05": 1200,
+		"SS-PHOTO-06": 2049,
+		"SS-PHOTO-07": 1500,
+		"SS-PHOTO-08": 1200,
+		"SS-PHOTO-09": 1300,
+		"SS-PHOTO-10": 700,
+		"SS-PHOTO-11": 1300,
+		"SS-PHOTO-12": 1600,
+		"SS-PHOTO-13": 1400,
+		"SS-PHOTO-14": 700,
+		"SS-PHOTO-15": 1400,
+		"SS-PHOTO-16": 800,
+		"SS-PHOTO-17": 2300,
+		"SS-PHOTO-18": 1200,
+		"SS-PHOTO-19": 1200,
+		"SS-PHOTO-20": 1600,
+		"SS-PHOTO-21": 1600,
+		"SS-PHOTO-22": 1300,
+		"SS-PHOTO-23": 1600,
+		"SS-PHOTO-24": 1000,
+		"SS-PHOTO-25": 1200,
+		"SS-PHOTO-26": 1400,
+		"SS-PHOTO-27": 1200,
+		"SS-PHOTO-28": 1400,
+		"SS-PHOTO-29": 1100,
+		"SS-PHOTO-30": 1200,
+		"SS-PHOTO-31": 1100,
+		"SS-PHOTO-32": 950,
+		"SS-PHOTO-33": 1200,
+		"SS-PHOTO-34": 1300,
+		"SS-PHOTO-35": 1100,
+		"SS-PHOTO-36": 1400,
+		"SS-PHOTO-37": 1300,
+		"SS-PHOTO-38": 850,
+		"SS-PHOTO-39": 1300,
+		"SS-PHOTO-40": 1300,
+		"SS-PHOTO-41": 1200,
+		"SS-PHOTO-42": 1300,
+		"SS-PHOTO-43": 1100,
+		"SS-PHOTO-44": 1400,
+		"SS-PHOTO-45": 1500,
+		"SS-PHOTO-46": 1400,
+	}
+	for sku, wantPrice := range wantPrices {
+		product, ok := productsBySKU[sku]
+		if !ok {
+			t.Fatalf("missing priced product %s", sku)
+		}
+		if product.Price != wantPrice {
+			t.Fatalf("%s price = %.0f, want %.0f", sku, product.Price, wantPrice)
 		}
 	}
 }
