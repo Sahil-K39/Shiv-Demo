@@ -149,6 +149,24 @@
     color: #000000;
   }
 
+  @media (hover: none) and (pointer: coarse) and (max-width: 1023px) {
+    .desktop-nav-links {
+      display: none !important;
+    }
+
+    .mobile-menu-trigger {
+      display: inline-flex !important;
+    }
+
+    .mobile-menu-panel {
+      display: block !important;
+    }
+
+    .product-catalogue-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+  }
+
   .media-reveal {
     clip-path: inset(0 0 0 0);
     transform-origin: center;

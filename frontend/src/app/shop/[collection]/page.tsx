@@ -38,7 +38,7 @@ export default function ShopCollection() {
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[44px] font-light uppercase tracking-[0.14em] text-black lg:text-[60px] lg:tracking-[0.16em]"
+          className="text-[44px] font-light uppercase tracking-[0.14em] text-black min-[600px]:text-[56px] md:text-[60px] md:tracking-[0.16em]"
         >
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
@@ -47,7 +47,7 @@ export default function ShopCollection() {
         </p>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-10 bg-white px-6 py-12 md:px-10 lg:grid-cols-2 xl:grid-cols-4">
+      <div className="product-catalogue-grid grid w-full grid-cols-1 gap-10 bg-white px-6 py-12 min-[600px]:grid-cols-2 md:px-10 lg:grid-cols-4">
         {isLoading ? (
           <div className="col-span-full flex justify-center py-32 bg-white">
             <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />

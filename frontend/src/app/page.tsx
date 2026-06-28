@@ -117,7 +117,7 @@ export default function Home() {
             <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />
           </div>
         ) : (
-          <div className="grid w-full grid-cols-1 gap-10 bg-white px-6 md:px-10 lg:grid-cols-2 xl:grid-cols-4">
+          <div className="product-catalogue-grid grid w-full grid-cols-1 gap-10 bg-white px-6 min-[600px]:grid-cols-2 md:px-10 lg:grid-cols-4">
             {products.slice(0, 4).map((product, i) => (
               <ProductCard key={product.slug} product={product} index={i} />
             ))}
