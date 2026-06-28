@@ -149,21 +149,10 @@
     color: #000000;
   }
 
-  @media (hover: none) and (pointer: coarse) and (max-width: 1023px) {
-    .desktop-nav-links {
-      display: none !important;
-    }
-
-    .mobile-menu-trigger {
-      display: inline-flex !important;
-    }
-
-    .mobile-menu-panel {
-      display: block !important;
-    }
-
-    .product-catalogue-grid {
-      grid-template-columns: minmax(0, 1fr) !important;
+  @media (min-width: 600px) and (max-width: 767px) {
+    .nav-brand > span {
+      width: 96px !important;
+      height: 44px !important;
     }
   }
 

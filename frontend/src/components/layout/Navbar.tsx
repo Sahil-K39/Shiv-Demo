@@ -42,11 +42,11 @@ export default function Navbar() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between gap-3 border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl min-[600px]:items-start md:px-6 lg:items-center lg:px-10"
+        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between gap-2 border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl min-[600px]:px-2 md:gap-3 md:px-6 lg:px-10"
       >
-        <BrandLogo />
+        <BrandLogo className="nav-brand" />
 
-        <div className="desktop-nav-links absolute bottom-0 left-0 right-0 hidden h-8 min-w-0 items-center justify-center gap-4 text-[12px] font-medium uppercase tracking-[0.1em] min-[600px]:flex lg:static lg:h-full lg:flex-1 lg:gap-5 lg:text-[13px] xl:gap-6 xl:text-[14px]">
+        <div className="desktop-nav-links hidden h-full min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.08em] min-[600px]:flex md:gap-3 md:text-[12px] md:tracking-[0.09em] lg:gap-4 lg:text-[13px] xl:gap-5 xl:text-[14px]">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
