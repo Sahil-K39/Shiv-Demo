@@ -46,7 +46,7 @@ export default function Navbar() {
       >
         <BrandLogo className="nav-brand" />
 
-        <div className="desktop-nav-links hidden h-full min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.08em] min-[600px]:flex md:gap-3 md:text-[12px] md:tracking-[0.09em] lg:gap-4 lg:text-[13px] xl:gap-5 xl:text-[14px]">
+        <div className="desktop-nav-links hidden h-full min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.08em] min-[600px]:flex md:gap-3 md:text-[13px] md:tracking-[0.09em] lg:gap-4 lg:text-[14px] xl:gap-5 xl:text-[15px]">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||

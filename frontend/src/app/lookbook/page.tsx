@@ -1,2 +1,5 @@
-// This page has been removed as per request.
-export default function Empty() { return null; }
+import { redirect } from "next/navigation";
+
+export default function LookbookPage() {
+  redirect("/shop/shiva");
+}

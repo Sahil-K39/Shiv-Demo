@@ -1,4 +1,5 @@
 
+import Link from "next/link";
 
 export default function Council() {
   return (
@@ -12,11 +13,25 @@ export default function Council() {
         </p>
       </div>
       
-      <div className="w-full max-w-[1200px] px-10 py-20 flex flex-col items-center justify-center min-h-[40vh]">
-        <span className="mb-8 text-[13px] uppercase tracking-[0.2em] text-gray-400">
-          AWAITING TRANSMISSION...
-        </span>
-        <div className="w-10 h-10 border border-black/20 border-t-black animate-spin"></div>
+      <div className="flex min-h-[40vh] w-full max-w-[1200px] flex-col items-center justify-center px-6 py-20 text-center md:px-10">
+        <p className="max-w-xl text-[14px] uppercase leading-loose tracking-[0.14em] text-gray-500">
+          Sign in to access Council updates, or contact support for wholesale and partnership
+          enquiries.
+        </p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/login"
+            className="inline-flex min-h-[50px] items-center justify-center bg-black px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-neutral-800"
+          >
+            Log In
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex min-h-[50px] items-center justify-center border border-black px-8 text-[11px] uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white"
+          >
+            Contact Support
+          </Link>
+        </div>
       </div>
     </div>
   );
