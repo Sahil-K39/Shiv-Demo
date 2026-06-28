@@ -31,23 +31,23 @@ export default function ShopCollection() {
   return (
     <div className="w-full bg-white min-h-[80vh] flex flex-col items-center">
       <div className="w-full border-b border-black py-20 text-center">
-        <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.28em] text-black/45">
+        <p className="mb-5 px-5 text-[14px] font-medium uppercase leading-relaxed tracking-[0.2em] text-black/55 lg:text-[12px] lg:tracking-[0.28em] lg:text-black/45">
           Wholesale catalogue / MOQ {MIN_WHOLESALE_QUANTITY} units per style
         </p>
         <motion.h1
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[40px] font-light uppercase tracking-[0.16em] text-black md:text-[60px]"
+          className="text-[44px] font-light uppercase tracking-[0.14em] text-black lg:text-[60px] lg:tracking-[0.16em]"
         >
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
-        <p className="mx-auto mt-6 max-w-2xl px-6 text-[16px] uppercase leading-relaxed tracking-[0.14em] text-black/50">
+        <p className="mx-auto mt-6 max-w-2xl px-6 text-[18px] uppercase leading-relaxed tracking-[0.1em] text-black/55 lg:text-[16px] lg:tracking-[0.14em] lg:text-black/50">
           Select sizes, colorways, and bulk quantities for boutique, studio, and partner enquiries.
         </p>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-8 bg-white px-6 py-12 sm:grid-cols-2 md:px-10 lg:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-10 bg-white px-6 py-12 md:px-10 lg:grid-cols-2 xl:grid-cols-4">
         {isLoading ? (
           <div className="col-span-full flex justify-center py-32 bg-white">
             <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />

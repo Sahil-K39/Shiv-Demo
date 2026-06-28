@@ -46,7 +46,7 @@ export default function Navbar() {
       >
         <BrandLogo />
 
-        <div className="hidden h-full min-w-0 flex-1 items-center justify-center gap-2 text-[9px] font-medium uppercase tracking-[0.09em] md:flex lg:gap-4 lg:text-[10px] lg:tracking-[0.12em] xl:gap-5 xl:text-[11px]">
+        <div className="hidden h-full min-w-0 flex-1 items-center justify-center gap-4 text-[10px] font-medium uppercase tracking-[0.12em] lg:flex xl:gap-5 xl:text-[11px]">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
@@ -117,7 +117,7 @@ export default function Navbar() {
             type="button"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
-            className="icon-button md:hidden"
+            className="icon-button lg:hidden"
             onClick={() => setIsMenuOpen((value) => !value)}
           >
             {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -128,7 +128,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="fixed left-0 right-0 top-[80px] z-40 border-b border-black bg-white px-4 py-5 md:hidden"
+            className="fixed left-0 right-0 top-[80px] z-40 border-b border-black bg-white px-4 py-5 lg:hidden"
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}

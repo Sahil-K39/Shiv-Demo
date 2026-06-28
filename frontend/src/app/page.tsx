@@ -59,7 +59,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="relative overflow-hidden group inline-block border border-white text-white bg-transparent backdrop-blur-sm px-10 py-5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-500"
+              className="group relative inline-block overflow-hidden border border-white bg-transparent px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-white backdrop-blur-sm transition-colors duration-500 lg:text-[11px] lg:tracking-[0.2em]"
             >
               <span className="relative z-10 group-hover:text-black transition-colors duration-500">
                 Start Wholesale Order
@@ -117,7 +117,7 @@ export default function Home() {
             <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />
           </div>
         ) : (
-          <div className="grid w-full grid-cols-1 gap-8 bg-white px-6 sm:grid-cols-2 md:px-10 lg:grid-cols-4">
+          <div className="grid w-full grid-cols-1 gap-10 bg-white px-6 md:px-10 lg:grid-cols-2 xl:grid-cols-4">
             {products.slice(0, 4).map((product, i) => (
               <ProductCard key={product.slug} product={product} index={i} />
             ))}
@@ -125,7 +125,7 @@ export default function Home() {
         )}
 
         <div className="w-full flex justify-center mt-10">
-          <Link href="/shop/shakti" className="relative overflow-hidden group inline-block border border-black text-black px-10 py-5 text-[11px] tracking-[0.2em] uppercase bg-white">
+          <Link href="/shop/shakti" className="group relative inline-block overflow-hidden border border-black bg-white px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-black lg:text-[11px] lg:tracking-[0.2em]">
             <span className="relative z-10 group-hover:text-white transition-colors duration-500">VIEW WHOLESALE CATALOGUE</span>
             <div className="absolute inset-0 bg-black translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
           </Link>

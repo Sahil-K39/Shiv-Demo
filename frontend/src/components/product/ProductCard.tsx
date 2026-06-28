@@ -125,7 +125,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         {product.featured && (
           <div className="absolute top-3 left-3 z-10">
-            <span className="text-[9px] tracking-[0.3em] uppercase px-3 py-1.5 bg-white text-black font-medium">
+            <span className="bg-white px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.22em] text-black lg:text-[9px] lg:tracking-[0.3em]">
               WHOLESALE READY
             </span>
           </div>
@@ -148,7 +148,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             {sizes.map((size) => (
               <span
                 key={size}
-                className="border border-white/40 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.15em] text-white transition-colors duration-200"
+                className="border border-white/40 px-2.5 py-1.5 text-[12px] uppercase tracking-[0.12em] text-white transition-colors duration-200 lg:text-[10px] lg:tracking-[0.15em]"
               >
                 {size}
               </span>
@@ -182,7 +182,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             variants={textVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="text-[10px] tracking-[0.3em] uppercase text-stone"
+            className="text-[13px] uppercase tracking-[0.2em] text-stone lg:text-[10px] lg:tracking-[0.3em]"
           >
             {product.category} / {product.collection}
           </motion.p>
@@ -192,7 +192,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             variants={textVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="text-[15px] tracking-[0.08em] uppercase text-bone font-light leading-snug"
+            className="text-[18px] font-light uppercase leading-snug tracking-[0.06em] text-bone lg:text-[15px] lg:tracking-[0.08em]"
           >
             {product.name}
           </motion.h3>
@@ -202,16 +202,16 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             variants={textVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="flex items-center gap-3"
+            className="flex flex-wrap items-center gap-3"
           >
-            <span className="text-[14px] tracking-[0.1em] text-bone/70 font-light">
+            <span className="text-[16px] font-light tracking-[0.08em] text-bone/70 lg:text-[14px] lg:tracking-[0.1em]">
               {formatPriceINR(product.price)} wholesale unit
             </span>
-            <span className="text-[9px] tracking-[0.2em] uppercase text-bone/45 border border-bone/15 px-2 py-0.5">
+            <span className="border border-bone/15 px-2 py-0.5 text-[11px] uppercase tracking-[0.14em] text-bone/55 lg:text-[9px] lg:tracking-[0.2em] lg:text-bone/45">
               MOQ {MIN_WHOLESALE_QUANTITY}
             </span>
             {!product.in_stock && (
-              <span className="text-[9px] tracking-[0.2em] uppercase text-accent-ember/70 border border-accent-ember/30 px-2 py-0.5">
+              <span className="border border-accent-ember/30 px-2 py-0.5 text-[11px] uppercase tracking-[0.14em] text-accent-ember/70 lg:text-[9px] lg:tracking-[0.2em]">
                 SOLD OUT
               </span>
             )}
