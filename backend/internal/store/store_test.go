@@ -18,10 +18,14 @@ func TestFinalProductCatalogueCorrections(t *testing.T) {
 
 	productsBySKU := make(map[string]finalProduct, len(payload.Products))
 	wantColors := `["Black","Brown","Green","Purple","Maroon"]`
+	wantSizes := `["S/M","M/L"]`
 	for _, product := range payload.Products {
 		productsBySKU[product.SKU] = product
 		if product.Colors != wantColors {
 			t.Fatalf("%s colors = %q, want %q", product.SKU, product.Colors, wantColors)
+		}
+		if product.Sizes != wantSizes {
+			t.Fatalf("%s sizes = %q, want %q", product.SKU, product.Sizes, wantSizes)
 		}
 	}
 

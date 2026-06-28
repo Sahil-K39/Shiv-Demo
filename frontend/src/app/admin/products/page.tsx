@@ -16,7 +16,7 @@ const emptyForm: ProductInput = {
   sale_price: 0,
   category: "shakti",
   collection: "SS26",
-  sizes: `["OS"]`,
+  sizes: `["S/M","M/L"]`,
   colors: `["Default"]`,
   images: "[]",
   quantity: 0,
@@ -37,7 +37,7 @@ const categoryOptions = [
   { value: "wellness", label: "Wellness" },
 ];
 
-const sizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "OS", "Custom"];
+const sizeOptions = ["S/M", "M/L"];
 
 const colorOptions = [
   "Void Black",
@@ -156,7 +156,7 @@ function buildTemplateCSV() {
       "shakti",
       "BULK-SAMPLE-001",
       "/final-products/go01/go01-01.png|/final-products/go01/go01-02.png",
-      "S|M|L|XL",
+      "S/M|M/L",
       "Void Black|Ivory",
       "false",
       "true",
@@ -300,7 +300,7 @@ function recordToProduct(record: Record<string, string>, index: number): Product
     sale_price: Number.isFinite(salePrice) ? salePrice : 0,
     category: recordValue(record, "category") || "shakti",
     collection: recordValue(record, "collection") || "SS26",
-    sizes: listField(recordValue(record, "sizes", "size") || "OS"),
+    sizes: listField(recordValue(record, "sizes", "size") || "S/M|M/L"),
     colors: listField(recordValue(record, "colors", "color") || "Default"),
     images: listField(images),
     quantity: Number.isFinite(quantity) ? quantity : 0,
