@@ -21,7 +21,7 @@ export default function ContactPage() {
             <h1 className="max-w-2xl text-[42px] font-light uppercase leading-tight md:text-[72px]">
               Enquiries by email only.
             </h1>
-            <p className="mt-8 max-w-xl text-[15px] uppercase leading-loose tracking-[0.12em] text-gray-500 md:text-[16px]">
+            <p className="mt-8 max-w-xl text-[16px] uppercase leading-loose tracking-[0.12em] text-gray-500">
               Send your requirement and our team will reply with quote, payment instructions, and
               delivery details. The website does not collect payment.
             </p>

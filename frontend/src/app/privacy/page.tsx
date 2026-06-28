@@ -15,7 +15,7 @@ export default function PrivacyPage() {
         <h1 className="text-[40px] font-light uppercase leading-tight md:text-[68px]">
           We use enquiry details to respond and process requests.
         </h1>
-        <div className="mt-10 grid gap-8 border-t border-black/10 pt-10 text-[15px] uppercase leading-loose tracking-[0.12em] text-gray-600 md:grid-cols-2 md:text-[16px]">
+        <div className="mt-10 grid gap-8 border-t border-black/10 pt-10 text-[16px] uppercase leading-loose tracking-[0.12em] text-gray-600 md:grid-cols-2">
           <p>
             Contact, fabric quote, account, shipping, and wholesale enquiry details are used to
             reply by email, confirm availability, and coordinate delivery.

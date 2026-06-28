@@ -42,7 +42,7 @@ export default function ShopCollection() {
         >
           {collection === "shiva" ? "SHIVA" : collection === "shakti" ? "SHAKTI" : collection}
         </motion.h1>
-        <p className="mx-auto mt-6 max-w-2xl px-6 text-[15px] uppercase leading-relaxed tracking-[0.14em] text-black/50 md:text-[16px]">
+        <p className="mx-auto mt-6 max-w-2xl px-6 text-[16px] uppercase leading-relaxed tracking-[0.14em] text-black/50">
           Select sizes, colorways, and bulk quantities for boutique, studio, and partner enquiries.
         </p>
       </div>

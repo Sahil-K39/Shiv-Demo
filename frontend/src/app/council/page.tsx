@@ -7,7 +7,7 @@ export default function Council() {
         <h1 className="animate-soft-reveal text-[40px] md:text-[80px] font-light text-black uppercase tracking-[0.16em] mb-6">
           THE COUNCIL
         </h1>
-        <p className="animate-soft-reveal max-w-2xl text-center text-[15px] uppercase leading-relaxed tracking-[0.1em] text-gray-500 md:text-[16px]" style={{ animationDelay: "90ms" }}>
+        <p className="animate-soft-reveal max-w-2xl text-center text-[16px] uppercase leading-relaxed tracking-[0.1em] text-gray-500" style={{ animationDelay: "90ms" }}>
           The inner sanctum. Only those with the required clearance may access the encrypted transmissions and early drops. Log in to establish connection.
         </p>
       </div>

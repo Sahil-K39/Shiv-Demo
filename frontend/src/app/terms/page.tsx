@@ -15,7 +15,7 @@ export default function TermsPage() {
         <h1 className="text-[40px] font-light uppercase leading-tight md:text-[68px]">
           Website enquiries are not payment confirmation.
         </h1>
-        <div className="mt-10 grid gap-8 border-t border-black/10 pt-10 text-[15px] uppercase leading-loose tracking-[0.12em] text-gray-600 md:grid-cols-2 md:text-[16px]">
+        <div className="mt-10 grid gap-8 border-t border-black/10 pt-10 text-[16px] uppercase leading-loose tracking-[0.12em] text-gray-600 md:grid-cols-2">
           <p>
             Product and fabric submissions are enquiry requests. Pricing, stock, payment method, and
             delivery terms are confirmed by email before order processing.

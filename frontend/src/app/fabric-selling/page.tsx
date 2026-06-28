@@ -78,7 +78,7 @@ export default function FabricSellingPage() {
             <h1 className="max-w-[1040px] text-[44px] font-light uppercase leading-[0.95] text-white md:text-[84px] lg:text-[104px]">
               Fabric Selling
             </h1>
-            <p className="mt-8 max-w-2xl text-[15px] uppercase leading-loose tracking-[0.12em] text-white/75 md:text-[16px]">
+            <p className="mt-8 max-w-2xl text-[16px] uppercase leading-loose tracking-[0.12em] text-white/75">
               Bulk fabrics, swatches, dye lots, and production-ready material sourcing for boutiques,
               designers, studios, and small manufacturing partners.
             </p>
@@ -182,7 +182,7 @@ export default function FabricSellingPage() {
           <h2 className="text-[34px] font-light uppercase leading-tight text-black md:text-[52px]">
             Minimum 50 units. Quote, payment, and delivery details by email.
           </h2>
-          <p className="mt-6 max-w-md text-[15px] uppercase leading-loose tracking-[0.12em] text-gray-500 md:text-[16px]">
+          <p className="mt-6 max-w-md text-[16px] uppercase leading-loose tracking-[0.12em] text-gray-500">
             Share the fabric type, quantity, preferred color, and delivery city. We review the
             request and reply from support with the next steps.
           </p>
