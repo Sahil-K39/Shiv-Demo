@@ -1,10 +1,58 @@
 package store
 
 import (
+	"encoding/json"
 	"path/filepath"
 	"strings"
 	"testing"
 )
+
+func TestFinalProductCatalogueCorrections(t *testing.T) {
+	var payload finalProductsPayload
+	if err := json.Unmarshal(finalProductsJSON, &payload); err != nil {
+		t.Fatalf("unmarshal final product catalogue: %v", err)
+	}
+	if len(payload.Products) != 46 {
+		t.Fatalf("final products = %d, want 46", len(payload.Products))
+	}
+
+	productsBySKU := make(map[string]finalProduct, len(payload.Products))
+	wantColors := `["Black","Brown","Green","Purple","Maroon"]`
+	for _, product := range payload.Products {
+		productsBySKU[product.SKU] = product
+		if product.Colors != wantColors {
+			t.Fatalf("%s colors = %q, want %q", product.SKU, product.Colors, wantColors)
+		}
+	}
+
+	checks := map[string]struct {
+		name  string
+		price float64
+	}{
+		"SS-PHOTO-02": {name: "Obsidian Cutwork Halter Dress", price: 1499},
+		"SS-PHOTO-12": {name: "Black Lace Column Kaftan", price: 1749},
+		"SS-PHOTO-16": {name: "Black Temple Mini Pants", price: 2349},
+		"SS-PHOTO-20": {name: "Handloom Open Kimono", price: 1749},
+		"SS-PHOTO-29": {name: "Temple Print Dress", price: 1899},
+		"SS-PHOTO-34": {name: "Ivory Minimal Dress", price: 1349},
+		"SS-PHOTO-36": {name: "Handloom Resort Dress", price: 1649},
+		"SS-PHOTO-38": {name: "Ivory Casual Ritual Kimono", price: 1949},
+		"SS-PHOTO-39": {name: "Black Tie Detail Top & Skirt Set", price: 2099},
+		"SS-PHOTO-40": {name: "Temple Surface Crop Set", price: 2749},
+	}
+	for sku, want := range checks {
+		product, ok := productsBySKU[sku]
+		if !ok {
+			t.Fatalf("missing corrected product %s", sku)
+		}
+		if product.Name != want.name || product.Price != want.price {
+			t.Fatalf("%s = %q/%.0f, want %q/%.0f", sku, product.Name, product.Price, want.name, want.price)
+		}
+		if !strings.HasPrefix(product.Description, want.name+" ") {
+			t.Fatalf("%s description does not start with corrected name", sku)
+		}
+	}
+}
 
 func TestSeedProductsRemovesRetiredCatalogue(t *testing.T) {
 	t.Setenv("DATABASE_URL", "")
