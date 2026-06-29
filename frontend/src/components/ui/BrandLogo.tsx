@@ -14,11 +14,51 @@ export default function BrandLogo({
 }: BrandLogoProps) {
   const isFooter = variant === "footer";
   const isMarkOnly = variant === "mark";
+
+  if (variant === "nav") {
+    return (
+      <Link
+        href={href}
+        aria-label="Shiv Shakti Project home"
+        className={`group inline-flex shrink-0 items-center text-black ${className}`}
+      >
+        <span className="relative flex h-[48px] w-[128px] shrink-0 items-center sm:w-[146px] lg:h-[52px] lg:w-[164px] xl:w-[188px]">
+          <span className="relative h-11 w-[30px] shrink-0 min-[600px]:h-8 min-[600px]:w-[22px] md:h-11 md:w-[30px] lg:h-12 lg:w-8">
+            <Image
+              src="/logos/mark-logo.png"
+              alt=""
+              fill
+              priority
+              sizes="32px"
+              className="object-contain transition-opacity duration-300 group-hover:opacity-85"
+            />
+          </span>
+
+          <span className="mx-1.5 h-9 w-px shrink-0 bg-black/50 min-[600px]:mx-1 min-[600px]:h-7 md:mx-2 md:h-9" />
+
+          <span className="flex min-w-0 flex-1 flex-col items-center justify-center">
+            <span
+              className="whitespace-nowrap text-[14px] font-semibold uppercase leading-none tracking-[0.04em] min-[600px]:text-[10px] md:text-[15px] lg:text-[16px] xl:text-[18px]"
+              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+            >
+              Shiv Shakti
+            </span>
+            <span className="mt-1 flex w-full items-center justify-center gap-1 min-[600px]:mt-0.5 min-[600px]:gap-0.5 md:mt-1 md:gap-1">
+              <span className="h-px w-2 bg-black/45 min-[600px]:w-1 md:w-2 lg:w-3" />
+              <span className="whitespace-nowrap text-[8px] font-semibold uppercase leading-none tracking-[0.08em] min-[600px]:text-[5px] md:text-[8px] lg:text-[9px] xl:text-[10px]">
+                Premium Wear
+              </span>
+              <span className="h-px w-2 bg-black/45 min-[600px]:w-1 md:w-2 lg:w-3" />
+            </span>
+          </span>
+        </span>
+      </Link>
+    );
+  }
+
   const logoSrc = isMarkOnly
     ? "/logos/mark-logo.png"
-    : isFooter
-      ? "/logos/footer-logo.png"
-      : "/logos/nav-logo.png";
+    : "/logos/footer-logo.png";
 
   return (
     <Link
@@ -39,24 +79,13 @@ export default function BrandLogo({
           src={logoSrc}
           alt={isMarkOnly ? "Shiv Shakti icon" : "Shiv Shakti Premium Wear"}
           fill
-          priority={variant === "nav"}
           sizes={
             isMarkOnly
               ? "32px"
-              : isFooter
-                ? "(max-width: 768px) 150px, 178px"
-                : "(max-width: 640px) 128px, (max-width: 1024px) 146px, 188px"
+              : "(max-width: 768px) 150px, 178px"
           }
           className="object-contain"
         />
-        {variant === "nav" ? (
-          <span
-            aria-hidden="true"
-            className="absolute left-[36%] right-0 top-[52%] flex h-[25%] items-center justify-center bg-white text-[7px] font-semibold uppercase tracking-[0.12em] text-black md:text-[8px]"
-          >
-            Premium Wear
-          </span>
-        ) : null}
       </span>
     </Link>
   );
