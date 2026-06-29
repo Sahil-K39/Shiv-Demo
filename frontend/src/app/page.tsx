@@ -77,32 +77,32 @@ export default function Home() {
       </div>
 
       <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-black mt-[1px] border-b border-black">
-        <Link href="/shop/shakti" className="relative aspect-square bg-white group block overflow-hidden">
-          <div className="relative h-full w-full">
-            <Image
-              src="/final-products/go01/go01-01.png"
-              alt="Shakti" 
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
-            />
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <h2 className="text-[50px] md:text-[70px] text-white uppercase tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHAKTI</h2>
-          </div>
-        </Link>
         <Link href="/shop/shiva" className="relative aspect-square bg-white group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
               src="/final-products/go44/go44-01.png"
-              alt="Shiva" 
+              alt="Shiva"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
             />
           </div>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <h2 className="text-[50px] md:text-[70px] text-white uppercase tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHIVA</h2>
+          <div className="pointer-events-none absolute inset-x-0 top-[8%] flex justify-center md:top-[10%]">
+            <h2 className="text-[50px] md:text-[70px] text-white uppercase leading-none tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHIVA</h2>
+          </div>
+        </Link>
+        <Link href="/shop/shakti" className="relative aspect-square bg-white group block overflow-hidden">
+          <div className="relative h-full w-full">
+            <Image
+              src="/final-products/go01/go01-01.png"
+              alt="Shakti"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105 group-hover:grayscale-0"
+            />
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 top-[8%] flex justify-center md:top-[10%]">
+            <h2 className="text-[50px] md:text-[70px] text-white uppercase leading-none tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHAKTI</h2>
           </div>
         </Link>
       </section>

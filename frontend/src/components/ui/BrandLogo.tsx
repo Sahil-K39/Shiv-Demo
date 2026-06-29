@@ -49,6 +49,14 @@ export default function BrandLogo({
           }
           className="object-contain"
         />
+        {variant === "nav" ? (
+          <span
+            aria-hidden="true"
+            className="absolute left-[36%] right-0 top-[52%] flex h-[25%] items-center justify-center bg-white text-[7px] font-semibold uppercase tracking-[0.12em] text-black md:text-[8px]"
+          >
+            Premium Wear
+          </span>
+        ) : null}
       </span>
     </Link>
   );
