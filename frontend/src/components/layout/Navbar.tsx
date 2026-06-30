@@ -42,11 +42,11 @@ export default function Navbar() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between gap-2 border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl min-[600px]:px-2 md:gap-3 md:px-6 lg:px-10"
+        className="fixed top-0 z-50 flex h-[80px] w-full items-center justify-between gap-2 border-b border-black/10 bg-white/[0.88] px-4 backdrop-blur-xl md:gap-3 md:px-6 lg:px-10"
       >
         <BrandLogo className="nav-brand" />
 
-        <div className="desktop-nav-links hidden h-full min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.08em] min-[600px]:flex md:gap-3 md:text-[13px] md:tracking-[0.09em] lg:gap-4 lg:text-[14px] xl:gap-5 xl:text-[15px]">
+        <div className="desktop-nav-links hidden h-full min-w-0 flex-1 items-center justify-center gap-2 whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.08em] md:flex md:gap-3 md:text-[13px] md:tracking-[0.09em] lg:gap-4 lg:text-[14px] xl:gap-5 xl:text-[15px]">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
@@ -117,7 +117,7 @@ export default function Navbar() {
             type="button"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
-            className="mobile-menu-trigger icon-button min-[600px]:hidden"
+            className="mobile-menu-trigger icon-button md:hidden"
             onClick={() => setIsMenuOpen((value) => !value)}
           >
             {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -128,7 +128,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="mobile-menu-panel fixed left-0 right-0 top-[80px] z-40 border-b border-black bg-white px-4 py-5 min-[600px]:hidden"
+            className="mobile-menu-panel fixed left-0 right-0 top-[80px] z-40 border-b border-black bg-white px-4 py-5 md:hidden"
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}

@@ -149,13 +149,6 @@
     color: #000000;
   }
 
-  @media (min-width: 600px) and (max-width: 767px) {
-    .nav-brand > span {
-      width: 96px !important;
-      height: 44px !important;
-    }
-  }
-
   .media-reveal {
     clip-path: inset(0 0 0 0);
     transform-origin: center;
