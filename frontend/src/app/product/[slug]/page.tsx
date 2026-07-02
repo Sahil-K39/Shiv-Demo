@@ -116,7 +116,7 @@ export default function ProductDetail() {
   const categoryHref = `/shop/${product.category?.toLowerCase() || "shakti"}`;
 
   return (
-    <main className="min-h-screen bg-white text-black px-4 pb-28 pt-24 sm:px-6 md:px-10 md:pb-24 md:pt-28 xl:px-14">
+    <main className="min-h-screen bg-white text-black px-4 pb-28 pt-6 sm:px-6 md:px-10 md:pb-24 md:pt-10 xl:px-14">
       <div className="mx-auto grid w-full max-w-[1680px] gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(400px,0.82fr)] lg:gap-14 xl:gap-20">
         <motion.section
           aria-label={`${product.name} product gallery`}

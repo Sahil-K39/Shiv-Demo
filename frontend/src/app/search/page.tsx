@@ -40,7 +40,7 @@ export default function Search() {
   return (
     <div className="flex min-h-[80vh] w-full flex-col items-center bg-white">
       <motion.div
-        className="w-full max-w-3xl px-6 pb-14 pt-24 md:px-10 md:pb-20 md:pt-32"
+        className="w-full max-w-3xl px-6 pb-14 pt-10 md:px-10 md:pb-20 md:pt-14"
         initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
