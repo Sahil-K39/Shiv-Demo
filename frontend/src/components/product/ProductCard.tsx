@@ -54,7 +54,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     >
       {/* Image container — portrait 3:4 ratio, borderless, clean */}
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-[#1a1a1a]"
+        className="relative aspect-[3/4] overflow-hidden bg-[#f0ede8]"
         onClick={() => router.push(`/product/${product.slug}`)}
       >
         <Image
@@ -96,8 +96,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         {/* Out of stock overlay */}
         {!product.in_stock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/60">
+          <div className="absolute inset-0 flex items-center justify-center bg-white/80">
+            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-black">
               Sold out
             </span>
           </div>
@@ -116,10 +116,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       {/* Product info — clean, minimal, below the image */}
       <Link href={`/product/${product.slug}`} className="block">
         <div className="mt-4 space-y-1.5 px-0.5">
-          <h3 className="text-[13px] font-light uppercase tracking-[0.06em] text-white line-clamp-1 sm:text-[14px]">
+          <h3 className="text-[13px] font-normal uppercase tracking-[0.06em] text-black line-clamp-1 sm:text-[14px]">
             {product.name}
           </h3>
-          <p className="text-[13px] tracking-[0.04em] text-gray-400 sm:text-[14px]">
+          <p className="text-[13px] tracking-[0.04em] text-gray-600 sm:text-[14px]">
             {formatPriceINR(product.price)}
           </p>
         </div>

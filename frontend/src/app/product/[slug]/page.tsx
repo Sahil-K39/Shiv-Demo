@@ -116,7 +116,7 @@ export default function ProductDetail() {
   const categoryHref = `/shop/${product.category?.toLowerCase() || "shakti"}`;
 
   return (
-    <main className="min-h-screen bg-[#141414] text-white px-4 pb-28 pt-24 sm:px-6 md:px-10 md:pb-24 md:pt-28 xl:px-14">
+    <main className="min-h-screen bg-[#fbfaf7] text-black px-4 pb-28 pt-24 sm:px-6 md:px-10 md:pb-24 md:pt-28 xl:px-14">
       <div className="mx-auto grid w-full max-w-[1680px] gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(400px,0.82fr)] lg:gap-14 xl:gap-20">
         <motion.section
           aria-label={`${product.name} product gallery`}
@@ -130,7 +130,7 @@ export default function ProductDetail() {
             {images.map((img, idx) => (
               <div
                 key={`${img}-${idx}`}
-                className="relative aspect-[3/4] w-full overflow-hidden bg-[#1a1a1a]"
+                className="relative aspect-[3/4] w-full overflow-hidden bg-[#f0ede8]"
               >
                 <Image
                   src={img}
@@ -158,9 +158,9 @@ export default function ProductDetail() {
                     onClick={() => setCurrentImageIdx(idx)}
                     aria-label={`View image ${idx + 1} of ${images.length}`}
                     aria-pressed={idx === currentImageIdx}
-                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-[#1a1a1a] transition-colors md:w-full ${
+                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-[#f0ede8] transition-colors md:w-full ${
                       idx === currentImageIdx
-                        ? "border border-white"
+                        ? "border border-black"
                         : "opacity-60 hover:opacity-100"
                     }`}
                   >
@@ -177,7 +177,7 @@ export default function ProductDetail() {
             )}
 
             <div
-              className={`relative order-1 aspect-[3/4] overflow-hidden bg-[#1a1a1a] md:order-2 md:min-h-[580px] ${
+              className={`relative order-1 aspect-[3/4] overflow-hidden bg-[#f0ede8] md:order-2 md:min-h-[580px] ${
                 images.length === 1 ? "md:col-span-2" : ""
               }`}
             >
@@ -204,10 +204,10 @@ export default function ProductDetail() {
                 </motion.div>
               </AnimatePresence>
 
-              <div className="absolute left-4 top-4 bg-[#1a1a1a]/90 border border-white/20 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-white">
+              <div className="absolute left-4 top-4 bg-white/90 border border-black/20 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black font-medium">
                 Wholesale
               </div>
-              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-[9px] uppercase tracking-[0.2em] text-white/70">
+              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-[9px] uppercase tracking-[0.2em] text-black/70 font-medium">
                 <span>{product.collection || "SS26"}</span>
                 <span>
                   {String(currentImageIdx + 1).padStart(2, "0")} /{" "}
@@ -228,48 +228,48 @@ export default function ProductDetail() {
           <header>
             <Link
               href={categoryHref}
-              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-white"
+              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gray-600 transition-colors hover:text-black font-medium"
             >
               <span>{product.category} collection</span>
               <ArrowRightIcon className="h-3.5 w-3.5" />
             </Link>
 
-            <p className="mt-10 text-[10px] uppercase tracking-[0.28em] text-white/50">
+            <p className="mt-10 text-[10px] uppercase tracking-[0.28em] text-gray-500 font-medium">
               {product.collection || "SS26"} / wholesale look
             </p>
-            <h1 className="mt-4 max-w-[720px] text-[38px] font-light uppercase leading-[1.02] tracking-[0.025em] text-white md:text-[48px] xl:text-[56px]">
+            <h1 className="mt-4 max-w-[720px] text-[38px] font-light uppercase leading-[1.02] tracking-[0.025em] text-black md:text-[48px] xl:text-[56px]">
               {product.name}
             </h1>
 
-            <div className="mt-8 flex flex-wrap items-end justify-between gap-5 border-y border-white/10 py-5">
+            <div className="mt-8 flex flex-wrap items-end justify-between gap-5 border-y border-black/10 py-5">
               <div>
-                <p className="text-[9px] uppercase tracking-[0.22em] text-white/50">
+                <p className="text-[9px] uppercase tracking-[0.22em] text-gray-500 font-medium">
                   Wholesale unit
                 </p>
-                <p className="mt-1 text-[24px] font-light tracking-[0.06em] text-white md:text-[28px]">
+                <p className="mt-1 text-[24px] font-light tracking-[0.06em] text-black md:text-[28px]">
                   {formatPriceINR(product.price)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-[9px] uppercase tracking-[0.22em] text-white/50">
+                <p className="text-[9px] uppercase tracking-[0.22em] text-gray-500 font-medium">
                   Minimum order
                 </p>
-                <p className="mt-2 text-[12px] uppercase tracking-[0.16em] text-white">
+                <p className="mt-2 text-[12px] uppercase tracking-[0.16em] text-black font-medium">
                   {MIN_WHOLESALE_QUANTITY} units per style
                 </p>
               </div>
             </div>
           </header>
 
-          <p className="max-w-[680px] text-[16px] leading-[1.9] tracking-[0.02em] text-white/70 md:text-[17px]">
+          <p className="max-w-[680px] text-[16px] leading-[1.9] tracking-[0.02em] text-gray-600 md:text-[17px]">
             {product.description}
           </p>
 
-          <div className="space-y-8 border-t border-white/10 pt-8">
+          <div className="space-y-8 border-t border-black/10 pt-8">
             {colors.length > 0 && (
               <fieldset className="space-y-4">
-                <legend className="text-[10px] uppercase tracking-[0.22em] text-white/60">
-                  Colour / <span className="text-white font-medium">{selectedColor}</span>
+                <legend className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
+                  Colour / <span className="text-black font-semibold">{selectedColor}</span>
                 </legend>
                 <div className="flex flex-wrap gap-3">
                   {colors.map((color) => (
@@ -280,13 +280,13 @@ export default function ProductDetail() {
                       aria-pressed={selectedColor === color}
                       className={`flex h-11 items-center gap-2.5 border px-3 text-[10px] uppercase tracking-[0.14em] transition-colors ${
                         selectedColor === color
-                          ? "border-white bg-white text-black font-semibold"
-                          : "border-white/20 text-white/70 hover:border-white hover:text-white"
+                          ? "border-black bg-black text-white font-semibold"
+                          : "border-black/20 text-gray-600 hover:border-black hover:text-black"
                       }`}
                       aria-label={`Select ${color}`}
                     >
                       <span
-                        className="h-4 w-4 border border-white/20"
+                        className="h-4 w-4 border border-black/20"
                         style={{ backgroundColor: getColorSwatch(color) }}
                       />
                       <span>{color}</span>
@@ -298,10 +298,10 @@ export default function ProductDetail() {
 
             {sizes.length > 0 && (
               <fieldset className="space-y-4">
-                <legend className="text-[10px] uppercase tracking-[0.22em] text-white/60">
+                <legend className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
                   Stretch-fit size
                 </legend>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-white/40">
+                <p className="text-[9px] uppercase tracking-[0.16em] text-gray-400 font-medium">
                   Two flexible size bands
                 </p>
                 <div className="grid max-w-[420px] grid-cols-2 gap-3">
@@ -313,8 +313,8 @@ export default function ProductDetail() {
                       aria-pressed={selectedSize === size}
                       className={`flex h-14 items-center justify-center border px-4 text-[12px] uppercase tracking-[0.14em] transition-colors ${
                         selectedSize === size
-                          ? "border-white bg-white text-black font-semibold"
-                          : "border-white/20 text-white/70 hover:border-white hover:text-white"
+                          ? "border-black bg-black text-white font-semibold"
+                          : "border-black/20 text-gray-600 hover:border-black hover:text-black"
                       }`}
                     >
                       {size}
@@ -325,32 +325,32 @@ export default function ProductDetail() {
             )}
           </div>
 
-          <div className="space-y-5 bg-[#1a1a1a] border border-white/10 p-5 md:p-6">
+          <div className="space-y-5 bg-[#f0ede8] border border-black/10 p-5 md:p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-[10px] uppercase tracking-[0.22em] text-white/60">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
                   Wholesale quantity
                 </p>
-                <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-white">
+                <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-black font-semibold">
                   Build your enquiry pack
                 </p>
               </div>
-              <div className="flex items-center border border-white/20">
+              <div className="flex items-center border border-black/20 bg-white">
                 <button
                   type="button"
                   onClick={() => setQuantity((value) => Math.max(MIN_WHOLESALE_QUANTITY, value - 1))}
-                  className="flex h-12 w-12 items-center justify-center text-white/70 transition-colors hover:bg-white hover:text-black"
+                  className="flex h-12 w-12 items-center justify-center text-gray-600 transition-colors hover:bg-black hover:text-white"
                   aria-label="Decrease wholesale quantity"
                 >
                   <MinusIcon className="h-4 w-4" />
                 </button>
-                <span className="w-16 text-center text-[14px] tracking-[0.12em] text-white">
+                <span className="w-16 text-center text-[14px] tracking-[0.12em] text-black font-semibold">
                   {quantity}
                 </span>
                 <button
                   type="button"
                   onClick={() => setQuantity((value) => Math.min(500, value + 1))}
-                  className="flex h-12 w-12 items-center justify-center text-white/70 transition-colors hover:bg-white hover:text-black"
+                  className="flex h-12 w-12 items-center justify-center text-gray-600 transition-colors hover:bg-black hover:text-white"
                   aria-label="Increase wholesale quantity"
                 >
                   <PlusIcon className="h-4 w-4" />
@@ -366,8 +366,8 @@ export default function ProductDetail() {
                   onClick={() => setQuantity(packSize)}
                   className={`h-11 border text-[10px] uppercase tracking-[0.16em] transition-colors ${
                     quantity === packSize
-                      ? "border-white bg-white text-black font-semibold"
-                      : "border-white/20 bg-[#141414] text-white/60 hover:border-white hover:text-white"
+                      ? "border-black bg-black text-white font-semibold"
+                      : "border-black/20 bg-white text-gray-600 hover:border-black hover:text-black"
                   }`}
                   aria-label={`Set wholesale quantity to ${packSize}`}
                   aria-pressed={quantity === packSize}
@@ -377,11 +377,11 @@ export default function ProductDetail() {
               ))}
             </div>
 
-            <div className="flex items-center justify-between border-t border-white/10 pt-5">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-white/60">
+            <div className="flex items-center justify-between border-t border-black/10 pt-5">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-medium">
                 Estimated line total
               </span>
-              <span className="text-[20px] font-light tracking-[0.06em] text-white">
+              <span className="text-[20px] font-light tracking-[0.06em] text-black">
                 {formatPriceINR(wholesaleSubtotal)}
               </span>
             </div>
@@ -394,8 +394,8 @@ export default function ProductDetail() {
             whileTap={{ scale: product.in_stock ? 0.99 : 1 }}
             className={`group flex min-h-16 w-full items-center justify-center gap-4 border px-5 text-[11px] uppercase tracking-[0.2em] transition-colors ${
               product.in_stock
-                ? "border-white bg-white text-black font-semibold hover:bg-transparent hover:text-white"
-                : "cursor-not-allowed border-white/15 text-white/35"
+                ? "border-black bg-black text-white font-semibold hover:bg-transparent hover:text-black"
+                : "cursor-not-allowed border-black/15 text-black/35"
             }`}
           >
             {isAdding ? (
@@ -414,19 +414,19 @@ export default function ProductDetail() {
             <p
               role="status"
               aria-live="polite"
-              className="border-l border-white/60 pl-4 text-[10px] uppercase leading-relaxed tracking-[0.14em] text-white/70"
+              className="border-l border-black/60 pl-4 text-[10px] uppercase leading-relaxed tracking-[0.14em] text-gray-600"
             >
               {addNotice}{" "}
-              <Link href="/login" className="underline underline-offset-4 transition-colors hover:text-white">
+              <Link href="/login" className="underline underline-offset-4 transition-colors hover:text-black font-medium">
                 Log in
               </Link>
             </p>
           )}
 
-          <ul className="grid gap-4 border-t border-white/10 pt-7 text-[9px] uppercase leading-relaxed tracking-[0.15em] text-white/60 sm:grid-cols-3">
+          <ul className="grid gap-4 border-t border-black/10 pt-7 text-[9px] uppercase leading-relaxed tracking-[0.15em] text-gray-600 sm:grid-cols-3">
             {["WHOLESALE ENQUIRY REVIEW", "PAYMENT METHOD SHARED AFTER APPROVAL", "BULK SHIPPING QUOTED AFTER REVIEW"].map((item) => (
               <li key={item} className="flex items-start gap-2.5">
-                <CheckIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" />
+                <CheckIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-black" />
                 <span>{item}</span>
               </li>
             ))}
@@ -436,19 +436,19 @@ export default function ProductDetail() {
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-white/10 bg-[#141414]/95 backdrop-blur-md p-4 md:hidden">
+      <div className="fixed bottom-0 inset-x-0 z-40 border-t border-black/10 bg-white/95 backdrop-blur-md p-4 md:hidden">
         <button
           type="button"
           onClick={handleAddToCart}
           disabled={!product.in_stock || isAdding}
           className={`flex w-full min-h-[52px] items-center justify-center gap-3 text-[11px] uppercase tracking-[0.18em] transition-colors ${
             product.in_stock
-              ? "bg-white text-black font-semibold active:bg-white/85"
-              : "bg-white/10 text-white/35 cursor-not-allowed"
+              ? "bg-black text-white font-semibold active:bg-black/85"
+              : "bg-black/10 text-black/35 cursor-not-allowed"
           }`}
         >
           {isAdding ? (
-            <span className="h-4 w-4 animate-spin border border-black/40 border-t-black" />
+            <span className="h-4 w-4 animate-spin border border-white/40 border-t-white" />
           ) : product.in_stock ? (
             <>
               <span>Add to enquiry \u2014 {formatPriceINR(product.price * quantity)}</span>

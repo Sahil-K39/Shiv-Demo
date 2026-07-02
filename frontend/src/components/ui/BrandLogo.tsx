@@ -20,7 +20,7 @@ export default function BrandLogo({
       <Link
         href={href}
         aria-label="Shiv Shakti Project home"
-        className={`group inline-flex shrink-0 items-center text-white ${className}`}
+        className={`group inline-flex shrink-0 items-center text-black ${className}`}
       >
         <span className="relative block h-[36px] w-[129px] shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-85 sm:h-[40px] sm:w-[143px] md:h-[52px] md:w-[186px] lg:h-[58px] lg:w-[207px] xl:h-[64px] xl:w-[228px]">
           <Image
@@ -29,7 +29,7 @@ export default function BrandLogo({
             fill
             priority
             sizes="(max-width: 640px) 129px, (max-width: 768px) 143px, (max-width: 1024px) 186px, (max-width: 1280px) 207px, 228px"
-            className="object-contain object-left brightness-0 invert"
+            className="object-contain object-left brightness-0"
           />
         </span>
       </Link>
@@ -44,7 +44,7 @@ export default function BrandLogo({
     <Link
       href={href}
       aria-label="Shiv Shakti Project home"
-      className={`group inline-flex shrink-0 items-center text-white ${className}`}
+      className={`group inline-flex shrink-0 items-center text-black ${className}`}
     >
       <span
         className={`relative block shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-90 ${
@@ -64,7 +64,7 @@ export default function BrandLogo({
               ? "32px"
               : "(max-width: 768px) 150px, 178px"
           }
-          className="object-contain brightness-0 invert"
+          className="object-contain brightness-0"
         />
       </span>
     </Link>

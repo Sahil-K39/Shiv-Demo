@@ -214,19 +214,19 @@ export default function FabricSellingPage() {
         </div>
       </section>
 
-      <section className="border-y border-black bg-black px-6 py-16 text-white md:px-10">
+      <section className="border-y border-black/10 bg-[#f0ede8] px-6 py-16 text-black md:px-10">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-4 text-[12px] uppercase tracking-[0.28em] text-white/45">
+            <p className="mb-4 text-[12px] uppercase tracking-[0.28em] text-gray-500 font-medium">
               Quote Process
             </p>
-            <h2 className="max-w-3xl text-[32px] font-light uppercase leading-tight md:text-[54px]">
+            <h2 className="max-w-3xl text-[32px] font-light uppercase leading-tight text-black md:text-[54px]">
               Send fabric type, meter requirement, color, and delivery city.
             </h2>
           </div>
           <Link
             href="#fabric-quote"
-            className="inline-flex min-h-[54px] items-center justify-center border border-white px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
+            className="inline-flex min-h-[54px] items-center justify-center border border-black px-8 text-[11px] uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white font-medium"
           >
             Start Enquiry
           </Link>

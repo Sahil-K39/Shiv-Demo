@@ -7,7 +7,7 @@ import { ArrowRightIcon } from "@/components/ui/Icons";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-20 w-full overflow-hidden border-t border-white/10 bg-[#111111] px-6 py-16 text-white md:px-10">
+    <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-[#fbfaf7] px-6 py-16 text-black md:px-10">
       <Image
         src="/logos/logo4.webp"
         alt=""
@@ -15,7 +15,7 @@ export default function Footer() {
         width={760}
         height={560}
         loading="lazy"
-        className="pointer-events-none absolute -bottom-20 -right-20 h-[420px] w-[560px] object-cover opacity-[0.04] md:h-[560px] md:w-[760px]"
+        className="pointer-events-none absolute -bottom-20 -right-20 h-[420px] w-[560px] object-cover opacity-[0.06] md:h-[560px] md:w-[760px]"
       />
 
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
@@ -27,34 +27,34 @@ export default function Footer() {
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-white uppercase mb-6">Collections</h4>
-          <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-400 uppercase">
-            <li><Link href="/shop/shakti" className="hover:text-white transition-colors">Shakti</Link></li>
-            <li><Link href="/shop/shiva" className="hover:text-white transition-colors">Shiva</Link></li>
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Collections</h4>
+          <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-600 uppercase">
+            <li><Link href="/shop/shakti" className="hover:text-black transition-colors">Shakti</Link></li>
+            <li><Link href="/shop/shiva" className="hover:text-black transition-colors">Shiva</Link></li>
 
-            <li><Link href="/fabric-selling" className="hover:text-white transition-colors">Fabric Selling</Link></li>
-            <li><Link href="/council" className="hover:text-white transition-colors">The Council</Link></li>
+            <li><Link href="/fabric-selling" className="hover:text-black transition-colors">Fabric Selling</Link></li>
+            <li><Link href="/council" className="hover:text-black transition-colors">The Council</Link></li>
           </ul>
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-white uppercase mb-6">Information</h4>
-          <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-400 uppercase">
-            <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping & Returns</Link></li>
-            <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-            <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Information</h4>
+          <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-600 uppercase">
+            <li><Link href="/shipping" className="hover:text-black transition-colors">Shipping & Returns</Link></li>
+            <li><Link href="/terms" className="hover:text-black transition-colors">Terms of Service</Link></li>
+            <li><Link href="/privacy" className="hover:text-black transition-colors">Privacy Policy</Link></li>
+            <li><Link href="/contact" className="hover:text-black transition-colors">Contact</Link></li>
           </ul>
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-white uppercase mb-6">Transmission</h4>
-          <p className="text-[12px] uppercase leading-loose tracking-[0.1em] text-gray-400">
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Transmission</h4>
+          <p className="text-[12px] uppercase leading-loose tracking-[0.1em] text-gray-600">
             Join the Council for early access to drops, fabric lots, and wholesale updates.
           </p>
           <Link
             href="/contact"
-            className="mt-4 flex min-h-[46px] items-center justify-between border border-white/20 px-4 text-[11px] uppercase tracking-[0.1em] text-gray-400 transition-colors hover:border-white hover:text-white"
+            className="mt-4 flex min-h-[46px] items-center justify-between border border-black/20 px-4 text-[11px] uppercase tracking-[0.1em] text-gray-600 transition-colors hover:border-black hover:text-black"
           >
             Contact Support
             <span aria-hidden="true">
@@ -65,7 +65,7 @@ export default function Footer() {
 
       </div>
 
-      <div className="max-w-[1400px] mx-auto mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="max-w-[1400px] mx-auto mt-16 pt-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-6">
         <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center md:text-left">
           © 2026 SHIV SHAKTI PROJECT. ALL RIGHTS RESERVED.
         </p>
