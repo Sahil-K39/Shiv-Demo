@@ -52,9 +52,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image container — portrait 3:4 ratio, borderless, clean */}
+      {/* Image container — portrait 3:4 ratio, borderless, pure white */}
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-neutral-50"
+        className="relative aspect-[3/4] overflow-hidden bg-white"
         onClick={() => router.push(`/product/${product.slug}`)}
       >
         <Image
@@ -113,13 +113,20 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         />
       )}
 
-      {/* Product info — clean, minimal, below the image */}
+      {/* Product info — Demobaza video style: bold title with rose status badge and price below */}
       <Link href={`/product/${product.slug}`} className="block">
-        <div className="mt-4 space-y-1.5 px-0.5">
-          <h3 className="text-[13px] font-normal uppercase tracking-[0.06em] text-black line-clamp-1 sm:text-[14px]">
-            {product.name}
-          </h3>
-          <p className="text-[13px] tracking-[0.04em] text-gray-600 sm:text-[14px]">
+        <div className="mt-4 space-y-1 px-0.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-black sm:text-[12px]">
+              {product.name}
+            </h3>
+            {index % 3 === 0 ? (
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">NEW</span>
+            ) : index % 4 === 0 ? (
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d946ef]">PREORDER</span>
+            ) : null}
+          </div>
+          <p className="text-[12px] font-normal tracking-[0.05em] text-black sm:text-[13px]">
             {formatPriceINR(product.price)}
           </p>
         </div>
