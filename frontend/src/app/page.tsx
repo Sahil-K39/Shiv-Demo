@@ -60,9 +60,6 @@ export default function Home() {
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all">
                   SHAKTI / WOMEN
                 </Link>
-                <Link href="/lookbook" className="hover:text-black hover:translate-x-1.5 transition-all">
-                  EDITORIAL LOOKBOOK
-                </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
                   ARMOR / CEREMONIAL
                 </Link>
@@ -99,7 +96,7 @@ export default function Home() {
 
           {/* Center / Right Column: Massive Widescreen Campaign Banner */}
           <div className="lg:col-span-9 flex flex-col gap-6">
-            <Link href="/lookbook" className="block group overflow-hidden bg-neutral-50 relative aspect-[16/9] sm:aspect-[21/9] w-full">
+            <Link href="/shop/shakti" className="block group overflow-hidden bg-neutral-50 relative aspect-[16/9] sm:aspect-[21/9] w-full">
               <Image
                 src="/final-products/go22/go22-01.webp"
                 alt="Shiv Shakti SS26 Campaign"
@@ -125,10 +122,10 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                href="/lookbook"
+                href="/shop/shakti"
                 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-all"
               >
-                VIEW FULL EDITORIAL &rarr;
+                EXPLORE COLLECTION &rarr;
               </Link>
             </div>
 
@@ -294,30 +291,6 @@ export default function Home() {
           </div>
 
         </div>
-      </section>
-
-      {/* Section 5: Editorial Lookbook Portal Banner */}
-      <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24">
-        <Link href="/lookbook" className="block group relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-neutral-50">
-          <Image
-            src="/final-products/go49/go49-01.webp"
-            alt="Editorial Journal"
-            fill
-            sizes="100vw"
-            className="object-cover object-center transition-transform duration-[2000ms] ease-out group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500 flex flex-col items-center justify-center text-center p-6">
-            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-[0.3em] text-white mb-2">
-              SS26 FIELD DOCUMENTATION
-            </span>
-            <h3 className="text-[32px] sm:text-[52px] md:text-[64px] font-light uppercase tracking-[0.18em] text-white">
-              THE NAMIBIAN DESERT JOURNAL
-            </h3>
-            <span className="mt-6 inline-block border border-white bg-white/10 backdrop-blur-md px-8 py-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white group-hover:bg-white group-hover:text-black transition-all">
-              EXPLORE CAMPAIGN STORIES &rarr;
-            </span>
-          </div>
-        </Link>
       </section>
     </div>
   );
