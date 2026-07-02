@@ -99,7 +99,7 @@
     width: 44px;
     height: 44px;
     border: 1px solid transparent;
-    color: rgba(255,255,255,0.65);
+    color: rgba(0,0,0,0.65);
     transition:
       color 300ms cubic-bezier(0.22,1,0.36,1),
       border-color 300ms cubic-bezier(0.22,1,0.36,1),
@@ -108,9 +108,9 @@
   }
 
   .icon-button:hover {
-    color: #ffffff;
-    border-color: rgba(255,255,255,0.15);
-    background-color: rgba(255,255,255,0.05);
+    color: #000000;
+    border-color: rgba(0,0,0,0.15);
+    background-color: rgba(0,0,0,0.05);
     transform: translateY(-1px);
   }
 
@@ -119,12 +119,12 @@
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    color: rgba(255,255,255,0.65);
+    color: rgba(0,0,0,0.65);
     transition: color 300ms cubic-bezier(0.22,1,0.36,1);
   }
 
   .nav-link:hover {
-    color: #ffffff;
+    color: #000000;
   }
 
   .media-reveal {
