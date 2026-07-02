@@ -40,8 +40,8 @@
 
   body {
     font-family: var(--font-body);
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #141414;
+    color: #f5f5f5;
     overflow-x: hidden;
   }
 
@@ -54,48 +54,26 @@
   a:focus-visible,
   button:focus-visible,
   input:focus-visible {
-    outline: 1px solid #000000;
+    outline: 1px solid #f5f5f5;
     outline-offset: 4px;
   }
 
   
+  /* Hide scrollbar for Chrome, Safari and Opera */
   ::-webkit-scrollbar { display: none; }
   * { scrollbar-width: none; }
 
   
+  /* Smooth selection */
   ::selection {
-    background-color: white;
-    color: black;
+    background-color: #f5f5f5;
+    color: #141414;
   }
 }
 
 
 @layer components {
-  .cursor-dot {
-    width: 6px;
-    height: 6px;
-    background: white;
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: difference;
-    transition: transform 0.1s;
-  }
 
-  .cursor-outline {
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255,255,255,0.8);
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s ease, height 0.2s ease;
-    mix-blend-mode: difference;
-  }
 
   
   .noise-overlay {
@@ -110,7 +88,7 @@
 
   
   .glow-line {
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.18), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
     height: 1px;
   }
 
@@ -121,7 +99,7 @@
     width: 44px;
     height: 44px;
     border: 1px solid transparent;
-    color: rgba(0,0,0,0.58);
+    color: rgba(255,255,255,0.65);
     transition:
       color 300ms cubic-bezier(0.22,1,0.36,1),
       border-color 300ms cubic-bezier(0.22,1,0.36,1),
@@ -130,9 +108,9 @@
   }
 
   .icon-button:hover {
-    color: #000000;
-    border-color: rgba(0,0,0,0.12);
-    background-color: rgba(0,0,0,0.03);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.15);
+    background-color: rgba(255,255,255,0.05);
     transform: translateY(-1px);
   }
 
@@ -141,12 +119,12 @@
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    color: rgba(0,0,0,0.56);
+    color: rgba(255,255,255,0.65);
     transition: color 300ms cubic-bezier(0.22,1,0.36,1);
   }
 
   .nav-link:hover {
-    color: #000000;
+    color: #ffffff;
   }
 
   .media-reveal {

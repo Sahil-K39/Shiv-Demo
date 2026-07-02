@@ -34,7 +34,7 @@ export default function Home() {
           style={{ y: heroY }}
         >
           <Image
-            src="/final-products/go22/go22-01.png"
+            src="/final-products/go22/go22-01.webp"
             alt="Shiv Shakti SS26 editorial look" 
             fill
             priority
@@ -68,6 +68,22 @@ export default function Home() {
             </motion.div>
           </Link>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.8 }}
+        >
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/50">Scroll</span>
+          <motion.div
+            className="h-8 w-px bg-white/40"
+            animate={{ scaleY: [1, 0.4, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            style={{ transformOrigin: "top" }}
+          />
+        </motion.div>
       </section>
 
       <div className="w-full h-[120px] bg-black flex items-center overflow-hidden border-b border-black select-none">
@@ -77,10 +93,10 @@ export default function Home() {
       </div>
 
       <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-black mt-[1px] border-b border-black">
-        <Link href="/shop/shiva" className="relative aspect-square bg-white group block overflow-hidden">
+        <Link href="/shop/shiva" className="relative aspect-square bg-[#1a1a1a] group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/final-products/go44/go44-01.png"
+              src="/final-products/go44/go44-01.webp"
               alt="Shiva"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -91,10 +107,10 @@ export default function Home() {
             <h2 className="text-[50px] md:text-[70px] text-white uppercase leading-none tracking-[0.2em] mix-blend-difference drop-shadow-2xl font-light">SHIVA</h2>
           </div>
         </Link>
-        <Link href="/shop/shakti" className="relative aspect-square bg-white group block overflow-hidden">
+        <Link href="/shop/shakti" className="relative aspect-square bg-[#1a1a1a] group block overflow-hidden">
           <div className="relative h-full w-full">
             <Image
-              src="/final-products/go01/go01-01.png"
+              src="/final-products/go01/go01-01.webp"
               alt="Shakti"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -107,17 +123,17 @@ export default function Home() {
         </Link>
       </section>
 
-      <section className="w-full py-20 flex flex-col gap-10 border-b border-black">
+      <section className="w-full py-20 flex flex-col gap-10 border-b border-white/10 bg-[#141414]">
         <div className="w-full px-10 text-center">
-          <h3 className="text-2xl text-black uppercase tracking-[0.1em]">WHOLESALE READY STYLES</h3>
+          <h3 className="text-2xl text-white font-light uppercase tracking-[0.1em]">WHOLESALE READY STYLES</h3>
         </div>
 
         {isLoading ? (
           <div className="flex justify-center py-32">
-            <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />
+            <div className="w-6 h-6 border border-white/30 border-t-white animate-spin" />
           </div>
         ) : (
-          <div className="product-catalogue-grid grid w-full grid-cols-1 gap-10 bg-white px-6 min-[600px]:grid-cols-2 md:px-10 lg:grid-cols-4">
+          <div className="product-catalogue-grid grid w-full grid-cols-1 gap-10 bg-transparent px-6 min-[600px]:grid-cols-2 md:px-10 lg:grid-cols-4">
             {products.slice(0, 4).map((product, i) => (
               <ProductCard key={product.slug} product={product} index={i} />
             ))}
@@ -125,9 +141,9 @@ export default function Home() {
         )}
 
         <div className="w-full flex justify-center mt-10">
-          <Link href="/shop/shakti" className="group relative inline-block overflow-hidden border border-black bg-white px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-black lg:text-[11px] lg:tracking-[0.2em]">
-            <span className="relative z-10 group-hover:text-white transition-colors duration-500">VIEW WHOLESALE CATALOGUE</span>
-            <div className="absolute inset-0 bg-black translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+          <Link href="/shop/shakti" className="group relative inline-block overflow-hidden border border-white bg-transparent px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-white lg:text-[11px] lg:tracking-[0.2em]">
+            <span className="relative z-10 group-hover:text-black transition-colors duration-500 font-medium">VIEW WHOLESALE CATALOGUE</span>
+            <div className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
           </Link>
         </div>
       </section>
