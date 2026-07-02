@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-// Fixed hero/section images to avoid hydration mismatch from Math.random()
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
@@ -13,6 +12,7 @@ import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"all" | "shiva" | "shakti">("all");
 
   useEffect(() => {
     getAllProducts()
@@ -23,178 +23,302 @@ export default function Home() {
       .catch(() => setIsLoading(false));
   }, []);
 
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 1000], [0, 300]);
+  const filteredProducts = products.filter((p) => {
+    if (activeTab === "all") return true;
+    return p.category.toLowerCase() === activeTab;
+  });
 
   return (
-    <>
-      <section className="relative min-h-[calc(100svh-80px)] w-full bg-white text-black border-b border-black/10 overflow-hidden px-6 py-10 md:px-10 lg:py-16">
-        <div className="mx-auto w-full max-w-[1700px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+    <div className="w-full bg-white text-black min-h-screen">
+      {/* Section 1: Demobaza Widescreen Editorial Split Hero */}
+      <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-8 lg:py-12 border-b border-black/10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* Left Side: Demobaza Editorial Menu & Model */}
-          <div className="lg:col-span-5 flex flex-col justify-between h-full pt-2">
+          {/* Left Column: Demobaza Vertical Category Menu & Wholesale Specs */}
+          <div className="lg:col-span-3 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-black/10 pb-8 lg:pb-0 lg:pr-8">
             <div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.2em] text-black mb-6">
-                SS26 WHOLESALE BUYING ROOM
-              </p>
-              <h1 className="text-[32px] sm:text-[42px] md:text-[54px] font-normal uppercase leading-[1.05] text-black tracking-[0.05em] mb-8">
-                SHIV SHAKTI
-              </h1>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-black">
+                  CATEGORIES
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[#e11d48] bg-[#e11d48]/10 px-2 py-0.5">
+                  SS26 LIVE
+                </span>
+              </div>
 
-              <div className="flex flex-row gap-8 sm:gap-12 items-start my-6">
-                {/* Demobaza style vertical list */}
-                <div className="flex flex-col gap-2.5 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.18em] text-gray-800">
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all">
-                    *NEW STUFF
-                  </Link>
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all">
-                    WHOLESALE
-                  </Link>
-                  <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1 transition-all">
-                    SHIVA / MEN
-                  </Link>
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all">
-                    SHAKTI / WOMEN
-                  </Link>
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    ARMOR / CEREMONIAL
-                  </Link>
-                  <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    DECONSTRUCTED
-                  </Link>
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    KNITS / HEAVY
-                  </Link>
-                  <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    KNITS / LIGHT
-                  </Link>
-                  <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    ROBES & COATS
-                  </Link>
-                  <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1 transition-all text-gray-500">
-                    TROUSERS
-                  </Link>
-                </div>
-
-                {/* Left Side Model Photo */}
-                <div className="relative aspect-[3/4] w-[180px] sm:w-[240px] md:w-[280px] overflow-hidden bg-white shrink-0">
-                  <Image
-                    src="/final-products/go44/go44-01.webp"
-                    alt="Shiv Shakti Look"
-                    fill
-                    sizes="(max-width: 768px) 50vw, 30vw"
-                    className="object-contain object-center"
-                  />
-                </div>
+              {/* Signature Demobaza Vertical Menu */}
+              <div className="flex flex-col gap-3 text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.18em] text-gray-800">
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-[#e11d48]">
+                  *NEW STUFF
+                </Link>
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all">
+                  WHOLESALE BUYING
+                </Link>
+                <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all">
+                  SHIVA / MEN
+                </Link>
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all">
+                  SHAKTI / WOMEN
+                </Link>
+                <Link href="/lookbook" className="hover:text-black hover:translate-x-1.5 transition-all">
+                  EDITORIAL LOOKBOOK
+                </Link>
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
+                  ARMOR / CEREMONIAL
+                </Link>
+                <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
+                  DECONSTRUCTED
+                </Link>
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
+                  KNITS / HEAVY
+                </Link>
+                <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
+                  KNITS / LIGHT
+                </Link>
+                <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
+                  ROBES & COATS
+                </Link>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-black/10">
-              <Link href="/shop/shakti" className="inline-block bg-black text-white px-8 py-4 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors">
-                START WHOLESALE ORDER
-              </Link>
+            {/* Wholesale Info Block */}
+            <div className="mt-8 pt-6 border-t border-black/10 text-[11px] leading-relaxed uppercase tracking-[0.12em] text-gray-600 space-y-2">
+              <p className="font-bold text-black">WHOLESALE BUYING ROOM</p>
+              <p>MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE across selected sizes & colorways.</p>
+              <p>Global expedited shipping for studio & boutique partners.</p>
+              <div className="pt-2">
+                <Link
+                  href="/shop/shakti"
+                  className="inline-block bg-black text-white px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors w-full text-center"
+                >
+                  ENTER BUYING ROOM &rarr;
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Right Side: Demobaza Campaign Photo & Text */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full overflow-hidden bg-white group">
+          {/* Center / Right Column: Massive Widescreen Campaign Banner */}
+          <div className="lg:col-span-9 flex flex-col gap-6">
+            <Link href="/lookbook" className="block group overflow-hidden bg-neutral-50 relative aspect-[16/9] sm:aspect-[21/9] w-full">
               <Image
                 src="/final-products/go22/go22-01.webp"
-                alt="Shiv Shakti SS26 Campaign" 
+                alt="Shiv Shakti SS26 Campaign"
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover object-center transition-transform duration-[2000ms] group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 75vw"
+                className="object-cover object-center transition-transform duration-[2000ms] ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pointer-events-none">
-                <h2 className="text-[38px] sm:text-[56px] md:text-[68px] font-bold uppercase tracking-[0.15em] text-black drop-shadow-[0_2px_15px_rgba(255,255,255,0.9)]">
-                  SS26
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+            </Link>
+
+            {/* Clean Editorial Typography (No cheap drop shadows or glowing text) */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2 border-b border-black/10 pb-6">
+              <div>
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#e11d48] block mb-1">
+                  SS26 CAMPAIGN LAUNCH
+                </span>
+                <h2 className="text-[24px] sm:text-[34px] md:text-[42px] font-light uppercase tracking-[0.14em] text-black leading-tight">
+                  THE COUNCIL OF LIGHT
                 </h2>
-                <p className="text-[16px] sm:text-[22px] font-bold uppercase tracking-[0.25em] text-black drop-shadow-[0_2px_15px_rgba(255,255,255,0.9)]">
-                  WHOLESALE OPEN
+                <p className="text-[13px] sm:text-[14px] uppercase tracking-[0.08em] text-gray-600 mt-1 max-w-2xl">
+                  Deconstructed silhouettes, raw organic textures, and elevated frequency wearable forms.
                 </p>
               </div>
+              <Link
+                href="/lookbook"
+                className="shrink-0 text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-all"
+              >
+                VIEW FULL EDITORIAL &rarr;
+              </Link>
             </div>
 
-            <div className="flex flex-col gap-3 max-w-3xl">
-              <h3 className="text-[14px] sm:text-[16px] font-bold uppercase tracking-[0.15em] text-black">
-                DISCOVER SS26 — WHOLESALE BUYING ROOM NOW
-              </h3>
-              <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800 font-normal">
-                Step into a state of elevation with selected pieces from the SS26 COLLECTION. Inspired by the idea of awakening and inner ascent, SHIV SHAKTI explores the garment as a vessel of transformation — where structure meets lightness and form follows intention. Layered silhouettes, fluid movement and refined textures create a sense of balance, clarity and expansion — designed for your next evolution.
-              </p>
+            {/* Quick Promo Banner */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-[11px] font-semibold uppercase tracking-[0.15em] text-black pt-2">
+              <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">COLLECTION</span>
+                SS26 WHOLESALE OPEN
+              </div>
+              <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">MINIMUM ORDER</span>
+                MOQ {MIN_WHOLESALE_QUANTITY} UNITS / STYLE
+              </div>
+              <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">DISPATCH</span>
+                GLOBAL EXPRESS DELIVERY
+              </div>
             </div>
           </div>
 
         </div>
       </section>
 
-      <div className="w-full h-[100px] bg-white flex items-center overflow-hidden border-b border-black/10 select-none">
-        <div className="whitespace-nowrap px-4 text-[42px] uppercase animate-marquee md:text-[64px]" style={{ WebkitTextStroke: "1px rgba(0,0,0,0.6)", color: "transparent" }}>
-          WHOLESALE MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE. / SEND ENQUIRY FOR REVIEW, PAYMENT TERMS, AND DELIVERY PLAN. / SS26 BUYING WINDOW OPEN. / WHOLESALE MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE.
+      {/* Section 2: Minimalist Marquee Bar */}
+      <div className="w-full py-4 bg-black text-white overflow-hidden border-b border-black select-none">
+        <div className="whitespace-nowrap px-4 text-[12px] sm:text-[14px] font-medium uppercase tracking-[0.25em] animate-marquee">
+          SS26 WHOLESALE BUYING WINDOW OPEN &nbsp;&bull;&nbsp; MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE &nbsp;&bull;&nbsp; BOUTIQUE & STUDIO ENQUIRIES WELCOME &nbsp;&bull;&nbsp; RITUAL ARMOR & DECONSTRUCTED SILHOUETTES &nbsp;&bull;&nbsp; SS26 WHOLESALE BUYING WINDOW OPEN &nbsp;&bull;&nbsp; MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE
         </div>
       </div>
 
-      <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-black/10 mt-[1px] border-b border-black/10">
-        <Link href="/shop/shiva" className="relative aspect-square bg-white group block overflow-hidden">
-          <div className="relative h-full w-full">
-            <Image
-              src="/final-products/go44/go44-01.webp"
-              alt="Shiva"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105"
-            />
+      {/* Section 3: Wholesale Showroom Grid (Demobaza Floating White Cards) */}
+      <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24 border-b border-black/10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-12">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500 mb-2">
+              DIRECT FROM SHOWROOM
+            </p>
+            <h3 className="text-[28px] sm:text-[38px] font-light uppercase tracking-[0.16em] text-black">
+              FEATURED STYLES
+            </h3>
           </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-[8%] flex justify-center">
-            <span className="bg-white/95 text-black px-8 py-3 text-[28px] md:text-[36px] font-bold uppercase tracking-[0.25em] border border-black/10 shadow-md">
-              SHIVA / MEN
-            </span>
-          </div>
-        </Link>
-        <Link href="/shop/shakti" className="relative aspect-square bg-white group block overflow-hidden">
-          <div className="relative h-full w-full">
-            <Image
-              src="/final-products/go01/go01-01.webp"
-              alt="Shakti"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-top transition-all duration-[1500ms] ease-out group-hover:scale-105"
-            />
-          </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-[8%] flex justify-center">
-            <span className="bg-white/95 text-black px-8 py-3 text-[28px] md:text-[36px] font-bold uppercase tracking-[0.25em] border border-black/10 shadow-md">
-              SHAKTI / WOMEN
-            </span>
-          </div>
-        </Link>
-      </section>
 
-      <section className="w-full py-20 flex flex-col gap-10 border-b border-black/10 bg-white">
-        <div className="w-full px-10 text-center">
-          <h3 className="text-2xl text-black font-semibold uppercase tracking-[0.1em]">WHOLESALE READY STYLES</h3>
+          {/* Collection Filter Tabs */}
+          <div className="flex items-center gap-2 border border-black/10 p-1 bg-white text-[11px] font-bold uppercase tracking-[0.15em]">
+            <button
+              type="button"
+              onClick={() => setActiveTab("all")}
+              className={`px-4 py-2 transition-colors ${activeTab === "all" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
+            >
+              ALL ({products.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("shiva")}
+              className={`px-4 py-2 transition-colors ${activeTab === "shiva" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
+            >
+              SHIVA / MEN
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("shakti")}
+              className={`px-4 py-2 transition-colors ${activeTab === "shakti" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
+            >
+              SHAKTI / WOMEN
+            </button>
+          </div>
         </div>
 
         {isLoading ? (
           <div className="flex justify-center py-32">
-            <div className="w-6 h-6 border border-black/30 border-t-black animate-spin" />
+            <div className="w-8 h-8 border border-black/20 border-t-black animate-spin" />
           </div>
         ) : (
-          <div className="product-catalogue-grid grid w-full grid-cols-1 gap-10 bg-transparent px-6 min-[600px]:grid-cols-2 md:px-10 lg:grid-cols-4">
-            {products.slice(0, 4).map((product, i) => (
+          <div className="product-catalogue-grid grid w-full grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 sm:gap-y-16">
+            {filteredProducts.slice(0, 12).map((product, i) => (
               <ProductCard key={product.slug} product={product} index={i} />
             ))}
           </div>
         )}
 
-        <div className="w-full flex justify-center mt-10">
-          <Link href="/shop/shakti" className="group relative inline-block overflow-hidden border border-black bg-transparent px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-black lg:text-[11px] lg:tracking-[0.2em]">
-            <span className="relative z-10 group-hover:text-white transition-colors duration-500 font-medium">VIEW WHOLESALE CATALOGUE</span>
-            <div className="absolute inset-0 bg-black translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+        <div className="w-full flex justify-center mt-16">
+          <Link
+            href="/shop/shakti"
+            className="group relative inline-block overflow-hidden border border-black bg-black text-white px-12 py-5 text-[12px] font-bold uppercase tracking-[0.22em] transition-all hover:bg-white hover:text-black"
+          >
+            VIEW ENTIRE WHOLESALE CATALOGUE &rarr;
           </Link>
         </div>
       </section>
-    </>
+
+      {/* Section 4: Split Campaign Portals (Clean Editorial Style, Zero Boxy Overlays) */}
+      <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24 border-b border-black/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
+          
+          {/* Shiva Portal */}
+          <div className="flex flex-col group">
+            <Link href="/shop/shiva" className="block relative aspect-[3/4] w-full overflow-hidden bg-neutral-50 mb-6">
+              <Image
+                src="/final-products/go44/go44-01.webp"
+                alt="Shiva Men Collection"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-top transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+            </Link>
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e11d48]">
+                SS26 MENSWEAR
+              </span>
+              <Link href="/shop/shiva">
+                <h4 className="text-[20px] sm:text-[26px] font-bold uppercase tracking-[0.16em] text-black group-hover:underline underline-offset-4">
+                  SHIVA / MEN — DECONSTRUCTED ARMOR
+                </h4>
+              </Link>
+              <p className="text-[13px] text-gray-600 tracking-[0.04em] mt-1">
+                Explore ceremonial coats, deconstructed knitwear, and modular silhouettes designed for movement.
+              </p>
+              <div className="pt-3">
+                <Link
+                  href="/shop/shiva"
+                  className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b border-black pb-0.5 hover:text-gray-600 transition-all"
+                >
+                  EXPLORE SHIVA COLLECTION &rarr;
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Shakti Portal */}
+          <div className="flex flex-col group">
+            <Link href="/shop/shakti" className="block relative aspect-[3/4] w-full overflow-hidden bg-neutral-50 mb-6">
+              <Image
+                src="/final-products/go01/go01-01.webp"
+                alt="Shakti Women Collection"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-top transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
+            </Link>
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d946ef]">
+                SS26 WOMENSWEAR
+              </span>
+              <Link href="/shop/shakti">
+                <h4 className="text-[20px] sm:text-[26px] font-bold uppercase tracking-[0.16em] text-black group-hover:underline underline-offset-4">
+                  SHAKTI / WOMEN — SILHOUETTES OF LIGHT
+                </h4>
+              </Link>
+              <p className="text-[13px] text-gray-600 tracking-[0.04em] mt-1">
+                Fluid draping, high-frequency organic cottons, and architectural layering for the modern consciousness.
+              </p>
+              <div className="pt-3">
+                <Link
+                  href="/shop/shakti"
+                  className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b border-black pb-0.5 hover:text-gray-600 transition-all"
+                >
+                  EXPLORE SHAKTI COLLECTION &rarr;
+                </Link>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Section 5: Editorial Lookbook Portal Banner */}
+      <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24">
+        <Link href="/lookbook" className="block group relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden bg-neutral-50">
+          <Image
+            src="/final-products/go49/go49-01.webp"
+            alt="Editorial Journal"
+            fill
+            sizes="100vw"
+            className="object-cover object-center transition-transform duration-[2000ms] ease-out group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500 flex flex-col items-center justify-center text-center p-6">
+            <span className="text-[11px] sm:text-[13px] font-bold uppercase tracking-[0.3em] text-white mb-2">
+              SS26 FIELD DOCUMENTATION
+            </span>
+            <h3 className="text-[32px] sm:text-[52px] md:text-[64px] font-light uppercase tracking-[0.18em] text-white">
+              THE NAMIBIAN DESERT JOURNAL
+            </h3>
+            <span className="mt-6 inline-block border border-white bg-white/10 backdrop-blur-md px-8 py-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white group-hover:bg-white group-hover:text-black transition-all">
+              EXPLORE CAMPAIGN STORIES &rarr;
+            </span>
+          </div>
+        </Link>
+      </section>
+    </div>
   );
 }
