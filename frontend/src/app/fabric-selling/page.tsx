@@ -122,42 +122,42 @@ const services = [
 export default function FabricSellingPage() {
   return (
     <div className="bg-white text-black">
-      <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
+      <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black/10">
         <Image
           src="/fabric/fabric-007.jpg"
           alt="Fabric textures for wholesale selling"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-top"
+          className="object-cover object-top opacity-85"
         />
-        <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]" />
         <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">
           <div className="max-w-[1120px] animate-soft-reveal">
-            <p className="mb-5 text-[12px] uppercase tracking-[0.28em] text-white/70">
+            <p className="mb-5 text-[12px] uppercase tracking-[0.28em] text-black/70 font-medium">
               Fabric supply / wholesale sourcing
             </p>
-            <h1 className="max-w-[1040px] text-[44px] font-light uppercase leading-[0.95] text-white md:text-[84px] lg:text-[104px]">
+            <h1 className="max-w-[1040px] text-[44px] font-normal uppercase leading-[0.95] text-black md:text-[84px] lg:text-[104px]">
               Fabric Selling
             </h1>
-            <p className="mt-8 max-w-2xl text-[16px] uppercase leading-loose tracking-[0.12em] text-white/75">
+            <p className="mt-8 max-w-2xl text-[16px] uppercase leading-loose tracking-[0.12em] text-black/80 font-medium">
               Bulk fabrics, swatches, dye lots, and production-ready material sourcing for boutiques,
               designers, studios, and small manufacturing partners.
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="#fabric-list"
-                className="group relative inline-flex min-h-[54px] items-center justify-center gap-3 overflow-hidden border border-white px-8 text-[11px] uppercase tracking-[0.18em] text-white"
+                className="group relative inline-flex min-h-[54px] items-center justify-center gap-3 overflow-hidden border border-black bg-white px-8 text-[11px] uppercase tracking-[0.18em] text-black font-medium"
               >
-                <span className="relative z-10 transition-colors duration-500 group-hover:text-black">
+                <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
                   View Fabrics
                 </span>
-                <ArrowRightIcon className="relative z-10 h-4 w-4 transition-colors duration-500 group-hover:text-black" />
-                <span className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+                <ArrowRightIcon className="relative z-10 h-4 w-4 transition-colors duration-500 group-hover:text-white" />
+                <span className="absolute inset-0 translate-y-full bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
               </Link>
               <Link
                 href="#fabric-quote"
-                className="inline-flex min-h-[54px] items-center justify-center border border-white/35 px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:border-white"
+                className="inline-flex min-h-[54px] items-center justify-center border border-black/40 bg-transparent px-8 text-[11px] uppercase tracking-[0.18em] text-black transition-colors hover:border-black hover:bg-black hover:text-white font-medium"
               >
                 Request Fabric Quote
               </Link>
@@ -166,7 +166,7 @@ export default function FabricSellingPage() {
         </div>
       </section>
 
-      <section id="fabric-list" className="grid border-b border-black md:grid-cols-4">
+      <section id="fabric-list" className="grid border-b border-black/10 md:grid-cols-4">
         {fabrics.map((fabric) => (
           <article
             key={fabric.name}

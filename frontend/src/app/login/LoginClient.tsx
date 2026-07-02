@@ -73,7 +73,7 @@ export default function LoginClient({ initialTab }: { initialTab: LoginTab }) {
 
   return (
     <div className="w-full h-[calc(100vh-80px)] flex flex-col md:flex-row bg-white">
-      <div className="hidden md:block w-1/2 h-full bg-black relative overflow-hidden border-r border-black">
+      <div className="hidden md:block w-1/2 h-full bg-[#f0ede8] relative overflow-hidden border-r border-black/10">
         <Image
           src="/final-products/go44/go44-01.webp"
           alt="Identity" 
@@ -82,12 +82,12 @@ export default function LoginClient({ initialTab }: { initialTab: LoginTab }) {
           sizes="50vw"
           className="object-cover object-top opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent"></div>
         <div className="absolute inset-0 flex flex-col justify-end p-16">
-          <h2 className="text-white text-[40px] font-light tracking-[0.2em] uppercase leading-tight mix-blend-difference">
+          <h2 className="text-black text-[40px] font-normal tracking-[0.2em] uppercase leading-tight">
             ESTABLISH<br/>CONNECTION
           </h2>
-          <p className="text-white/40 text-[11px] tracking-[0.2em] uppercase mt-4">SECURE ENCRYPTED TRANSMISSION</p>
+          <p className="text-black/60 text-[11px] tracking-[0.2em] uppercase mt-4 font-medium">SECURE ENCRYPTED TRANSMISSION</p>
         </div>
       </div>
 
