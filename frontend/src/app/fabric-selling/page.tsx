@@ -122,46 +122,43 @@ const services = [
 export default function FabricSellingPage() {
   return (
     <div className="bg-white text-black">
-      <section className="relative flex min-h-[calc(100svh-80px)] items-end overflow-hidden border-b border-black">
-        <Image
-          src="/fabric/fabric-007.jpg"
-          alt="Fabric textures for wholesale selling"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-black/45" />
-        <div className="relative z-10 w-full px-6 pb-14 pt-28 md:px-10 md:pb-20">
-          <div className="max-w-[1120px] animate-soft-reveal">
-            <p className="mb-5 text-[12px] uppercase tracking-[0.28em] text-white/70">
-              Fabric supply / wholesale sourcing
+      <section className="relative min-h-[calc(100svh-80px)] w-full bg-white text-black border-b border-black/10 overflow-hidden px-6 py-10 md:px-10 lg:py-16 flex items-center">
+        <div className="mx-auto w-full max-w-[1700px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div className="lg:col-span-6 flex flex-col items-start justify-center">
+            <p className="mb-5 text-[12px] font-bold uppercase tracking-[0.28em] text-black">
+              FABRIC SUPPLY / WHOLESALE SOURCING
             </p>
-            <h1 className="max-w-[1040px] text-[44px] font-light uppercase leading-[0.95] text-white md:text-[84px] lg:text-[104px]">
-              Fabric Selling
+            <h1 className="text-[40px] sm:text-[54px] md:text-[68px] font-normal uppercase leading-[0.95] text-black mb-8">
+              FABRIC SELLING
             </h1>
-            <p className="mt-8 max-w-2xl text-[16px] uppercase leading-loose tracking-[0.12em] text-white/75">
-              Bulk fabrics, swatches, dye lots, and production-ready material sourcing for boutiques,
-              designers, studios, and small manufacturing partners.
+            <p className="max-w-xl text-[14px] sm:text-[15px] uppercase leading-relaxed tracking-[0.12em] text-gray-800 mb-10">
+              Bulk fabrics, swatches, dye lots, and production-ready material sourcing for boutiques, designers, studios, and small manufacturing partners.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-row w-full sm:w-auto">
               <Link
                 href="#fabric-list"
-                className="group relative inline-flex min-h-[54px] items-center justify-center gap-3 overflow-hidden border border-white px-8 text-[11px] uppercase tracking-[0.18em] text-white"
+                className="inline-flex min-h-[54px] items-center justify-center gap-3 bg-black px-8 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-gray-800 transition-colors"
               >
-                <span className="relative z-10 transition-colors duration-500 group-hover:text-black">
-                  View Fabrics
-                </span>
-                <ArrowRightIcon className="relative z-10 h-4 w-4 transition-colors duration-500 group-hover:text-black" />
-                <span className="absolute inset-0 translate-y-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+                <span>VIEW FABRICS</span>
+                <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <Link
                 href="#fabric-quote"
-                className="inline-flex min-h-[54px] items-center justify-center border border-white/35 px-8 text-[11px] uppercase tracking-[0.18em] text-white transition-colors hover:border-white"
+                className="inline-flex min-h-[54px] items-center justify-center border border-black px-8 text-[11px] font-bold uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white"
               >
-                Request Fabric Quote
+                REQUEST FABRIC QUOTE
               </Link>
             </div>
+          </div>
+          <div className="lg:col-span-6 relative aspect-[16/10] sm:aspect-[14/10] w-full overflow-hidden bg-white">
+            <Image
+              src="/fabric/fabric-007.jpg"
+              alt="Fabric textures for wholesale selling"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </section>
@@ -214,7 +211,7 @@ export default function FabricSellingPage() {
         </div>
       </section>
 
-      <section className="border-y border-black/10 bg-[#f0ede8] px-6 py-16 text-black md:px-10">
+      <section className="border-y border-black/10 bg-white px-6 py-16 text-black md:px-10">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mb-4 text-[12px] uppercase tracking-[0.28em] text-gray-500 font-medium">

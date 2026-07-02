@@ -49,7 +49,7 @@ export default function ShopCollection() {
       </div>
 
       {/* Mobile 1-col / 2-col view toggle toolbar */}
-      <div className="flex w-full items-center justify-between border-b border-black/10 bg-[#fbfaf7] px-4 py-3 sm:px-6 md:hidden">
+      <div className="flex w-full items-center justify-between border-b border-black/10 bg-white px-4 py-3 sm:px-6 md:hidden">
         <span className="text-[10px] uppercase tracking-[0.2em] text-black font-medium">
           {products.length} Styles
         </span>

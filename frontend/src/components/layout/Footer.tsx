@@ -7,7 +7,7 @@ import { ArrowRightIcon } from "@/components/ui/Icons";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-[#fbfaf7] px-6 py-16 text-black md:px-10">
+    <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-white px-6 py-16 text-black md:px-10">
       <Image
         src="/logos/logo4.webp"
         alt=""

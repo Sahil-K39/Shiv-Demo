@@ -54,7 +54,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     >
       {/* Image container — portrait 3:4 ratio, borderless, clean */}
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-[#f0ede8]"
+        className="relative aspect-[3/4] overflow-hidden bg-neutral-50"
         onClick={() => router.push(`/product/${product.slug}`)}
       >
         <Image

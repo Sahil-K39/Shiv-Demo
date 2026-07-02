@@ -116,7 +116,7 @@ export default function ProductDetail() {
   const categoryHref = `/shop/${product.category?.toLowerCase() || "shakti"}`;
 
   return (
-    <main className="min-h-screen bg-[#fbfaf7] text-black px-4 pb-28 pt-24 sm:px-6 md:px-10 md:pb-24 md:pt-28 xl:px-14">
+    <main className="min-h-screen bg-white text-black px-4 pb-28 pt-24 sm:px-6 md:px-10 md:pb-24 md:pt-28 xl:px-14">
       <div className="mx-auto grid w-full max-w-[1680px] gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(400px,0.82fr)] lg:gap-14 xl:gap-20">
         <motion.section
           aria-label={`${product.name} product gallery`}
@@ -130,7 +130,7 @@ export default function ProductDetail() {
             {images.map((img, idx) => (
               <div
                 key={`${img}-${idx}`}
-                className="relative aspect-[3/4] w-full overflow-hidden bg-[#f0ede8]"
+                className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-50"
               >
                 <Image
                   src={img}
@@ -158,7 +158,7 @@ export default function ProductDetail() {
                     onClick={() => setCurrentImageIdx(idx)}
                     aria-label={`View image ${idx + 1} of ${images.length}`}
                     aria-pressed={idx === currentImageIdx}
-                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-[#f0ede8] transition-colors md:w-full ${
+                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-neutral-50 transition-colors md:w-full ${
                       idx === currentImageIdx
                         ? "border border-black"
                         : "opacity-60 hover:opacity-100"
@@ -177,7 +177,7 @@ export default function ProductDetail() {
             )}
 
             <div
-              className={`relative order-1 aspect-[3/4] overflow-hidden bg-[#f0ede8] md:order-2 md:min-h-[580px] ${
+              className={`relative order-1 aspect-[3/4] overflow-hidden bg-neutral-50 md:order-2 md:min-h-[580px] ${
                 images.length === 1 ? "md:col-span-2" : ""
               }`}
             >
@@ -325,7 +325,7 @@ export default function ProductDetail() {
             )}
           </div>
 
-          <div className="space-y-5 bg-[#f0ede8] border border-black/10 p-5 md:p-6">
+          <div className="space-y-5 bg-neutral-50 border border-black/10 p-5 md:p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
