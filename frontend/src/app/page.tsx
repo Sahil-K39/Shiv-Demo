@@ -28,9 +28,9 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative flex h-[calc(100svh-80px)] min-h-[620px] w-full items-end overflow-hidden border-b border-black/10 p-6 md:p-10 bg-[#fbfaf7]">
+      <section className="relative flex h-[calc(100svh-80px)] min-h-[620px] w-full items-end overflow-hidden border-b border-black p-6 md:p-10">
         <motion.div 
-          className="absolute inset-0 w-full h-[120%] -top-[10%] bg-[#fbfaf7]"
+          className="absolute inset-0 w-full h-[120%] -top-[10%] bg-[radial-gradient(circle_at_60%_35%,rgba(255,255,255,0.18),transparent_38%),linear-gradient(135deg,#090909,#2f2a28_48%,#050505)]"
           style={{ y: heroY }}
         >
           <Image
@@ -39,9 +39,9 @@ export default function Home() {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-top opacity-90"
+            className="object-cover object-top opacity-95"
           />
-          <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-black/30" />
         </motion.div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-start gap-10 pb-16">
@@ -49,7 +49,7 @@ export default function Home() {
             initial={{ opacity: 0, filter: "blur(10px)", y: 28 }}
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-5xl break-words text-[44px] font-normal uppercase leading-[0.92] text-black sm:text-[64px] md:text-[96px] xl:text-[112px]"
+            className="max-w-5xl break-words text-[44px] font-light uppercase leading-[0.92] text-white mix-blend-difference sm:text-[64px] md:text-[96px] xl:text-[112px]"
           >
             SS26 / WHOLESALE BUYING ROOM
           </motion.h1>
@@ -59,12 +59,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="group relative inline-block overflow-hidden border border-black bg-white px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-black transition-colors duration-500 lg:text-[11px] lg:tracking-[0.2em]"
+              className="group relative inline-block overflow-hidden border border-white bg-transparent px-10 py-5 text-[13px] uppercase tracking-[0.16em] text-white backdrop-blur-sm transition-colors duration-500 lg:text-[11px] lg:tracking-[0.2em]"
             >
-              <span className="relative z-10 group-hover:text-white transition-colors duration-500 font-medium">
+              <span className="relative z-10 group-hover:text-black transition-colors duration-500">
                 Start Wholesale Order
               </span>
-              <div className="absolute inset-0 bg-black translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
+              <div className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
             </motion.div>
           </Link>
         </div>
@@ -76,9 +76,9 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4, duration: 0.8 }}
         >
-          <span className="text-[8px] uppercase tracking-[0.3em] text-black/60 font-medium">Scroll</span>
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/50">Scroll</span>
           <motion.div
-            className="h-8 w-px bg-black/40"
+            className="h-8 w-px bg-white/40"
             animate={{ scaleY: [1, 0.4, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             style={{ transformOrigin: "top" }}
