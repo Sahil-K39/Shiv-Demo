@@ -63,7 +63,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
           priority={index < 6}
-          className="h-full w-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className="h-full w-full object-contain object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src = fallbackImage;
           }}
@@ -86,7 +86,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover object-top opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
+            className="absolute inset-0 h-full w-full object-contain object-center opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100"
             aria-hidden={true}
             onError={(event) => {
               event.currentTarget.style.display = "none";

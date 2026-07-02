@@ -222,13 +222,13 @@ export default function Home() {
           
           {/* Shiva Portal */}
           <div className="flex flex-col group">
-            <Link href="/shop/shiva" className="block relative aspect-[3/4] w-full overflow-hidden bg-neutral-50 mb-6">
+            <Link href="/shop/shiva" className="block relative aspect-[3/4] w-full overflow-hidden bg-white mb-6">
               <Image
                 src="/final-products/go44/go44-01.webp"
                 alt="Shiva Men Collection"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-top transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                className="object-contain object-center transition-transform duration-[1500ms] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
             </Link>
@@ -257,13 +257,13 @@ export default function Home() {
 
           {/* Shakti Portal */}
           <div className="flex flex-col group">
-            <Link href="/shop/shakti" className="block relative aspect-[3/4] w-full overflow-hidden bg-neutral-50 mb-6">
+            <Link href="/shop/shakti" className="block relative aspect-[3/4] w-full overflow-hidden bg-white mb-6">
               <Image
                 src="/final-products/go01/go01-01.webp"
                 alt="Shakti Women Collection"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-top transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                className="object-contain object-center transition-transform duration-[1500ms] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
             </Link>

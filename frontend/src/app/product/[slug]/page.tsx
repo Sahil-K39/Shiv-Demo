@@ -130,7 +130,7 @@ export default function ProductDetail() {
             {images.map((img, idx) => (
               <div
                 key={`${img}-${idx}`}
-                className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-50"
+                className="relative aspect-[3/4] w-full overflow-hidden bg-white"
               >
                 <Image
                   src={img}
@@ -138,7 +138,7 @@ export default function ProductDetail() {
                   fill
                   priority={idx === 0}
                   sizes="60vw"
-                  className="object-cover object-top"
+                  className="object-contain object-center"
                   onError={(event) => {
                     event.currentTarget.src = fallbackImage;
                   }}
@@ -158,7 +158,7 @@ export default function ProductDetail() {
                     onClick={() => setCurrentImageIdx(idx)}
                     aria-label={`View image ${idx + 1} of ${images.length}`}
                     aria-pressed={idx === currentImageIdx}
-                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-neutral-50 transition-colors md:w-full ${
+                    className={`relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-white transition-colors md:w-full ${
                       idx === currentImageIdx
                         ? "border border-black"
                         : "opacity-60 hover:opacity-100"
@@ -169,7 +169,7 @@ export default function ProductDetail() {
                       alt=""
                       fill
                       sizes="(max-width: 767px) 72px, 88px"
-                      className="object-cover object-top"
+                      className="object-contain object-center"
                     />
                   </button>
                 ))}
@@ -177,7 +177,7 @@ export default function ProductDetail() {
             )}
 
             <div
-              className={`relative order-1 aspect-[3/4] overflow-hidden bg-neutral-50 md:order-2 md:min-h-[580px] ${
+              className={`relative order-1 aspect-[3/4] overflow-hidden bg-white md:order-2 md:min-h-[580px] ${
                 images.length === 1 ? "md:col-span-2" : ""
               }`}
             >
@@ -196,7 +196,7 @@ export default function ProductDetail() {
                     fill
                     priority
                     sizes="(max-width: 1023px) 100vw, 58vw"
-                    className="object-cover object-top"
+                    className="object-contain object-center"
                     onError={(event) => {
                       event.currentTarget.src = fallbackImage;
                     }}
