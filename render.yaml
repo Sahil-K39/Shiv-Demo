@@ -1,0 +1,40 @@
+# render.yaml – Deploy Shiv Shakti to Render
+
+services:
+  - type: web
+    name: shiv-shakti-backend
+    env: docker
+    repo: "{{YOUR_GIT_REPO_URL}}"
+    branch: main
+    dockerfilePath: backend/Dockerfile
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: JWT_SECRET
+        description: "JWT signing secret (>=32 chars)"
+      - key: DATABASE_URL
+        description: "PostgreSQL connection string (optional)"
+      - key: RESEND_API_KEY
+        description: "Resend email API key"
+      - key: CORS_ORIGIN
+        description: "Allowed origin for CORS (e.g., https://your-frontend.vercel.app)"
+      - key: FRONTEND_URL
+        description: "Public URL of the frontend (Vercel deployment)"
+      - key: BASE_URL
+        description: "Base URL for backend (e.g., https://shiv-shakti-backend.onrender.com)"
+    autoDeploy: true
+
+  - type: static
+    name: shiv-shakti-frontend
+    env: static
+    repo: "{{YOUR_GIT_REPO_URL}}"
+    branch: main
+    buildCommand: "cd frontend && npm install && npm run build"
+    outputDirectory: "frontend/.next"
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: "https://shiv-shakti-backend.onrender.com"
+      - key: NEXT_PUBLIC_IMAGE_HOSTNAME
+        value: "{{YOUR_SUPABASE_HOSTNAME}}"
+    autoDeploy: true

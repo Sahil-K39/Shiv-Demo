@@ -20,51 +20,31 @@ export default function BrandLogo({
       <Link
         href={href}
         aria-label="Shiv Shakti Project home"
-        className={`group inline-flex shrink-0 items-center text-black ${className}`}
+        className={`group inline-flex shrink-0 items-center text-white ${className}`}
       >
-        <span className="relative flex h-[48px] w-[128px] shrink-0 items-center sm:w-[146px] lg:h-[52px] lg:w-[164px] xl:w-[188px]">
-          <span className="relative h-10 w-[28px] shrink-0 md:h-11 md:w-[30px] lg:h-12 lg:w-8">
-            <Image
-              src="/logos/mark-logo.png"
-              alt=""
-              fill
-              priority
-              sizes="32px"
-              className="object-contain transition-opacity duration-300 group-hover:opacity-85"
-            />
-          </span>
-
-          <span className="ml-3 mr-2 h-7 w-px shrink-0 bg-black/42 md:mx-2 md:h-8 lg:h-9" />
-
-          <span className="flex min-w-0 flex-1 flex-col items-center justify-center">
-            <span
-              className="whitespace-nowrap text-[14px] font-semibold uppercase leading-none tracking-[0.04em] md:text-[15px] lg:text-[16px] xl:text-[18px]"
-              style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-            >
-              Shiv Shakti
-            </span>
-            <span className="mt-1 flex w-full items-center justify-center gap-1 md:mt-1 md:gap-1">
-              <span className="h-px w-2 bg-black/45 md:w-2 lg:w-3" />
-              <span className="whitespace-nowrap text-[8px] font-semibold uppercase leading-none tracking-[0.08em] md:text-[8px] lg:text-[9px] xl:text-[10px]">
-                Premium Wear
-              </span>
-              <span className="h-px w-2 bg-black/45 md:w-2 lg:w-3" />
-            </span>
-          </span>
+        <span className="relative block h-[36px] w-[129px] shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-85 sm:h-[40px] sm:w-[143px] md:h-[52px] md:w-[186px] lg:h-[58px] lg:w-[207px] xl:h-[64px] xl:w-[228px]">
+          <Image
+            src="/logos/nav-logo.webp"
+            alt="Shiv Shakti Premium Wear"
+            fill
+            priority
+            sizes="(max-width: 640px) 129px, (max-width: 768px) 143px, (max-width: 1024px) 186px, (max-width: 1280px) 207px, 228px"
+            className="object-contain object-left brightness-0 invert"
+          />
         </span>
       </Link>
     );
   }
 
   const logoSrc = isMarkOnly
-    ? "/logos/mark-logo.png"
-    : "/logos/footer-logo.png";
+    ? "/logos/mark-logo.webp"
+    : "/logos/footer-logo.webp";
 
   return (
     <Link
       href={href}
       aria-label="Shiv Shakti Project home"
-      className={`group inline-flex shrink-0 items-center text-black ${className}`}
+      className={`group inline-flex shrink-0 items-center text-white ${className}`}
     >
       <span
         className={`relative block shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-90 ${
@@ -84,7 +64,7 @@ export default function BrandLogo({
               ? "32px"
               : "(max-width: 768px) 150px, 178px"
           }
-          className="object-contain"
+          className="object-contain brightness-0 invert"
         />
       </span>
     </Link>

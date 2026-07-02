@@ -75,7 +75,7 @@ export default function LoginClient({ initialTab }: { initialTab: LoginTab }) {
     <div className="w-full h-[calc(100vh-80px)] flex flex-col md:flex-row bg-white">
       <div className="hidden md:block w-1/2 h-full bg-black relative overflow-hidden border-r border-black">
         <Image
-          src="/final-products/go44/go44-01.png"
+          src="/final-products/go44/go44-01.webp"
           alt="Identity" 
           fill
           priority

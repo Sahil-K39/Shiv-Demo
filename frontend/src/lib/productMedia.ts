@@ -5,12 +5,12 @@ const productImageAliases: Record<string, string[]> = {};
 
 const categoryFallbacks: Record<string, string[]> = {
   shakti: [
-    "/final-products/go01/go01-01.png",
-    "/final-products/go02/go02-01.png",
+    "/final-products/go01/go01-01.webp",
+    "/final-products/go02/go02-01.webp",
   ],
   shiva: [
-    "/final-products/go15/go15-01.png",
-    "/final-products/go16/go16-01.png",
+    "/final-products/go15/go15-01.webp",
+    "/final-products/go16/go16-01.webp",
   ],
 };
 
@@ -23,15 +23,23 @@ const swatches: Record<string, string> = {
   "void black": "#050505",
 };
 
+export function toWebp(url: string | null | undefined): string {
+  if (!url) return "";
+  if (url.startsWith("/final-products/") || url.startsWith("/logos/")) {
+    return url.replace(/\.png$/i, ".webp");
+  }
+  return url;
+}
+
 export function parseList(value: string[] | string | null | undefined): string[] {
-  if (Array.isArray(value)) return value.filter(Boolean);
+  if (Array.isArray(value)) return value.filter(Boolean).map(toWebp);
   if (!value) return [];
 
   try {
     const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+    return (Array.isArray(parsed) ? parsed.filter(Boolean) : []).map(toWebp);
   } catch {
-    return value ? [value] : [];
+    return value ? [toWebp(value)] : [];
   }
 }
 
@@ -44,20 +52,20 @@ export function getProductImages(product: Product): string[] {
   // Use explicit image aliases for known products as fallback
   const aliasImages = productImageAliases[product.slug];
   if (Array.isArray(aliasImages) && aliasImages.length) {
-    return aliasImages;
+    return aliasImages.map(toWebp);
   }
   // Fallback to category images when product has none
-  return categoryFallbacks[product.category?.toLowerCase()] ?? [
+  return (categoryFallbacks[product.category?.toLowerCase()] ?? [
     getRandomProductImage(),
-  ];
+  ]).map(toWebp);
 }
 
 export function getCartItemImage(images: string[] | string | null | undefined) {
-  return parseList(images)[0] || getRandomProductImage();
+  return toWebp(parseList(images)[0] || getRandomProductImage());
 }
 
 export function getCategoryFallbackImage(category: string | null | undefined) {
-  return (
+  return toWebp(
     categoryFallbacks[category?.toLowerCase() ?? ""]?.[0] ||
     getRandomProductImage()
   );

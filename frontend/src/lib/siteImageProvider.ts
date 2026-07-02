@@ -1,9 +1,9 @@
 const finalProductFallbackImages = [
-  "/final-products/go01/go01-01.png",
-  "/final-products/go02/go02-01.png",
-  "/final-products/go03/go03-01.png",
-  "/final-products/go04/go04-01.png",
-  "/final-products/go05/go05-01.png",
+  "/final-products/go01/go01-01.webp",
+  "/final-products/go02/go02-01.webp",
+  "/final-products/go03/go03-01.webp",
+  "/final-products/go04/go04-01.webp",
+  "/final-products/go05/go05-01.webp",
 ];
 
 export function getRandomProductImage(): string {

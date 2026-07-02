@@ -11,42 +11,104 @@ export const metadata: Metadata = {
     "Bulk fabric selling for studios, boutiques, designers, and production partners, including cotton, linen, silk blends, handloom textures, trims, dyeing, and sampling support.",
 };
 
-const fabricFamilies = [
-  "Floral Mesh",
-  "Washed Jacquard",
-  "Lace Surface",
-  "Embroidered Net",
-  "Open Weave",
-  "Dobby Texture",
-  "Printed Cotton",
-  "Artisan Surface",
-  "Textured Overlay",
-  "Boutique Fabric",
-  "Resort Weave",
-  "Statement Textile",
-];
-
-const fabricUses = [
-  "Statement overlays, resort panels, occasion capsules",
-  "Soft tailoring, resort layers, tonal coordinates",
-  "Premium dresses, bridal separates, delicate panels",
-  "Occasionwear, overlays, soft statement capsules",
-  "Layering pieces, breathable panels, craft textures",
-  "Casual sets, shirts, dresses, small batch uniforms",
-  "Evening overlays, lace panels, statement trims",
-  "Layered silhouettes, panels, boutique capsules",
-];
-
-const fabrics = Array.from({ length: 92 }, (_, index) => {
-  const number = String(index + 1).padStart(3, "0");
-
-  return {
-    name: `${fabricFamilies[index % fabricFamilies.length]} ${number}`,
-    image: `/fabric/fabric-${number}.jpg`,
-    use: fabricUses[index % fabricUses.length],
+const fabrics = [
+  {
+    name: "Floral Mesh 001",
+    image: "/fabric/fabric-001.jpg",
+    use: "Statement overlays, resort panels, occasion capsules",
     moq: "MOQ 50 meters",
-  };
-});
+  },
+  {
+    name: "Washed Jacquard 004",
+    image: "/fabric/fabric-004.jpg",
+    use: "Soft tailoring, resort layers, tonal coordinates",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Lace Surface 006",
+    image: "/fabric/fabric-006.jpg",
+    use: "Premium dresses, bridal separates, delicate panels",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Embroidered Net 007",
+    image: "/fabric/fabric-007.jpg",
+    use: "Occasionwear, overlays, soft statement capsules",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Open Weave 008",
+    image: "/fabric/fabric-008.jpg",
+    use: "Layering pieces, breathable panels, craft textures",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Dobby Texture 009",
+    image: "/fabric/fabric-009.jpg",
+    use: "Casual sets, shirts, dresses, small batch uniforms",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Printed Cotton 036",
+    image: "/fabric/fabric-036.jpg",
+    use: "Evening overlays, lace panels, statement trims",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Artisan Surface 038",
+    image: "/fabric/fabric-038.jpg",
+    use: "Layered silhouettes, panels, boutique capsules",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Textured Overlay 040",
+    image: "/fabric/fabric-040.jpg",
+    use: "Statement overlays, resort panels, occasion capsules",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Boutique Fabric 044",
+    image: "/fabric/fabric-044.jpg",
+    use: "Soft tailoring, resort layers, tonal coordinates",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Resort Weave 047",
+    image: "/fabric/fabric-047.jpg",
+    use: "Premium dresses, bridal separates, delicate panels",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Statement Textile 051",
+    image: "/fabric/fabric-051.jpg",
+    use: "Occasionwear, overlays, soft statement capsules",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Raw Handloom Linen 052",
+    image: "/fabric/fabric-052.jpg",
+    use: "Layering pieces, breathable panels, craft textures",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Silk Organza Blend 053",
+    image: "/fabric/fabric-053.jpg",
+    use: "Casual sets, shirts, dresses, small batch uniforms",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Ceremonial Brocade 057",
+    image: "/fabric/fabric-057.jpg",
+    use: "Evening overlays, lace panels, statement trims",
+    moq: "MOQ 50 meters",
+  },
+  {
+    name: "Deconstructed Canvas 062",
+    image: "/fabric/fabric-062.jpg",
+    use: "Layered silhouettes, panels, boutique capsules",
+    moq: "MOQ 50 meters",
+  },
+];
 
 const services = [
   "Bulk meterage supply",
