@@ -14,17 +14,17 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon.ico?v=trident-emblem-ss26" },
-      { url: "/icon.png?v=trident-emblem-ss26", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.ico?v=trident-emblem-ss26-large" },
+      { url: "/icon.png?v=trident-emblem-ss26-large", type: "image/png", sizes: "512x512" },
     ],
     apple: [
-      { url: "/apple-icon.png?v=trident-emblem-ss26", type: "image/png", sizes: "180x180" },
-      { url: "/apple-touch-icon.png?v=trident-emblem-ss26", type: "image/png", sizes: "180x180" },
+      { url: "/apple-icon.png?v=trident-emblem-ss26-large", type: "image/png", sizes: "180x180" },
+      { url: "/apple-touch-icon.png?v=trident-emblem-ss26-large", type: "image/png", sizes: "180x180" },
     ],
     other: [
       {
         rel: "apple-touch-icon-precomposed",
-        url: "/apple-touch-icon-precomposed.png?v=trident-emblem-ss26",
+        url: "/apple-touch-icon-precomposed.png?v=trident-emblem-ss26-large",
       },
     ],
   },

@@ -14,10 +14,10 @@ export default function BrandLogo({
 }: BrandLogoProps) {
   const sizeClasses =
     variant === "nav"
-      ? "h-[42px] w-[34px] sm:h-[46px] sm:w-[38px] md:h-[50px] md:w-[40px]"
+      ? "h-[54px] w-[44px] sm:h-[60px] sm:w-[48px] md:h-[64px] md:w-[52px]"
       : variant === "footer"
-        ? "h-[76px] w-[62px] md:h-[92px] md:w-[74px]"
-        : "h-10 w-8";
+        ? "h-[110px] w-[90px] md:h-[140px] md:w-[114px]"
+        : "h-14 w-11 md:h-16 md:w-13";
 
   return (
     <Link
