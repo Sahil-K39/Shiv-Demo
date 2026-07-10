@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import BrandLogo from "@/components/ui/BrandLogo";
+import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
 import {
   BagIcon,
   CloseIcon,
@@ -70,7 +71,9 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcherButton variant="nav" />
+
           <Link
             href="/search"
             aria-label="Search"
@@ -153,6 +156,12 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              <div className="py-4 flex items-center justify-between">
+                <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
+                  Language / Region
+                </span>
+                <LanguageSwitcherButton variant="footer" />
+              </div>
             </div>
           </motion.div>
         )}

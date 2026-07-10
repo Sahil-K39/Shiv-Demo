@@ -216,4 +216,15 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  /* Right-to-Left (RTL) Layout Direction Support */
+  html[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  html[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
+  }
 }
+

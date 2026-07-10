@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import BrandLogo from "@/components/ui/BrandLogo";
+import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 
 export default function Footer() {
@@ -66,9 +67,12 @@ export default function Footer() {
       </div>
 
       <div className="max-w-[1400px] mx-auto mt-16 pt-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center md:text-left">
-          © 2026 SHIV SHAKTI PROJECT. ALL RIGHTS RESERVED.
-        </p>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <LanguageSwitcherButton variant="footer" />
+          <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center sm:text-left">
+            © 2026 SHIV SHAKTI PROJECT. ALL RIGHTS RESERVED.
+          </p>
+        </div>
         <BrandLogo variant="mark" />
       </div>
     </footer>

@@ -4,6 +4,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { Analytics } from '@vercel/analytics/react';
+import { LanguageProvider } from "@/context/LanguageContext";
+import LanguageModal from "@/components/ui/LanguageModal";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shiv-demo.vercel.app"),
@@ -69,14 +71,17 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className="antialiased flex flex-col min-h-screen">
-        <div className="noise-overlay" />
-        <Navbar />
-        <CartDrawer />
-        <main id="main-content" className="flex-1 pt-[80px]">
-          {children}
-        </main>
-        <Footer />
-        <Analytics />
+        <LanguageProvider>
+          <div className="noise-overlay" />
+          <Navbar />
+          <CartDrawer />
+          <LanguageModal />
+          <main id="main-content" className="flex-1 pt-[80px]">
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
+        </LanguageProvider>
       </body>
     </html>
   );
