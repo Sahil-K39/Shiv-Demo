@@ -35,20 +35,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Load language from storage on mount
-  useEffect(() => {
-    try {
-      const storedCode = localStorage.getItem(STORAGE_KEY);
-      if (storedCode) {
-        const found = getLanguageByCode(storedCode);
-        setCurrentLanguageState(found);
-        applyDocumentDirection(found);
-      }
-    } catch (err) {
-      console.error("Failed to read locale from localStorage:", err);
-    }
-  }, []);
-
   const applyDocumentDirection = (lang: Language) => {
     const isRtl = Boolean(lang.rtl || RTL_LANGUAGES.has(lang.code));
     if (typeof document !== "undefined") {
@@ -59,7 +45,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       } else {
         document.documentElement.classList.remove("rtl");
       }
-      // Set universal translation cookie for browser/DOM auto-translators
       try {
         if (lang.code === "en") {
           document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -69,6 +54,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       } catch {}
     }
   };
+
+  useEffect(() => {
+    try {
+      const storedCode = localStorage.getItem(STORAGE_KEY);
+      if (storedCode) {
+        const found = getLanguageByCode(storedCode);
+        setTimeout(() => {
+          setCurrentLanguageState(found);
+          applyDocumentDirection(found);
+        }, 0);
+      }
+    } catch (err) {
+      console.error("Failed to read locale from localStorage:", err);
+    }
+  }, []);
 
   const setLanguage = (code: string) => {
     const lang = getLanguageByCode(code);

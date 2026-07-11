@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
-import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Home() {
