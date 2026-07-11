@@ -219,15 +219,6 @@ export default function ContentProtectionShield() {
 
   return (
     <>
-      {/* High-Contrast Foreground IP Watermark Matrix (Always Visible on Mobile & Desktop Screenshots) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.075] select-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='440' height='240' viewBox='0 0 440 240' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='120' fill='%23000000' font-family='monospace' font-size='12' font-weight='bold' transform='rotate(-22 220 120)' letter-spacing='3'%3ESHIV SHAKTI • CONFIDENTIAL WHOLESALE IP • UNAUTHORIZED CAPTURE PROHIBITED%3C/text%3E%3C/svg%3E")`,
-        }}
-      />
-
       {/* Screen Capture & Window Blur Shield Overlay */}
       {isShieldActive && (
         <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-neutral-950/98 p-8 text-center backdrop-blur-3xl select-none">
