@@ -6,6 +6,7 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { Analytics } from '@vercel/analytics/react';
 import { LanguageProvider } from "@/context/LanguageContext";
 import LanguageModal from "@/components/ui/LanguageModal";
+import ContentProtectionShield from "@/components/security/ContentProtectionShield";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shiv-demo.vercel.app"),
@@ -72,6 +73,7 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className="antialiased flex flex-col min-h-screen">
         <LanguageProvider>
+          <ContentProtectionShield />
           <div className="noise-overlay" />
           <Navbar />
           <CartDrawer />

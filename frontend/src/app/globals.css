@@ -226,5 +226,58 @@
   html[dir="rtl"] .rtl-flip {
     transform: scaleX(-1);
   }
+
+  /* Anti-Copy & Anti-Selection Shield for Wholesale Articles & Images */
+  body,
+  main,
+  article,
+  img,
+  picture,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  span,
+  div {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+  }
+
+  img {
+    -webkit-user-drag: none !important;
+  }
+
+  /* Anti Print & PDF Export Shield */
+  @media print {
+    body * {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    body::before {
+      content: "CONFIDENTIAL WHOLESALE BUYING ROOM — PRINTING & EXPORTING ARTICLES PROHIBITED. © SHIV SHAKTI PROJECT";
+      display: block !important;
+      visibility: visible !important;
+      position: fixed;
+      top: 40%;
+      left: 10%;
+      right: 10%;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #000;
+      border: 3px solid #000;
+      padding: 40px;
+    }
+  }
 }
 
