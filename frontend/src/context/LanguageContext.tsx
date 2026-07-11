@@ -7,6 +7,7 @@ import {
   RTL_LANGUAGES,
   getLanguageByCode,
 } from "@/lib/languages";
+import { TranslationKey, getTranslation } from "@/lib/translations";
 
 interface LanguageContextType {
   currentLanguage: Language;
@@ -14,6 +15,7 @@ interface LanguageContextType {
   isRtl: boolean;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
+  t: (key: TranslationKey) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -22,6 +24,7 @@ const LanguageContext = createContext<LanguageContextType>({
   isRtl: false,
   isModalOpen: false,
   setIsModalOpen: () => {},
+  t: (key) => key,
 });
 
 const STORAGE_KEY = "shiv_shakti_locale";
@@ -56,6 +59,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       } else {
         document.documentElement.classList.remove("rtl");
       }
+      // Set universal translation cookie for browser/DOM auto-translators
+      try {
+        if (lang.code === "en") {
+          document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        } else {
+          document.cookie = `googtrans=/en/${lang.code}; path=/;`;
+        }
+      } catch {}
     }
   };
 
@@ -74,6 +85,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     currentLanguage.rtl || RTL_LANGUAGES.has(currentLanguage.code)
   );
 
+  const t = (key: TranslationKey) =>
+    getTranslation(currentLanguage.code, key);
+
   return (
     <LanguageContext.Provider
       value={{
@@ -82,6 +96,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         isRtl,
         isModalOpen,
         setIsModalOpen,
+        t,
       }}
     >
       {children}

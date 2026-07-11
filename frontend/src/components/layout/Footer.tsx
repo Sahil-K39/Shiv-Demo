@@ -1,12 +1,16 @@
 
 
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import BrandLogo from "@/components/ui/BrandLogo";
 import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
 import { ArrowRightIcon } from "@/components/ui/Icons";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="relative mt-20 w-full overflow-hidden border-t border-black/10 bg-white px-6 py-16 text-black md:px-10">
       <Image
@@ -49,15 +53,15 @@ export default function Footer() {
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Transmission</h4>
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">{t("footer.transmission")}</h4>
           <p className="text-[12px] uppercase leading-loose tracking-[0.1em] text-gray-600">
-            Join the Council for early access to drops, fabric lots, and wholesale updates.
+            {t("footer.desc")}
           </p>
           <Link
             href="/contact"
             className="mt-4 flex min-h-[46px] items-center justify-between border border-black/20 px-4 text-[11px] uppercase tracking-[0.1em] text-gray-600 transition-colors hover:border-black hover:text-black"
           >
-            Contact Support
+            {t("footer.contact")}
             <span aria-hidden="true">
               <ArrowRightIcon className="h-4 w-4" />
             </span>
@@ -70,7 +74,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <LanguageSwitcherButton variant="footer" />
           <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center sm:text-left">
-            © 2026 SHIV SHAKTI PROJECT. ALL RIGHTS RESERVED.
+            {t("footer.rights")}
           </p>
         </div>
         <BrandLogo variant="mark" />

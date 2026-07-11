@@ -9,6 +9,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import BrandLogo from "@/components/ui/BrandLogo";
 import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
+import { useLanguage } from "@/context/LanguageContext";
+import { TranslationKey } from "@/lib/translations";
 import {
   BagIcon,
   CloseIcon,
@@ -17,17 +19,18 @@ import {
   UserIcon,
 } from "@/components/ui/Icons";
 
-const navLinks = [
-  { href: "/shop/shiva", label: "SHIVA" },
-  { href: "/shop/shakti", label: "SHAKTI" },
-  { href: "/", label: "WHOLESALE" },
-  { href: "/fabric-selling", label: "FABRIC SELLING" },
-  { href: "/council", label: "COUNCIL" },
+const navLinks: Array<{ href: string; key: TranslationKey }> = [
+  { href: "/shop/shiva", key: "nav.shiva" },
+  { href: "/shop/shakti", key: "nav.shakti" },
+  { href: "/", key: "nav.wholesale" },
+  { href: "/fabric-selling", key: "nav.fabric" },
+  { href: "/council", key: "nav.council" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const { toggleCart, itemCount, user, checkSession } = useCartStore();
+  const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const count = itemCount();
 
@@ -58,7 +61,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`nav-link ${isActive ? "text-black font-semibold" : ""}`}
               >
-                {link.label}
+                {t(link.key)}
                 {isActive && (
                   <motion.span
                     layoutId="nav-underline"
@@ -151,7 +154,7 @@ export default function Navbar() {
                       isActive ? "text-black font-semibold" : "text-black/55"
                     }`}
                   >
-                    {link.label}
+                    {t(link.key)}
                     <span className="h-px w-8 bg-current opacity-40" />
                   </Link>
                 );

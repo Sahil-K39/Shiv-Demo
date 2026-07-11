@@ -8,8 +8,10 @@ import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Home() {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"all" | "shiva" | "shakti">("all");
@@ -112,20 +114,20 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2 border-b border-black/10 pb-6">
               <div>
                 <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#e11d48] block mb-1">
-                  SS26 CAMPAIGN LAUNCH
+                  {t("hero.subtitle")}
                 </span>
                 <h2 className="text-[24px] sm:text-[34px] md:text-[42px] font-light uppercase tracking-[0.14em] text-black leading-tight">
-                  THE COUNCIL OF LIGHT
+                  {t("hero.title")}
                 </h2>
                 <p className="text-[13px] sm:text-[14px] uppercase tracking-[0.08em] text-gray-600 mt-1 max-w-2xl">
-                  Deconstructed silhouettes, raw organic textures, and elevated frequency wearable forms.
+                  {t("hero.description")}
                 </p>
               </div>
               <Link
                 href="/shop/shakti"
                 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-all"
               >
-                EXPLORE COLLECTION &rarr;
+                {t("hero.cta")} &rarr;
               </Link>
             </div>
 
