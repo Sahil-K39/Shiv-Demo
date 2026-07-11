@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ContentProtectionShield() {
   const [securityNotice, setSecurityNotice] = useState<string | null>(null);
   const [isScreenCaptureBlocked, setIsScreenCaptureBlocked] = useState(false);
+  const [isWindowBlurred, setIsWindowBlurred] = useState(false);
 
   const showSecurityWarning = (message: string, blockScreen = false) => {
     setSecurityNotice(message);
@@ -13,7 +14,7 @@ export default function ContentProtectionShield() {
       setIsScreenCaptureBlocked(true);
       setTimeout(() => {
         setIsScreenCaptureBlocked(false);
-      }, 2400);
+      }, 2200);
     }
     setTimeout(() => {
       setSecurityNotice(null);
@@ -23,7 +24,6 @@ export default function ContentProtectionShield() {
   useEffect(() => {
     // 1. Prevent Right-Click Context Menu
     const handleContextMenu = (e: MouseEvent) => {
-      // Allow context menu only inside text input fields
       const target = e.target as HTMLElement;
       if (
         target.tagName === "INPUT" ||
@@ -65,11 +65,13 @@ export default function ContentProtectionShield() {
       }
     };
 
-    // 4. Intercept Screen Capture & Inspection Shortcuts
+    // 4. INSTANT KEYBOARD INTERCEPTION (macOS Cmd+Shift & Windows Ctrl+Shift)
+    // We intercept the moment Cmd+Shift or Ctrl+Shift are pressed together BEFORE 3, 4, 5, or S are pressed!
     const handleKeyDown = (e: KeyboardEvent) => {
       // PrintScreen Key
       if (e.key === "PrintScreen" || e.keyCode === 44) {
         e.preventDefault();
+        setIsScreenCaptureBlocked(true);
         showSecurityWarning("Screenshot attempt detected. Display obscured for security.", true);
         try {
           navigator.clipboard.writeText("");
@@ -80,19 +82,20 @@ export default function ContentProtectionShield() {
       const isMacMeta = e.metaKey;
       const isCtrl = e.ctrlKey;
       const isShift = e.shiftKey;
-      const isAlt = e.altKey;
 
-      // macOS Screenshots: Cmd + Shift + 3, 4, 5, 6
-      if (isMacMeta && isShift && ["3", "4", "5", "6", "$", "%", "^"].includes(e.key)) {
-        e.preventDefault();
-        showSecurityWarning("macOS Screen Capture protected by Shiv Shakti Security Shield.", true);
+      // INSTANT SHIELD: If Cmd + Shift (macOS screenshot combo prefix) or Ctrl + Shift is held down,
+      // instantly raise the shield BEFORE the user can hit 3, 4, 5, 6, or S!
+      if ((isMacMeta && isShift) || (isCtrl && isShift && ["s", "S", "i", "I", "c", "C"].includes(e.key))) {
+        setIsScreenCaptureBlocked(true);
+        showSecurityWarning("Screen capture shortcut intercepted by Shiv Shakti Security Shield.", true);
         return;
       }
 
-      // Windows Snipping Tool: Win/Ctrl + Shift + S
-      if ((isCtrl || isMacMeta) && isShift && e.key.toLowerCase() === "s") {
+      // macOS Screenshots explicit keys: Cmd + Shift + 3, 4, 5, 6
+      if (isMacMeta && isShift && ["3", "4", "5", "6", "$", "%", "^"].includes(e.key)) {
         e.preventDefault();
-        showSecurityWarning("Screen Snipping tool intercepted.", true);
+        setIsScreenCaptureBlocked(true);
+        showSecurityWarning("macOS Screen Capture protected by Shiv Shakti Security Shield.", true);
         return;
       }
 
@@ -103,24 +106,36 @@ export default function ContentProtectionShield() {
         return;
       }
 
-      // View Source & DevTools shortcuts: F12, Ctrl/Cmd + U, Ctrl/Cmd + Shift + I/J/C
-      if (
-        e.key === "F12" ||
-        ((isCtrl || isMacMeta) && e.key.toLowerCase() === "u") ||
-        ((isCtrl || isMacMeta) &&
-          isShift &&
-          ["i", "j", "c"].includes(e.key.toLowerCase()))
-      ) {
+      // View Source & DevTools shortcuts: F12, Ctrl/Cmd + U
+      if (e.key === "F12" || ((isCtrl || isMacMeta) && e.key.toLowerCase() === "u")) {
         e.preventDefault();
         showSecurityWarning("Inspection & developer tools are locked on wholesale views.");
         return;
       }
     };
 
-    // 5. Detect PrintScreen KeyUp
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === "PrintScreen" || e.keyCode === 44) {
         showSecurityWarning("Screenshot attempt detected. Display obscured for security.", true);
+      }
+    };
+
+    // 5. WINDOW BLUR / VISIBILITY LOSS SHIELD
+    // When macOS Screenshot app (Cmd+Shift+5), Snipping Tool, or screen recording overlays activate,
+    // the browser window loses focus. We instantly blur the screen until focus returns.
+    const handleWindowBlur = () => {
+      setIsWindowBlurred(true);
+    };
+
+    const handleWindowFocus = () => {
+      setIsWindowBlurred(false);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsWindowBlurred(true);
+      } else {
+        setIsWindowBlurred(false);
       }
     };
 
@@ -130,6 +145,9 @@ export default function ContentProtectionShield() {
     document.addEventListener("dragstart", handleDragStart);
     window.addEventListener("keydown", handleKeyDown, true);
     window.addEventListener("keyup", handleKeyUp, true);
+    window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("focus", handleWindowFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
@@ -138,69 +156,66 @@ export default function ContentProtectionShield() {
       document.removeEventListener("dragstart", handleDragStart);
       window.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keyup", handleKeyUp, true);
+      window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("focus", handleWindowFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 
+  const isShieldActive = isScreenCaptureBlocked || isWindowBlurred;
+
   return (
     <>
-      {/* Subtle Repeating Security Watermark Overlay */}
+      {/* Repeating Foreground Security Watermark Matrix */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-30 overflow-hidden opacity-[0.028] select-none"
+        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.04] select-none"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='380' height='200' viewBox='0 0 380 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='20' y='100' fill='%23000000' font-family='monospace' font-size='10' font-weight='bold' transform='rotate(-22 190 100)' letter-spacing='3'%3ESHIV SHAKTI • CONFIDENTIAL ARTICLE BUYING ROOM%3C/text%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='420' height='220' viewBox='0 0 420 220' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='15' y='110' fill='%23000000' font-family='monospace' font-size='11' font-weight='bold' transform='rotate(-24 210 110)' letter-spacing='4'%3ESHIV SHAKTI • CONFIDENTIAL WHOLESALE IP%3C/text%3E%3C/svg%3E")`,
         }}
       />
 
-      {/* Screen Capture Blurring Shield Overlay */}
-      <AnimatePresence>
-        {isScreenCaptureBlocked && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
-            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/95 p-8 text-center backdrop-blur-2xl"
-          >
-            <div className="max-w-md rounded-2xl border border-white/20 bg-neutral-900/90 p-8 shadow-2xl">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 text-red-500">
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold tracking-wider text-white uppercase">
-                Content Capture Protected
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-400">
-                Shiv Shakti wholesale designs, articles, and lookbooks are confidential proprietary assets. Screenshot capture and unauthorized reproduction are disabled.
-              </p>
-              <div className="mt-6 border-t border-white/10 pt-4 text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
-                Security Protocol SS-26 • ID: PROPRIETARY-BUYING-ROOM
-              </div>
+      {/* Screen Capture & Window Blur Shield Overlay */}
+      {isShieldActive && (
+        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-neutral-950/98 p-8 text-center backdrop-blur-3xl select-none">
+          <div className="max-w-md rounded-2xl border border-white/20 bg-neutral-900/95 p-8 shadow-2xl">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-red-500/40 bg-red-500/15 text-red-500">
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <h3 className="text-lg font-bold tracking-widest text-white uppercase">
+              Confidential Content Shield
+            </h3>
+            <p className="mt-3 text-xs leading-relaxed text-neutral-300">
+              Shiv Shakti wholesale articles, garment specifications, and imagery are protected under proprietary IP security. Screen capture, snipping overlays, and background snapshots are disabled.
+            </p>
+            <div className="mt-6 border-t border-white/10 pt-4 text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
+              Click window to resume wholesale session
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Security Toast Notification */}
       <AnimatePresence>
-        {securityNotice && !isScreenCaptureBlocked && (
+        {securityNotice && !isShieldActive && (
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 right-6 z-[9990] flex max-w-sm items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-950/95 px-4 py-3 text-white shadow-2xl backdrop-blur-md"
+            className="fixed bottom-6 right-6 z-[99990] flex max-w-sm items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-950/95 px-4 py-3 text-white shadow-2xl backdrop-blur-md"
           >
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-amber-400">
               <svg
