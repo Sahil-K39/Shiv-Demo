@@ -6,7 +6,6 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { Analytics } from '@vercel/analytics/react';
 import { LanguageProvider } from "@/context/LanguageContext";
 import LanguageModal from "@/components/ui/LanguageModal";
-import AutoTranslator from "@/components/ui/AutoTranslator";
 import ContentProtectionShield from "@/components/security/ContentProtectionShield";
 
 export const metadata: Metadata = {
@@ -74,7 +73,6 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className="antialiased flex flex-col min-h-screen">
         <LanguageProvider>
-          <AutoTranslator />
           <ContentProtectionShield />
           <div className="noise-overlay" />
           <Navbar />

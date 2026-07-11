@@ -12,6 +12,7 @@ import {
   getProductImages,
 } from "@/lib/productMedia";
 import { formatPriceINR } from "@/lib/pricing";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProductCardProps {
   product: Product;
@@ -19,6 +20,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
+  const { t } = useLanguage();
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-80px" });
   const [isHovered, setIsHovered] = useState(false);
@@ -98,7 +100,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         {!product.in_stock && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/80">
             <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-black">
-              Sold out
+              {t("product.soldOut")}
             </span>
           </div>
         )}
@@ -121,9 +123,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               {product.name}
             </h3>
             {index % 3 === 0 ? (
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">NEW</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">{t("product.new")}</span>
             ) : index % 4 === 0 ? (
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d946ef]">PREORDER</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d946ef]">{t("product.preorder")}</span>
             ) : null}
           </div>
           <p className="text-[12px] font-normal tracking-[0.05em] text-black sm:text-[13px]">

@@ -41,56 +41,56 @@ export default function Home() {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-black">
-                  CATEGORIES
+                  {t("home.categories")}
                 </span>
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[#e11d48] bg-[#e11d48]/10 px-2 py-0.5">
-                  SS26 LIVE
+                  {t("home.ss26Live")}
                 </span>
               </div>
 
               {/* Signature Demobaza Vertical Menu */}
               <div className="flex flex-col gap-3 text-[12px] sm:text-[13px] font-semibold uppercase tracking-[0.18em] text-gray-800">
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-[#e11d48]">
-                  *NEW STUFF
+                  {t("home.newStuff")}
                 </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all">
-                  WHOLESALE BUYING
+                  {t("home.wholesaleBuying")}
                 </Link>
                 <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all">
-                  SHIVA / MEN
+                  {t("home.shivaMen")}
                 </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all">
-                  SHAKTI / WOMEN
+                  {t("home.shaktiWomen")}
                 </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
-                  ARMOR / CEREMONIAL
+                  {t("home.armorCeremonial")}
                 </Link>
                 <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
-                  DECONSTRUCTED
+                  {t("home.deconstructed")}
                 </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
-                  KNITS / HEAVY
+                  {t("home.knitsHeavy")}
                 </Link>
                 <Link href="/shop/shiva" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
-                  KNITS / LIGHT
+                  {t("home.knitsLight")}
                 </Link>
                 <Link href="/shop/shakti" className="hover:text-black hover:translate-x-1.5 transition-all text-gray-400">
-                  ROBES & COATS
+                  {t("home.robesCoats")}
                 </Link>
               </div>
             </div>
 
             {/* Wholesale Info Block */}
             <div className="mt-8 pt-6 border-t border-black/10 text-[11px] leading-relaxed uppercase tracking-[0.12em] text-gray-600 space-y-2">
-              <p className="font-bold text-black">WHOLESALE BUYING ROOM</p>
-              <p>MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE across selected sizes & colorways.</p>
-              <p>Global expedited shipping for studio & boutique partners.</p>
+              <p className="font-bold text-black">{t("home.wholesaleBuyingRoom")}</p>
+              <p>{t("home.moqDescription")}</p>
+              <p>{t("home.globalShipping")}</p>
               <div className="pt-2">
                 <Link
                   href="/shop/shakti"
                   className="inline-block bg-black text-white px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition-colors w-full text-center"
                 >
-                  ENTER BUYING ROOM &rarr;
+                  {t("home.enterBuyingRoom")} &rarr;
                 </Link>
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
             </Link>
 
-            {/* Clean Editorial Typography (No cheap drop shadows or glowing text) */}
+            {/* Clean Editorial Typography */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-2 border-b border-black/10 pb-6">
               <div>
                 <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-[#e11d48] block mb-1">
@@ -134,16 +134,16 @@ export default function Home() {
             {/* Quick Promo Banner */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-[11px] font-semibold uppercase tracking-[0.15em] text-black pt-2">
               <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
-                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">COLLECTION</span>
-                SS26 WHOLESALE OPEN
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">{t("home.collection")}</span>
+                {t("home.ss26WholesaleOpen")}
               </div>
               <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
-                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">MINIMUM ORDER</span>
-                MOQ {MIN_WHOLESALE_QUANTITY} UNITS / STYLE
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">{t("home.minimumOrder")}</span>
+                {t("home.moqUnits")}
               </div>
               <div className="border border-black/10 p-4 text-center bg-white hover:border-black transition-colors">
-                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">DISPATCH</span>
-                GLOBAL EXPRESS DELIVERY
+                <span className="block text-gray-400 text-[9px] tracking-[0.2em] mb-1">{t("home.dispatch")}</span>
+                {t("home.globalExpress")}
               </div>
             </div>
           </div>
@@ -154,19 +154,19 @@ export default function Home() {
       {/* Section 2: Minimalist Marquee Bar */}
       <div className="w-full py-4 bg-black text-white overflow-hidden border-b border-black select-none">
         <div className="whitespace-nowrap px-4 text-[12px] sm:text-[14px] font-medium uppercase tracking-[0.25em] animate-marquee">
-          SS26 WHOLESALE BUYING WINDOW OPEN &nbsp;&bull;&nbsp; MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE &nbsp;&bull;&nbsp; BOUTIQUE & STUDIO ENQUIRIES WELCOME &nbsp;&bull;&nbsp; RITUAL ARMOR & DECONSTRUCTED SILHOUETTES &nbsp;&bull;&nbsp; SS26 WHOLESALE BUYING WINDOW OPEN &nbsp;&bull;&nbsp; MOQ {MIN_WHOLESALE_QUANTITY} UNITS PER STYLE
+          {t("home.marquee")} &nbsp;&bull;&nbsp; {t("home.moqUnits")} &nbsp;&bull;&nbsp; {t("home.marquee")} &nbsp;&bull;&nbsp; {t("home.moqUnits")}
         </div>
       </div>
 
-      {/* Section 3: Wholesale Showroom Grid (Demobaza Floating White Cards) */}
+      {/* Section 3: Wholesale Showroom Grid */}
       <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24 border-b border-black/10">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-12">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-gray-500 mb-2">
-              DIRECT FROM SHOWROOM
+              {t("home.directFromShowroom")}
             </p>
             <h3 className="text-[28px] sm:text-[38px] font-light uppercase tracking-[0.16em] text-black">
-              FEATURED STYLES
+              {t("home.featuredStyles")}
             </h3>
           </div>
 
@@ -177,21 +177,21 @@ export default function Home() {
               onClick={() => setActiveTab("all")}
               className={`px-4 py-2 transition-colors ${activeTab === "all" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
             >
-              ALL ({products.length})
+              {t("home.all")} ({products.length})
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("shiva")}
               className={`px-4 py-2 transition-colors ${activeTab === "shiva" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
             >
-              SHIVA / MEN
+              {t("home.shivaMen")}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("shakti")}
               className={`px-4 py-2 transition-colors ${activeTab === "shakti" ? "bg-black text-white" : "text-gray-600 hover:text-black"}`}
             >
-              SHAKTI / WOMEN
+              {t("home.shaktiWomen")}
             </button>
           </div>
         </div>
@@ -213,12 +213,12 @@ export default function Home() {
             href="/shop/shakti"
             className="group relative inline-block overflow-hidden border border-black bg-black text-white px-12 py-5 text-[12px] font-bold uppercase tracking-[0.22em] transition-all hover:bg-white hover:text-black"
           >
-            VIEW ENTIRE WHOLESALE CATALOGUE &rarr;
+            {t("home.viewCatalogue")} &rarr;
           </Link>
         </div>
       </section>
 
-      {/* Section 4: Split Campaign Portals (Clean Editorial Style, Zero Boxy Overlays) */}
+      {/* Section 4: Split Campaign Portals */}
       <section className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 py-16 sm:py-24 border-b border-black/10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
           
@@ -236,22 +236,22 @@ export default function Home() {
             </Link>
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e11d48]">
-                SS26 MENSWEAR
+                {t("home.ss26Menswear")}
               </span>
               <Link href="/shop/shiva">
                 <h4 className="text-[20px] sm:text-[26px] font-bold uppercase tracking-[0.16em] text-black group-hover:underline underline-offset-4">
-                  SHIVA / MEN — DECONSTRUCTED ARMOR
+                  {t("home.shivaDeconstructed")}
                 </h4>
               </Link>
               <p className="text-[13px] text-gray-600 tracking-[0.04em] mt-1">
-                Explore ceremonial coats, deconstructed knitwear, and modular silhouettes designed for movement.
+                {t("home.shivaDesc")}
               </p>
               <div className="pt-3">
                 <Link
                   href="/shop/shiva"
                   className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b border-black pb-0.5 hover:text-gray-600 transition-all"
                 >
-                  EXPLORE SHIVA COLLECTION &rarr;
+                  {t("home.exploreShiva")} &rarr;
                 </Link>
               </div>
             </div>
@@ -271,22 +271,22 @@ export default function Home() {
             </Link>
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d946ef]">
-                SS26 WOMENSWEAR
+                {t("home.ss26Womenswear")}
               </span>
               <Link href="/shop/shakti">
                 <h4 className="text-[20px] sm:text-[26px] font-bold uppercase tracking-[0.16em] text-black group-hover:underline underline-offset-4">
-                  SHAKTI / WOMEN — SILHOUETTES OF LIGHT
+                  {t("home.shaktiSilhouettes")}
                 </h4>
               </Link>
               <p className="text-[13px] text-gray-600 tracking-[0.04em] mt-1">
-                Fluid draping, high-frequency organic cottons, and architectural layering for the modern consciousness.
+                {t("home.shaktiDesc")}
               </p>
               <div className="pt-3">
                 <Link
                   href="/shop/shakti"
                   className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-black border-b border-black pb-0.5 hover:text-gray-600 transition-all"
                 >
-                  EXPLORE SHAKTI COLLECTION &rarr;
+                  {t("home.exploreShakti")} &rarr;
                 </Link>
               </div>
             </div>

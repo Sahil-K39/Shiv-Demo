@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -27,28 +25,27 @@ export default function Footer() {
         <div className="space-y-6">
           <BrandLogo variant="footer" />
           <p className="max-w-[250px] text-[13px] uppercase leading-loose tracking-[0.2em] text-gray-500">
-            Neo-primitive fashion for ritual silhouettes, structured layers, and limited seasonal releases.
+            {t("footer.tagline")}
           </p>
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Collections</h4>
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">{t("footer.collections")}</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-600 uppercase">
-            <li><Link href="/shop/shakti" className="hover:text-black transition-colors">Shakti</Link></li>
-            <li><Link href="/shop/shiva" className="hover:text-black transition-colors">Shiva</Link></li>
-
-            <li><Link href="/fabric-selling" className="hover:text-black transition-colors">Fabric Selling</Link></li>
-            <li><Link href="/council" className="hover:text-black transition-colors">The Council</Link></li>
+            <li><Link href="/shop/shakti" className="hover:text-black transition-colors">{t("footer.shakti")}</Link></li>
+            <li><Link href="/shop/shiva" className="hover:text-black transition-colors">{t("footer.shiva")}</Link></li>
+            <li><Link href="/fabric-selling" className="hover:text-black transition-colors">{t("footer.fabricSelling")}</Link></li>
+            <li><Link href="/council" className="hover:text-black transition-colors">{t("footer.theCouncil")}</Link></li>
           </ul>
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">Information</h4>
+          <h4 className="text-[12px] tracking-[0.3em] text-black font-semibold uppercase mb-6">{t("footer.information")}</h4>
           <ul className="space-y-3 text-[11px] tracking-[0.1em] text-gray-600 uppercase">
-            <li><Link href="/shipping" className="hover:text-black transition-colors">Shipping & Returns</Link></li>
-            <li><Link href="/terms" className="hover:text-black transition-colors">Terms of Service</Link></li>
-            <li><Link href="/privacy" className="hover:text-black transition-colors">Privacy Policy</Link></li>
-            <li><Link href="/contact" className="hover:text-black transition-colors">Contact</Link></li>
+            <li><Link href="/shipping" className="hover:text-black transition-colors">{t("footer.shippingReturns")}</Link></li>
+            <li><Link href="/terms" className="hover:text-black transition-colors">{t("footer.termsOfService")}</Link></li>
+            <li><Link href="/privacy" className="hover:text-black transition-colors">{t("footer.privacyPolicy")}</Link></li>
+            <li><Link href="/contact" className="hover:text-black transition-colors">{t("footer.contactLink")}</Link></li>
           </ul>
         </div>
 

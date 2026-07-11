@@ -161,7 +161,7 @@ export default function Navbar() {
               })}
               <div className="py-4 flex items-center justify-between">
                 <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
-                  Language / Region
+                  {t("nav.languageRegion")}
                 </span>
                 <LanguageSwitcherButton variant="footer" />
               </div>
