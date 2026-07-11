@@ -14,7 +14,7 @@ export default function ContentProtectionShield() {
       setIsScreenCaptureBlocked(true);
       setTimeout(() => {
         setIsScreenCaptureBlocked(false);
-      }, 2200);
+      }, 2400);
     }
     setTimeout(() => {
       setSecurityNotice(null);
@@ -22,7 +22,7 @@ export default function ContentProtectionShield() {
   };
 
   useEffect(() => {
-    // 1. Prevent Right-Click Context Menu
+    // 1. Prevent Right-Click Context Menu (Desktop & Mobile Long-Press)
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
@@ -33,7 +33,7 @@ export default function ContentProtectionShield() {
         return;
       }
       e.preventDefault();
-      showSecurityWarning("Right-click is disabled to protect proprietary articles & imagery.");
+      showSecurityWarning("Right-click & long-press save is disabled on proprietary articles & imagery.");
     };
 
     // 2. Prevent Copy & Cut Actions
@@ -65,14 +65,13 @@ export default function ContentProtectionShield() {
       }
     };
 
-    // 4. INSTANT KEYBOARD INTERCEPTION (macOS Cmd+Shift & Windows Ctrl+Shift)
-    // We intercept the moment Cmd+Shift or Ctrl+Shift are pressed together BEFORE 3, 4, 5, or S are pressed!
+    // 4. INSTANT CROSS-PLATFORM KEYBOARD INTERCEPTION (macOS + Windows)
     const handleKeyDown = (e: KeyboardEvent) => {
-      // PrintScreen Key
+      // PrintScreen Key (Windows PrtScn / Alt+PrtScn / Ctrl+PrtScn)
       if (e.key === "PrintScreen" || e.keyCode === 44) {
         e.preventDefault();
         setIsScreenCaptureBlocked(true);
-        showSecurityWarning("Screenshot attempt detected. Display obscured for security.", true);
+        showSecurityWarning("Windows Screenshot attempt detected. Display obscured for security.", true);
         try {
           navigator.clipboard.writeText("");
         } catch {}
@@ -82,16 +81,24 @@ export default function ContentProtectionShield() {
       const isMacMeta = e.metaKey;
       const isCtrl = e.ctrlKey;
       const isShift = e.shiftKey;
+      const isAlt = e.altKey;
 
-      // INSTANT SHIELD: If Cmd + Shift (macOS screenshot combo prefix) or Ctrl + Shift is held down,
-      // instantly raise the shield BEFORE the user can hit 3, 4, 5, 6, or S!
+      // WINDOWS SNIPPING TOOL: Win + Shift + S or Ctrl + Shift + S
+      if (((isMacMeta || isCtrl) && isShift && e.key.toLowerCase() === "s") || (isAlt && (e.key === "PrintScreen" || e.keyCode === 44))) {
+        e.preventDefault();
+        setIsScreenCaptureBlocked(true);
+        showSecurityWarning("Windows Snipping Tool intercepted by Shiv Shakti Security Shield.", true);
+        return;
+      }
+
+      // INSTANT PRE-EMPTIVE SHIELD: If Cmd + Shift (macOS) or Win + Shift (Windows) or Ctrl + Shift is held down
       if ((isMacMeta && isShift) || (isCtrl && isShift && ["s", "S", "i", "I", "c", "C"].includes(e.key))) {
         setIsScreenCaptureBlocked(true);
         showSecurityWarning("Screen capture shortcut intercepted by Shiv Shakti Security Shield.", true);
         return;
       }
 
-      // macOS Screenshots explicit keys: Cmd + Shift + 3, 4, 5, 6
+      // macOS Explicit Screenshot Shortcuts: Cmd + Shift + 3, 4, 5, 6
       if (isMacMeta && isShift && ["3", "4", "5", "6", "$", "%", "^"].includes(e.key)) {
         e.preventDefault();
         setIsScreenCaptureBlocked(true);
@@ -120,9 +127,24 @@ export default function ContentProtectionShield() {
       }
     };
 
-    // 5. WINDOW BLUR / VISIBILITY LOSS SHIELD
-    // When macOS Screenshot app (Cmd+Shift+5), Snipping Tool, or screen recording overlays activate,
-    // the browser window loses focus. We instantly blur the screen until focus returns.
+    // 5. MOBILE INTERCEPTION: 3+ Finger Swipe / Screenshot Gestures (iOS & Android)
+    const handleTouchStart = (e: TouchEvent) => {
+      // If 3 or more fingers touch the screen simultaneously (common Android/iOS screenshot gesture)
+      if (e.touches && e.touches.length >= 3) {
+        setIsScreenCaptureBlocked(true);
+        showSecurityWarning("Multi-finger screen capture gesture blocked on mobile device.", true);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length >= 3) {
+        setIsScreenCaptureBlocked(true);
+      }
+    };
+
+    // 6. CROSS-PLATFORM WINDOW BLUR / VISIBILITY / APP SWITCHER SHIELD
+    // When macOS Screenshot app (Cmd+Shift+5), Windows Snipping Tool, mobile App Switcher (iOS/Android Multitasking),
+    // or external screen recorders take focus, instantly obscure the viewport.
     const handleWindowBlur = () => {
       setIsWindowBlurred(true);
     };
@@ -132,7 +154,7 @@ export default function ContentProtectionShield() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
+      if (document.hidden || document.visibilityState === "hidden") {
         setIsWindowBlurred(true);
       } else {
         setIsWindowBlurred(false);
@@ -145,6 +167,8 @@ export default function ContentProtectionShield() {
     document.addEventListener("dragstart", handleDragStart);
     window.addEventListener("keydown", handleKeyDown, true);
     window.addEventListener("keyup", handleKeyUp, true);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
     window.addEventListener("blur", handleWindowBlur);
     window.addEventListener("focus", handleWindowFocus);
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -156,6 +180,8 @@ export default function ContentProtectionShield() {
       document.removeEventListener("dragstart", handleDragStart);
       window.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keyup", handleKeyUp, true);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("blur", handleWindowBlur);
       window.removeEventListener("focus", handleWindowFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -169,7 +195,7 @@ export default function ContentProtectionShield() {
       {/* Repeating Foreground Security Watermark Matrix */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.04] select-none"
+        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.045] select-none"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='420' height='220' viewBox='0 0 420 220' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='15' y='110' fill='%23000000' font-family='monospace' font-size='11' font-weight='bold' transform='rotate(-24 210 110)' letter-spacing='4'%3ESHIV SHAKTI • CONFIDENTIAL WHOLESALE IP%3C/text%3E%3C/svg%3E")`,
         }}
@@ -201,7 +227,7 @@ export default function ContentProtectionShield() {
               Shiv Shakti wholesale articles, garment specifications, and imagery are protected under proprietary IP security. Screen capture, snipping overlays, and background snapshots are disabled.
             </p>
             <div className="mt-6 border-t border-white/10 pt-4 text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
-              Click window to resume wholesale session
+              Click or tap screen to resume wholesale session
             </div>
           </div>
         </div>
