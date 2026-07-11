@@ -22,6 +22,8 @@ export default function ContentProtectionShield() {
   };
 
   useEffect(() => {
+    let focusRecoveryTimer: NodeJS.Timeout | null = null;
+
     // 1. Prevent Right-Click Context Menu (Desktop & Mobile Long-Press)
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -67,11 +69,10 @@ export default function ContentProtectionShield() {
 
     // 4. INSTANT CROSS-PLATFORM KEYBOARD INTERCEPTION (macOS + Windows)
     const handleKeyDown = (e: KeyboardEvent) => {
-      // PrintScreen Key (Windows PrtScn / Alt+PrtScn / Ctrl+PrtScn)
       if (e.key === "PrintScreen" || e.keyCode === 44) {
         e.preventDefault();
         setIsScreenCaptureBlocked(true);
-        showSecurityWarning("Windows Screenshot attempt detected. Display obscured for security.", true);
+        showSecurityWarning("Screenshot attempt detected. Display obscured for security.", true);
         try {
           navigator.clipboard.writeText("");
         } catch {}
@@ -83,7 +84,6 @@ export default function ContentProtectionShield() {
       const isShift = e.shiftKey;
       const isAlt = e.altKey;
 
-      // WINDOWS SNIPPING TOOL: Win + Shift + S or Ctrl + Shift + S
       if (((isMacMeta || isCtrl) && isShift && e.key.toLowerCase() === "s") || (isAlt && (e.key === "PrintScreen" || e.keyCode === 44))) {
         e.preventDefault();
         setIsScreenCaptureBlocked(true);
@@ -91,14 +91,12 @@ export default function ContentProtectionShield() {
         return;
       }
 
-      // INSTANT PRE-EMPTIVE SHIELD: If Cmd + Shift (macOS) or Win + Shift (Windows) or Ctrl + Shift is held down
       if ((isMacMeta && isShift) || (isCtrl && isShift && ["s", "S", "i", "I", "c", "C"].includes(e.key))) {
         setIsScreenCaptureBlocked(true);
         showSecurityWarning("Screen capture shortcut intercepted by Shiv Shakti Security Shield.", true);
         return;
       }
 
-      // macOS Explicit Screenshot Shortcuts: Cmd + Shift + 3, 4, 5, 6
       if (isMacMeta && isShift && ["3", "4", "5", "6", "$", "%", "^"].includes(e.key)) {
         e.preventDefault();
         setIsScreenCaptureBlocked(true);
@@ -106,14 +104,12 @@ export default function ContentProtectionShield() {
         return;
       }
 
-      // Save Page: Ctrl/Cmd + S
       if ((isCtrl || isMacMeta) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         showSecurityWarning("Saving HTML / article content is prohibited.");
         return;
       }
 
-      // View Source & DevTools shortcuts: F12, Ctrl/Cmd + U
       if (e.key === "F12" || ((isCtrl || isMacMeta) && e.key.toLowerCase() === "u")) {
         e.preventDefault();
         showSecurityWarning("Inspection & developer tools are locked on wholesale views.");
@@ -127,37 +123,61 @@ export default function ContentProtectionShield() {
       }
     };
 
-    // 5. MOBILE INTERCEPTION: 3+ Finger Swipe / Screenshot Gestures (iOS & Android)
+    // 5. MOBILE AGGRESSIVE SCREENSHOT & GESTURE INTERCEPTION (iOS & Android)
+    const triggerInstantMobileShield = (message: string) => {
+      setIsScreenCaptureBlocked(true);
+      showSecurityWarning(message, true);
+    };
+
     const handleTouchStart = (e: TouchEvent) => {
-      // If 3 or more fingers touch the screen simultaneously (common Android/iOS screenshot gesture)
-      if (e.touches && e.touches.length >= 3) {
-        setIsScreenCaptureBlocked(true);
-        showSecurityWarning("Multi-finger screen capture gesture blocked on mobile device.", true);
+      // If 2+ fingers touch simultaneously (screenshot swipes / multi-finger OS gesture)
+      if (e.touches && e.touches.length >= 2) {
+        triggerInstantMobileShield("Multi-finger mobile capture gesture blocked.");
       }
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches && e.touches.length >= 3) {
-        setIsScreenCaptureBlocked(true);
-      }
+    // When OS interrupts browser touch (hardware Power+Volume screenshot or notification drawer)
+    const handleTouchCancel = () => {
+      triggerInstantMobileShield("Mobile OS capture event detected. Screen obscured.");
     };
 
-    // 6. CROSS-PLATFORM WINDOW BLUR / VISIBILITY / APP SWITCHER SHIELD
-    // When macOS Screenshot app (Cmd+Shift+5), Windows Snipping Tool, mobile App Switcher (iOS/Android Multitasking),
-    // or external screen recorders take focus, instantly obscure the viewport.
+    // 6. AGGRESSIVE BLUR & LOCK ON VISIBILITY LOSS / WINDOW BLUR / VIEWPORT RESIZE
+    // We lock blur for at least 1800ms so mobile screenshot flash cannot capture clean frames
     const handleWindowBlur = () => {
       setIsWindowBlurred(true);
+      setIsScreenCaptureBlocked(true);
+      setTimeout(() => {
+        setIsScreenCaptureBlocked(false);
+      }, 1800);
     };
 
     const handleWindowFocus = () => {
-      setIsWindowBlurred(false);
+      if (focusRecoveryTimer) clearTimeout(focusRecoveryTimer);
+      // Keep shield locked for 800ms after focus returns so mobile screenshot animation finishes capturing only blur
+      focusRecoveryTimer = setTimeout(() => {
+        setIsWindowBlurred(false);
+      }, 800);
     };
 
     const handleVisibilityChange = () => {
       if (document.hidden || document.visibilityState === "hidden") {
         setIsWindowBlurred(true);
+        setIsScreenCaptureBlocked(true);
       } else {
-        setIsWindowBlurred(false);
+        if (focusRecoveryTimer) clearTimeout(focusRecoveryTimer);
+        focusRecoveryTimer = setTimeout(() => {
+          setIsWindowBlurred(false);
+        }, 800);
+      }
+    };
+
+    // Mobile visual viewport resize (triggers when Android/iOS screenshot flash or recording banner appears)
+    const handleViewportResize = () => {
+      if (window.visualViewport) {
+        setIsScreenCaptureBlocked(true);
+        setTimeout(() => {
+          setIsScreenCaptureBlocked(false);
+        }, 1500);
       }
     };
 
@@ -168,12 +188,16 @@ export default function ContentProtectionShield() {
     window.addEventListener("keydown", handleKeyDown, true);
     window.addEventListener("keyup", handleKeyUp, true);
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchcancel", handleTouchCancel, { passive: true });
     window.addEventListener("blur", handleWindowBlur);
     window.addEventListener("focus", handleWindowFocus);
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleViewportResize);
+    }
 
     return () => {
+      if (focusRecoveryTimer) clearTimeout(focusRecoveryTimer);
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("copy", handleCopyCut);
       document.removeEventListener("cut", handleCopyCut);
@@ -181,10 +205,13 @@ export default function ContentProtectionShield() {
       window.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keyup", handleKeyUp, true);
       window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchcancel", handleTouchCancel);
       window.removeEventListener("blur", handleWindowBlur);
       window.removeEventListener("focus", handleWindowFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleViewportResize);
+      }
     };
   }, []);
 
@@ -192,12 +219,12 @@ export default function ContentProtectionShield() {
 
   return (
     <>
-      {/* Repeating Foreground Security Watermark Matrix */}
+      {/* High-Contrast Foreground IP Watermark Matrix (Always Visible on Mobile & Desktop Screenshots) */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.045] select-none"
+        className="pointer-events-none fixed inset-0 z-40 overflow-hidden opacity-[0.075] select-none"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='420' height='220' viewBox='0 0 420 220' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='15' y='110' fill='%23000000' font-family='monospace' font-size='11' font-weight='bold' transform='rotate(-24 210 110)' letter-spacing='4'%3ESHIV SHAKTI • CONFIDENTIAL WHOLESALE IP%3C/text%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='440' height='240' viewBox='0 0 440 240' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='120' fill='%23000000' font-family='monospace' font-size='12' font-weight='bold' transform='rotate(-22 220 120)' letter-spacing='3'%3ESHIV SHAKTI • CONFIDENTIAL WHOLESALE IP • UNAUTHORIZED CAPTURE PROHIBITED%3C/text%3E%3C/svg%3E")`,
         }}
       />
 
