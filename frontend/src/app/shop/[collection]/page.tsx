@@ -10,10 +10,12 @@ import ProductCard from "@/components/product/ProductCard";
 import { getAllProducts } from "@/lib/productData";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ShopCollection() {
   const params = useParams();
   const collection = params.collection as string;
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mobileGridCols, setMobileGridCols] = useState<1 | 2>(2);
@@ -34,7 +36,7 @@ export default function ShopCollection() {
     <div className="w-full bg-white text-black min-h-[80vh] flex flex-col items-center">
       <div className="w-full border-b border-black/10 py-16 sm:py-20 text-center">
         <p className="mb-4 px-5 text-[12px] sm:text-[14px] font-medium uppercase leading-relaxed tracking-[0.2em] text-gray-600 lg:text-[12px] lg:tracking-[0.28em] lg:text-gray-500">
-          Wholesale catalogue / MOQ {MIN_WHOLESALE_QUANTITY} units per style
+          {t("shop.ss26Wholesale")} / MOQ {MIN_WHOLESALE_QUANTITY} {t("cart.units")} / style
         </p>
         <motion.h1
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
@@ -42,10 +44,10 @@ export default function ShopCollection() {
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="text-[38px] sm:text-[44px] font-light uppercase tracking-[0.14em] text-black min-[600px]:text-[56px] md:text-[60px] md:tracking-[0.16em]"
         >
-          {collection === "shiva" ? "SHIVA / MEN" : collection === "shakti" ? "SHAKTI / WOMEN" : collection}
+          {collection === "shiva" ? t("shop.shivaCollection") : collection === "shakti" ? t("shop.shaktiCollection") : t("shop.allCollection")}
         </motion.h1>
         <p className="mx-auto mt-4 sm:mt-6 max-w-2xl px-6 text-[14px] sm:text-[18px] uppercase leading-relaxed tracking-[0.1em] text-gray-600 lg:text-[16px] lg:tracking-[0.14em] lg:text-gray-500">
-          Select sizes, colorways, and bulk quantities for boutique, studio, and partner enquiries.
+          {collection === "shiva" ? t("shop.shivaDesc") : collection === "shakti" ? t("shop.shaktiDesc") : t("shop.allDesc")}
         </p>
       </div>
 

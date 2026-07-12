@@ -12,6 +12,8 @@ import { ordersAPI } from "@/lib/api";
 import { getCartItemImage } from "@/lib/productMedia";
 import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
+import { useLanguage } from "@/context/LanguageContext";
+import { translateProductText } from "@/lib/productTranslations";
 
 const emptyEnquiryForm = {
   shipping_name: "",
@@ -24,6 +26,7 @@ const emptyEnquiryForm = {
 };
 
 export default function CartDrawer() {
+  const { t, currentLanguage } = useLanguage();
   const { items, isOpen, closeCart, total, removeItem, updateQuantity, fetchCart, isLoading, user } =
     useCartStore();
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
@@ -107,10 +110,10 @@ export default function CartDrawer() {
             <div className="flex items-center justify-between p-8 border-b border-black/5">
               <div>
                 <h2 className="text-[18px] tracking-[0.15em] uppercase font-light text-black">
-                  WHOLESALE ENQUIRY
+                  {t("cart.title")}
                 </h2>
                 <p className="text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-1">
-                  {items.length} wholesale {items.length === 1 ? "line" : "lines"}
+                  {items.length} {t("cart.units")}
                 </p>
               </div>
               <button
@@ -132,12 +135,12 @@ export default function CartDrawer() {
               {!isLoading && items.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                   <p className="text-[13px] tracking-[0.1em] text-gray-500 uppercase">
-                    YOUR WHOLESALE ENQUIRY IS EMPTY
+                    {t("cart.empty")}
                   </p>
                   <p className="text-[11px] text-gray-400 mt-2">
                     {user
-                      ? `Add at least ${MIN_WHOLESALE_QUANTITY} units to begin a buyer enquiry.`
-                      : "Log in or create an identity before adding wholesale enquiry items."}
+                      ? t("cart.moqWarning")
+                      : t("cart.loginToEnquire")}
                   </p>
                   {!user && (
                     <Link
@@ -175,7 +178,7 @@ export default function CartDrawer() {
                     <div className="flex-1 flex flex-col justify-between min-w-0">
                       <div>
                         <h4 className="text-[12px] tracking-[0.1em] uppercase text-black font-light truncate">
-                          {item.name}
+                          {translateProductText(item.name, currentLanguage.code)}
                         </h4>
                         <p className="text-[10px] tracking-[0.15em] uppercase text-gray-500 mt-1">
                           SIZE: {item.size} {item.color && `/ ${item.color}`}
@@ -216,7 +219,7 @@ export default function CartDrawer() {
                           onClick={() => handleRemoveItem(item.id)}
                           className="text-[10px] tracking-[0.15em] uppercase text-gray-500 hover:text-red-600 transition-colors"
                         >
-                          REMOVE
+                          {t("cart.remove")}
                         </button>
                       </div>
                     </div>
@@ -229,7 +232,7 @@ export default function CartDrawer() {
               <div className="p-8 border-t border-black/5 space-y-4 bg-white">
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] tracking-[0.2em] uppercase text-gray-500">
-                    ENQUIRY SUBTOTAL
+                    {t("cart.subtotal")}
                   </span>
                   <span className="text-[18px] tracking-[0.05em] text-black font-light">
                     {formatPriceINR(total)}
@@ -308,7 +311,7 @@ export default function CartDrawer() {
                   whileTap={{ scale: 0.99 }}
                 >
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    {user ? "SEND WHOLESALE ENQUIRY" : "LOG IN TO SEND ENQUIRY"}
+                    {user ? t("cart.checkout") : t("cart.loginToEnquire")}
                   </span>
                   <motion.div
                     className="absolute inset-0 bg-black"

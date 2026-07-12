@@ -13,6 +13,7 @@ import {
 } from "@/lib/productMedia";
 import { formatPriceINR } from "@/lib/pricing";
 import { useLanguage } from "@/context/LanguageContext";
+import { translateProductText } from "@/lib/productTranslations";
 
 interface ProductCardProps {
   product: Product;
@@ -20,7 +21,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-80px" });
   const [isHovered, setIsHovered] = useState(false);
@@ -120,7 +121,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         <div className="mt-4 space-y-1 px-0.5">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-black sm:text-[12px]">
-              {product.name}
+              {translateProductText(product.name, currentLanguage.code)}
             </h3>
             {index % 3 === 0 ? (
               <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">{t("product.new")}</span>

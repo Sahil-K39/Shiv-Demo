@@ -22,11 +22,14 @@ import {
 import { getAllProducts } from "@/lib/productData";
 import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY, WHOLESALE_PACK_SIZES } from "@/lib/wholesale";
+import { useLanguage } from "@/context/LanguageContext";
+import { translateProductText } from "@/lib/productTranslations";
 
 export default function ProductDetail() {
   const params = useParams();
   const slug = params.slug as string;
   const { addItem, openCart, user } = useCartStore();
+  const { t, currentLanguage } = useLanguage();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loadedSlug, setLoadedSlug] = useState("");
@@ -230,21 +233,21 @@ export default function ProductDetail() {
               href={categoryHref}
               className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gray-600 transition-colors hover:text-black font-medium"
             >
-              <span>{product.category} collection</span>
+              <span>{translateProductText(product.category || "Women", currentLanguage.code)} {t("productDetail.collection")}</span>
               <ArrowRightIcon className="h-3.5 w-3.5" />
             </Link>
 
             <p className="mt-10 text-[10px] uppercase tracking-[0.28em] text-gray-500 font-medium">
-              {product.collection || "SS26"} / wholesale look
+              {product.collection || "SS26"} / {t("productDetail.wholesaleLook")}
             </p>
             <h1 className="mt-4 max-w-[720px] text-[38px] font-light uppercase leading-[1.02] tracking-[0.025em] text-black md:text-[48px] xl:text-[56px]">
-              {product.name}
+              {translateProductText(product.name, currentLanguage.code)}
             </h1>
 
             <div className="mt-8 flex flex-wrap items-end justify-between gap-5 border-y border-black/10 py-5">
               <div>
                 <p className="text-[9px] uppercase tracking-[0.22em] text-gray-500 font-medium">
-                  Wholesale unit
+                  {t("productDetail.wholesaleUnit")}
                 </p>
                 <p className="mt-1 text-[24px] font-light tracking-[0.06em] text-black md:text-[28px]">
                   {formatPriceINR(product.price)}
@@ -255,7 +258,7 @@ export default function ProductDetail() {
                   Minimum order
                 </p>
                 <p className="mt-2 text-[12px] uppercase tracking-[0.16em] text-black font-medium">
-                  {MIN_WHOLESALE_QUANTITY} units per style
+                  {MIN_WHOLESALE_QUANTITY} {t("cart.units")} / style
                 </p>
               </div>
             </div>
@@ -402,11 +405,11 @@ export default function ProductDetail() {
               <span className="h-4 w-4 animate-spin border border-white/40 border-t-white" />
             ) : product.in_stock ? (
               <>
-                <span>Add to wholesale enquiry</span>
+                <span>{t("productDetail.addToEnquiry")}</span>
                 <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </>
             ) : (
-              <span>Out of stock</span>
+              <span>{t("products.outOfStock")}</span>
             )}
           </motion.button>
 
@@ -451,10 +454,10 @@ export default function ProductDetail() {
             <span className="h-4 w-4 animate-spin border border-white/40 border-t-white" />
           ) : product.in_stock ? (
             <>
-              <span>Add to enquiry \u2014 {formatPriceINR(product.price * quantity)}</span>
+              <span>{t("productDetail.addToEnquiry")} \u2014 {formatPriceINR(product.price * quantity)}</span>
             </>
           ) : (
-            <span>Out of stock</span>
+            <span>{t("products.outOfStock")}</span>
           )}
         </button>
       </div>

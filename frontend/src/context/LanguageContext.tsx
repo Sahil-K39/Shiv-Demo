@@ -8,6 +8,7 @@ import {
   getLanguageByCode,
 } from "@/lib/languages";
 import { TranslationKey, getTranslation } from "@/lib/translations";
+import { getPageText } from "@/lib/pageTranslations";
 
 interface LanguageContextType {
   currentLanguage: Language;
@@ -15,7 +16,8 @@ interface LanguageContextType {
   isRtl: boolean;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
-  t: (key: TranslationKey) => string;
+  t: (key: TranslationKey | string) => string;
+  pt: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -24,7 +26,8 @@ const LanguageContext = createContext<LanguageContextType>({
   isRtl: false,
   isModalOpen: false,
   setIsModalOpen: () => {},
-  t: (key) => key,
+  t: (key) => String(key),
+  pt: (key) => String(key),
 });
 
 const STORAGE_KEY = "shiv_shakti_locale";
@@ -85,8 +88,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     currentLanguage.rtl || RTL_LANGUAGES.has(currentLanguage.code)
   );
 
-  const t = (key: TranslationKey) =>
-    getTranslation(currentLanguage.code, key);
+  const pt = (key: string) => getPageText(currentLanguage.code, key);
+
+  const t = (key: TranslationKey | string) => {
+    const translated = getTranslation(currentLanguage.code, key as TranslationKey);
+    if (translated && translated !== key) return translated;
+    return getPageText(currentLanguage.code, key);
+  };
 
   return (
     <LanguageContext.Provider
@@ -97,6 +105,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         isModalOpen,
         setIsModalOpen,
         t,
+        pt,
       }}
     >
       {children}
