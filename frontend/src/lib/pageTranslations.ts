@@ -1,3 +1,5 @@
+import { PAGE_TRANSLATIONS_ALL } from "./pageTranslationsAll";
+
 export const PAGE_TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
     // Cart Drawer
@@ -376,6 +378,11 @@ export const PAGE_TRANSLATIONS: Record<string, Record<string, string>> = {
 
 export function getPageText(langCode: string, key: string): string {
   const code = langCode.split("-")[0];
-  const dict = PAGE_TRANSLATIONS[code] || PAGE_TRANSLATIONS.en;
-  return dict[key] || PAGE_TRANSLATIONS.en[key] || key;
+  const dictCore = PAGE_TRANSLATIONS[langCode] || PAGE_TRANSLATIONS[code];
+  if (dictCore && dictCore[key]) return dictCore[key];
+
+  const dict86 = PAGE_TRANSLATIONS_ALL[langCode] || PAGE_TRANSLATIONS_ALL[code];
+  if (dict86 && dict86[key]) return dict86[key];
+
+  return PAGE_TRANSLATIONS.en[key] || key;
 }

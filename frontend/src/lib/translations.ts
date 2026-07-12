@@ -1,3 +1,5 @@
+import { TRANSLATIONS_ALL } from "./translationsAll86";
+
 export type TranslationKey =
   | "nav.shiva"
   | "nav.shakti"
@@ -413,6 +415,11 @@ export const TRANSLATIONS: Record<string, TranslationMap> = {
 
 export function getTranslation(langCode: string, key: TranslationKey): string {
   const code = langCode.split("-")[0];
-  const dict = TRANSLATIONS[langCode] || TRANSLATIONS[code] || TRANSLATIONS.en;
-  return dict[key] || TRANSLATIONS.en[key] || key;
+  const dictCore = TRANSLATIONS[langCode] || TRANSLATIONS[code];
+  if (dictCore && dictCore[key]) return dictCore[key];
+
+  const dict86 = TRANSLATIONS_ALL[langCode] || TRANSLATIONS_ALL[code];
+  if (dict86 && dict86[key]) return dict86[key];
+
+  return TRANSLATIONS.en[key] || key;
 }

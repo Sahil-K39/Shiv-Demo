@@ -1,3 +1,5 @@
+import { CATEGORY_TRANSLATIONS_ALL } from "./productTranslationsAll86";
+
 // Comprehensive multi-language dictionary for Shiv Shakti SS26 Product Names & Fashion Terms
 export const PRODUCT_TRANSLATIONS: Record<string, Record<string, string>> = {
   // Products
@@ -207,22 +209,29 @@ const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
 export function translateProductText(text: string, langCode: string): string {
   if (!text || langCode === "en") return text;
 
+  const code = langCode.split("-")[0];
+
   // Check exact product match
-  if (PRODUCT_TRANSLATIONS[text] && PRODUCT_TRANSLATIONS[text][langCode]) {
-    return PRODUCT_TRANSLATIONS[text][langCode];
+  if (PRODUCT_TRANSLATIONS[text] && (PRODUCT_TRANSLATIONS[text][langCode] || PRODUCT_TRANSLATIONS[text][code])) {
+    return PRODUCT_TRANSLATIONS[text][langCode] || PRODUCT_TRANSLATIONS[text][code];
   }
 
-  // Check category match
-  if (CATEGORY_TRANSLATIONS[text] && CATEGORY_TRANSLATIONS[text][langCode]) {
-    return CATEGORY_TRANSLATIONS[text][langCode];
+  // Check category match in base CATEGORY_TRANSLATIONS
+  if (CATEGORY_TRANSLATIONS[text] && (CATEGORY_TRANSLATIONS[text][langCode] || CATEGORY_TRANSLATIONS[text][code])) {
+    return CATEGORY_TRANSLATIONS[text][langCode] || CATEGORY_TRANSLATIONS[text][code];
+  }
+
+  // Check category match in CATEGORY_TRANSLATIONS_ALL (all 86 languages)
+  if (CATEGORY_TRANSLATIONS_ALL[text] && (CATEGORY_TRANSLATIONS_ALL[text][langCode] || CATEGORY_TRANSLATIONS_ALL[text][code])) {
+    return CATEGORY_TRANSLATIONS_ALL[text][langCode] || CATEGORY_TRANSLATIONS_ALL[text][code];
   }
 
   // Case-insensitive lookup
   const foundKey = Object.keys(PRODUCT_TRANSLATIONS).find(
     (k) => k.toLowerCase() === text.toLowerCase()
   );
-  if (foundKey && PRODUCT_TRANSLATIONS[foundKey][langCode]) {
-    return PRODUCT_TRANSLATIONS[foundKey][langCode];
+  if (foundKey && (PRODUCT_TRANSLATIONS[foundKey][langCode] || PRODUCT_TRANSLATIONS[foundKey][code])) {
+    return PRODUCT_TRANSLATIONS[foundKey][langCode] || PRODUCT_TRANSLATIONS[foundKey][code];
   }
 
   return text;
