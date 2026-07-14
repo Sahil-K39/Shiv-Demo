@@ -54,10 +54,10 @@ export default function ShopCollection() {
       {/* Mobile 1-col / 2-col view toggle toolbar */}
       <div className="flex w-full items-center justify-between border-b border-black/10 bg-white px-4 py-3 sm:px-6 md:hidden">
         <span className="text-[10px] uppercase tracking-[0.2em] text-black font-medium">
-          {products.length} Styles
+          {products.length} {t("shop.stylesCount")}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-[9px] uppercase tracking-[0.15em] text-gray-500">Grid:</span>
+          <span className="text-[9px] uppercase tracking-[0.15em] text-gray-500">{t("shop.gridLabel")}</span>
           <button
             type="button"
             onClick={() => setMobileGridCols(1)}
@@ -90,35 +90,35 @@ export default function ShopCollection() {
         {/* Left Category Sidebar (Desktop) / Horizontal Scroll (Mobile) */}
         <div className="w-full lg:w-64 shrink-0 border-b lg:border-b-0 lg:border-r border-black/10 pb-6 lg:pb-0 lg:pr-8 lg:sticky lg:top-28">
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-black mb-4">
-            CATEGORIES
+            {t("shop.categoriesLabel")}
           </p>
           <div className="flex lg:flex-col gap-4 overflow-x-auto pb-2 lg:pb-0 text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.18em] text-gray-700 whitespace-nowrap">
             <Link href="/shop/shakti" className="hover:text-black transition-colors">
-              *NEW STUFF
+              {t("home.newStuff")}
             </Link>
             <Link href="/shop/shakti" className="hover:text-black transition-colors">
-              WHOLESALE
+              {t("home.wholesaleBuying")}
             </Link>
             <Link href="/shop/shiva" className={`hover:text-black transition-colors ${collection.toLowerCase() === 'shiva' ? 'text-black font-bold underline underline-offset-4' : ''}`}>
-              SHIVA / MEN
+              {t("home.shivaMen")}
             </Link>
             <Link href="/shop/shakti" className={`hover:text-black transition-colors ${collection.toLowerCase() === 'shakti' ? 'text-black font-bold underline underline-offset-4' : ''}`}>
-              SHAKTI / WOMEN
+              {t("home.shaktiWomen")}
             </Link>
             <Link href="/shop/shakti" className="hover:text-black transition-colors text-gray-400">
-              ARMOR / CEREMONIAL
+              {t("home.armorCeremonial")}
             </Link>
             <Link href="/shop/shiva" className="hover:text-black transition-colors text-gray-400">
-              DECONSTRUCTED
+              {t("home.deconstructed")}
             </Link>
             <Link href="/shop/shakti" className="hover:text-black transition-colors text-gray-400">
-              KNITS / HEAVY
+              {t("home.knitsHeavy")}
             </Link>
             <Link href="/shop/shiva" className="hover:text-black transition-colors text-gray-400">
-              KNITS / LIGHT
+              {t("home.knitsLight")}
             </Link>
             <Link href="/shop/shakti" className="hover:text-black transition-colors text-gray-400">
-              ROBES & COATS
+              {t("home.robesCoats")}
             </Link>
           </div>
         </div>

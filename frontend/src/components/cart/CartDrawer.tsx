@@ -38,9 +38,9 @@ export default function CartDrawer() {
   const totalUnits = items.reduce((sum, item) => sum + item.quantity, 0);
   const canSendEnquiry = Boolean(user) && totalUnits >= MIN_WHOLESALE_QUANTITY;
   const enquiryBlockedReason = !user
-    ? "Log in to send this wholesale enquiry."
+    ? t("cart.loginToEnquire")
     : totalUnits < MIN_WHOLESALE_QUANTITY
-      ? `Add at least ${MIN_WHOLESALE_QUANTITY} units to send an enquiry.`
+      ? `${t("cart.moqWarning")} (${MIN_WHOLESALE_QUANTITY} ${t("cart.units")})`
       : "";
 
   function setField(field: keyof typeof emptyEnquiryForm, value: string) {
@@ -148,7 +148,7 @@ export default function CartDrawer() {
                       onClick={closeCart}
                       className="mt-5 border border-black px-5 py-3 text-[10px] uppercase tracking-[0.18em] text-black transition-colors hover:bg-black hover:text-white"
                     >
-                      Log in
+                      {t("productDetail.loginLink")}
                     </Link>
                   )}
                 </div>
@@ -181,7 +181,7 @@ export default function CartDrawer() {
                           {translateProductText(item.name, currentLanguage.code)}
                         </h4>
                         <p className="text-[10px] tracking-[0.15em] uppercase text-gray-500 mt-1">
-                          SIZE: {item.size} {item.color && `/ ${item.color}`}
+                          {t("cart.sizeLabel")} {item.size} {item.color && `/ ${item.color}`}
                         </p>
                       </div>
 
@@ -246,7 +246,7 @@ export default function CartDrawer() {
                 )}
 
                 <div className="flex justify-between text-[10px] uppercase tracking-[0.16em] text-gray-500">
-                  <span>Total Units</span>
+                  <span>{t("cart.totalUnitsLabel")}</span>
                   <span>{totalUnits}</span>
                 </div>
 
@@ -265,16 +265,16 @@ export default function CartDrawer() {
                 {isEnquiryOpen && (
                   <form onSubmit={handleEnquirySubmit} className="space-y-3 border border-black/10 p-4">
                     <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">
-                      Buyer and delivery details
+                      {t("cart.buyerDetails")}
                     </p>
                     {[
-                      ["shipping_name", "Full name"],
-                      ["shipping_phone", "Phone"],
-                      ["shipping_address", "Address"],
-                      ["shipping_city", "City"],
-                      ["shipping_state", "State"],
-                      ["shipping_zip", "PIN / ZIP"],
-                      ["shipping_country", "Country"],
+                      ["shipping_name", t("cart.fieldName")],
+                      ["shipping_phone", t("cart.fieldPhone")],
+                      ["shipping_address", t("cart.fieldAddress")],
+                      ["shipping_city", t("cart.fieldCity")],
+                      ["shipping_state", t("cart.fieldState")],
+                      ["shipping_zip", t("cart.fieldZip")],
+                      ["shipping_country", t("cart.fieldCountry")],
                     ].map(([field, label]) => (
                       <input
                         key={field}
@@ -292,7 +292,7 @@ export default function CartDrawer() {
                       disabled={isSubmitting}
                       className="w-full border border-black bg-black py-3 text-[10px] uppercase tracking-[0.18em] text-white disabled:opacity-50"
                     >
-                      {isSubmitting ? "Sending..." : "Submit Enquiry"}
+                      {isSubmitting ? t("cart.sending") : t("cart.submitEnquiry")}
                     </button>
                   </form>
                 )}
@@ -322,7 +322,7 @@ export default function CartDrawer() {
                 </motion.button>
 
                 <p className="text-[9px] tracking-[0.1em] text-center text-gray-400 uppercase">
-                  MOQ {MIN_WHOLESALE_QUANTITY} units. We review the enquiry, then share payment and delivery instructions.
+                  {t("cart.moqFootnote")}
                 </p>
               </div>
             )}

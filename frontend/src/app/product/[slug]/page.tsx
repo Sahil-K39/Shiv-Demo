@@ -83,7 +83,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center">
         <h1 className="text-[24px] tracking-[0.2em] font-light uppercase text-stone">
-          GARMENT NOT FOUND
+          {t("productDetail.notFound")}
         </h1>
       </div>
     );
@@ -98,7 +98,7 @@ export default function ProductDetail() {
     if (!selectedSize || !selectedColor) return;
 
     if (!user) {
-      setAddNotice("Log in or create an identity before adding wholesale enquiry items.");
+      setAddNotice(t("productDetail.loginNotice"));
       openCart();
       return;
     }
@@ -107,7 +107,7 @@ export default function ProductDetail() {
     setIsAdding(true);
     try {
       await addItem(product.id, selectedSize, selectedColor, quantity);
-      setAddNotice("Added to wholesale enquiry.");
+      setAddNotice(t("productDetail.addedNotice"));
     } catch (error) {
       setAddNotice(error instanceof Error ? error.message : "Could not add this item.");
     } finally {
@@ -208,7 +208,7 @@ export default function ProductDetail() {
               </AnimatePresence>
 
               <div className="absolute left-4 top-4 bg-white/90 border border-black/20 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] text-black font-medium">
-                Wholesale
+                {t("productDetail.wholesaleBadge")}
               </div>
               <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-[9px] uppercase tracking-[0.2em] text-black/70 font-medium">
                 <span>{product.collection || "SS26"}</span>
@@ -255,10 +255,10 @@ export default function ProductDetail() {
               </div>
               <div className="text-right">
                 <p className="text-[9px] uppercase tracking-[0.22em] text-gray-500 font-medium">
-                  Minimum order
+                  {t("productDetail.minOrderLabel")}
                 </p>
                 <p className="mt-2 text-[12px] uppercase tracking-[0.16em] text-black font-medium">
-                  {MIN_WHOLESALE_QUANTITY} {t("cart.units")} / style
+                  {MIN_WHOLESALE_QUANTITY} {t("cart.units")} {t("productDetail.perStyle")}
                 </p>
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function ProductDetail() {
             {colors.length > 0 && (
               <fieldset className="space-y-4">
                 <legend className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
-                  Colour / <span className="text-black font-semibold">{selectedColor}</span>
+                  {t("productDetail.colorLabel")} / <span className="text-black font-semibold">{selectedColor}</span>
                 </legend>
                 <div className="flex flex-wrap gap-3">
                   {colors.map((color) => (
@@ -302,10 +302,10 @@ export default function ProductDetail() {
             {sizes.length > 0 && (
               <fieldset className="space-y-4">
                 <legend className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
-                  Stretch-fit size
+                  {t("productDetail.stretchFitSize")}
                 </legend>
                 <p className="text-[9px] uppercase tracking-[0.16em] text-gray-400 font-medium">
-                  Two flexible size bands
+                  {t("productDetail.flexibleBands")}
                 </p>
                 <div className="grid max-w-[420px] grid-cols-2 gap-3">
                   {sizes.map((size) => (
@@ -332,10 +332,10 @@ export default function ProductDetail() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-gray-600 font-medium">
-                  Wholesale quantity
+                  {t("productDetail.wholesaleQuantity")}
                 </p>
                 <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-black font-semibold">
-                  Build your enquiry pack
+                  {t("productDetail.buildPack")}
                 </p>
               </div>
               <div className="flex items-center border border-black/20 bg-white">
@@ -382,7 +382,7 @@ export default function ProductDetail() {
 
             <div className="flex items-center justify-between border-t border-black/10 pt-5">
               <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-medium">
-                Estimated line total
+                {t("productDetail.estLineTotal")}
               </span>
               <span className="text-[20px] font-light tracking-[0.06em] text-black">
                 {formatPriceINR(wholesaleSubtotal)}
@@ -421,13 +421,13 @@ export default function ProductDetail() {
             >
               {addNotice}{" "}
               <Link href="/login" className="underline underline-offset-4 transition-colors hover:text-black font-medium">
-                Log in
+                {t("productDetail.loginLink")}
               </Link>
             </p>
           )}
 
           <ul className="grid gap-4 border-t border-black/10 pt-7 text-[9px] uppercase leading-relaxed tracking-[0.15em] text-gray-600 sm:grid-cols-3">
-            {["WHOLESALE ENQUIRY REVIEW", "PAYMENT METHOD SHARED AFTER APPROVAL", "BULK SHIPPING QUOTED AFTER REVIEW"].map((item) => (
+            {[t("productDetail.review1"), t("productDetail.review2"), t("productDetail.review3")].map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <CheckIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-black" />
                 <span>{item}</span>

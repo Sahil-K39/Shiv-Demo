@@ -1,4 +1,5 @@
 import { PAGE_TRANSLATIONS_ALL } from "./pageTranslationsAll";
+import { EXTRA_UI_TRANSLATIONS_86 } from "./pageTranslationsExtra86";
 
 export const PAGE_TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
@@ -381,8 +382,11 @@ export function getPageText(langCode: string, key: string): string {
   const dictCore = PAGE_TRANSLATIONS[langCode] || PAGE_TRANSLATIONS[code];
   if (dictCore && dictCore[key]) return dictCore[key];
 
+  const dictExtra = EXTRA_UI_TRANSLATIONS_86[langCode] || EXTRA_UI_TRANSLATIONS_86[code];
+  if (dictExtra && dictExtra[key]) return dictExtra[key];
+
   const dict86 = PAGE_TRANSLATIONS_ALL[langCode] || PAGE_TRANSLATIONS_ALL[code];
   if (dict86 && dict86[key]) return dict86[key];
 
-  return PAGE_TRANSLATIONS.en[key] || key;
+  return PAGE_TRANSLATIONS.en[key] || EXTRA_UI_TRANSLATIONS_86.en[key] || key;
 }

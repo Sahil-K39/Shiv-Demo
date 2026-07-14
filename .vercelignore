@@ -1,0 +1,16 @@
+.git
+node_modules
+*/node_modules
+*/.next
+.next
+Final Products
+Products
+Photoroom
+*.mov
+*.mp4
+*.zip
+backend
+data
+scripts
+*.db
+.DS_Store
