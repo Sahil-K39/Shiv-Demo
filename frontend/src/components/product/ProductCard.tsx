@@ -116,20 +116,20 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         />
       )}
 
-      {/* Product info — Demobaza video style: bold title with rose status badge and price below */}
+      {/* Product info — Demobaza video style: bold title with status badge and price below */}
       <Link href={`/product/${product.slug}`} className="block">
-        <div className="mt-4 space-y-1 px-0.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-black sm:text-[12px]">
+        <div className="mt-2.5 sm:mt-4 space-y-1 px-0.5">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-1 sm:gap-2">
+            <h3 className="text-[10px] sm:text-[12px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-black line-clamp-1">
               {translateProductText(product.name, currentLanguage.code)}
             </h3>
             {index % 3 === 0 ? (
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">{t("product.new")}</span>
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.12em] text-[#e11d48]">{t("product.new")}</span>
             ) : index % 4 === 0 ? (
-              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d946ef]">{t("product.preorder")}</span>
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.12em] text-[#d946ef]">{t("product.preorder")}</span>
             ) : null}
           </div>
-          <p className="text-[12px] font-normal tracking-[0.05em] text-black sm:text-[13px]">
+          <p className="text-[11px] sm:text-[13px] font-medium sm:font-normal tracking-[0.05em] text-black/80 sm:text-black">
             {formatPriceINR(product.price)}
           </p>
         </div>

@@ -14,7 +14,7 @@ export default function BrandLogo({
 }: BrandLogoProps) {
   const sizeClasses =
     variant === "nav"
-      ? "h-[42px] w-[34px] sm:h-[48px] sm:w-[38px] md:h-[52px] md:w-[42px]"
+      ? "h-[36px] w-[28px] sm:h-[48px] sm:w-[38px] md:h-[52px] md:w-[42px]"
       : variant === "footer"
         ? "h-[110px] w-[90px] md:h-[140px] md:w-[114px]"
         : "h-14 w-11 md:h-16 md:w-13";
@@ -23,7 +23,7 @@ export default function BrandLogo({
     <Link
       href={href}
       aria-label="Shiv Shakti Project home"
-      className={`group inline-flex shrink-0 items-center gap-2.5 text-black ${className}`}
+      className={`group inline-flex shrink-0 items-center gap-1 sm:gap-2 text-black ${className}`}
     >
       <span
         className={`relative block shrink-0 overflow-hidden transition-opacity duration-300 group-hover:opacity-85 ${sizeClasses}`}
@@ -38,8 +38,8 @@ export default function BrandLogo({
         />
       </span>
       {variant === "nav" && (
-        <span className="font-serif text-[17px] sm:text-[21px] md:text-[24px] font-light tracking-[0.28em] text-black uppercase transition-opacity duration-300 group-hover:opacity-80">
-          Shiv<span className="font-bold ml-1.5">Shakti</span>
+        <span className="font-serif text-[16px] sm:text-[20px] md:text-[23px] font-medium tracking-[0.22em] sm:tracking-[0.25em] text-black uppercase transition-opacity duration-300 group-hover:opacity-80 whitespace-nowrap">
+          Shiv Shakti
         </span>
       )}
     </Link>
