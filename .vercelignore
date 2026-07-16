@@ -3,9 +3,9 @@ node_modules
 */node_modules
 */.next
 .next
-Final Products
-Products
-Photoroom
+/Final Products/
+/Products/
+/Photoroom/
 *.mov
 *.mp4
 *.zip
