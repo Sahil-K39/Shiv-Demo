@@ -91,7 +91,7 @@ export default function Home() {
               fill
               priority={index === 0}
               sizes="100vw"
-              className="object-cover object-center opacity-85"
+              className="object-cover object-[50%_15%] sm:object-[50%_18%] md:object-[50%_20%] opacity-85"
             />
             {/* Cinematic Gradients for text legibility */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
@@ -345,7 +345,7 @@ export default function Home() {
                 alt="Shiva Men Collection"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                className="object-cover object-[50%_15%] md:object-[50%_18%] transition-transform duration-[1500ms] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
             </Link>
@@ -380,7 +380,7 @@ export default function Home() {
                 alt="Shakti Women Collection"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-center transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                className="object-cover object-[50%_15%] md:object-[50%_18%] transition-transform duration-[1500ms] ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
             </Link>
