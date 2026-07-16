@@ -122,7 +122,7 @@ const services = [
 export default function FabricSellingPage() {
   return (
     <div className="bg-white text-black">
-      <section className="relative min-h-[calc(100svh-80px)] w-full bg-white text-black border-b border-black/10 overflow-hidden px-6 py-10 md:px-10 lg:py-16 flex items-center">
+      <section className="relative min-h-[calc(100svh-80px)] w-full bg-white text-black border-b border-black/10 overflow-hidden px-6 pt-6 sm:pt-8 pb-10 md:px-10 lg:pb-16 flex items-center">
         <div className="mx-auto w-full max-w-[1700px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-6 flex flex-col items-start justify-center">
             <p className="mb-5 text-[12px] font-bold uppercase tracking-[0.28em] text-black">

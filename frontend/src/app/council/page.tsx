@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Council() {
   return (
     <div className="w-full bg-white min-h-[80vh] flex flex-col items-center">
-      <div className="w-full max-w-[1200px] px-10 py-20 flex flex-col items-center border-b border-black">
+      <div className="w-full max-w-[1200px] px-10 pt-6 sm:pt-8 pb-12 sm:pb-16 flex flex-col items-center border-b border-black">
         <h1 className="animate-soft-reveal text-[40px] md:text-[80px] font-light text-black uppercase tracking-[0.16em] mb-6">
           THE COUNCIL
         </h1>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main className="bg-white text-black">
-      <section className="border-b border-black px-6 py-24 md:px-10 md:py-32">
+      <section className="border-b border-black px-6 pt-6 sm:pt-8 pb-16 md:px-10 md:pb-24">
         <div className="mx-auto grid max-w-[1400px] gap-12 md:grid-cols-[0.85fr_1.15fr]">
           <div>
             <p className="mb-5 text-[12px] uppercase tracking-[0.28em] text-gray-500">

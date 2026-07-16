@@ -34,7 +34,7 @@ export default function ShopCollection() {
 
   return (
     <div className="w-full bg-white text-black min-h-[80vh] flex flex-col items-center">
-      <div className="w-full border-b border-black/10 py-16 sm:py-20 text-center">
+      <div className="w-full border-b border-black/10 pt-6 sm:pt-8 pb-10 sm:pb-12 text-center">
         <p className="mb-4 px-5 text-[12px] sm:text-[14px] font-medium uppercase leading-relaxed tracking-[0.2em] text-gray-600 lg:text-[12px] lg:tracking-[0.28em] lg:text-gray-500">
           {t("shop.ss26Wholesale")} / MOQ {MIN_WHOLESALE_QUANTITY} {t("cart.units")} / style
         </p>
