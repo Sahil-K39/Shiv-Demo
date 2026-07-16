@@ -2,8 +2,14 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function ContentProtectionShield() {
+  const pathname = usePathname();
+  const isAdminRoute = Boolean(
+    pathname?.startsWith("/admin") || pathname?.startsWith("/backend-admin")
+  );
+
   const [securityNotice, setSecurityNotice] = useState<string | null>(null);
   const [isShieldActive, setIsShieldActive] = useState(false);
 
@@ -16,19 +22,24 @@ export default function ContentProtectionShield() {
   }, []);
 
   const triggerDesktopShield = useCallback((notice?: string) => {
-    if (isMobileDevice()) return;
+    if (isAdminRoute || isMobileDevice()) return;
     setIsShieldActive(true);
     if (notice) {
       setSecurityNotice(notice);
       setTimeout(() => setSecurityNotice(null), 3000);
     }
-  }, [isMobileDevice]);
+  }, [isAdminRoute, isMobileDevice]);
 
   const releaseDesktopShield = useCallback(() => {
     setIsShieldActive(false);
   }, []);
 
   useEffect(() => {
+    if (isAdminRoute) {
+      setIsShieldActive(false);
+      return;
+    }
+
     // 1. Silent Protection for ALL platforms (Desktop & Mobile): prevent right-click & image drag
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -144,7 +155,9 @@ export default function ContentProtectionShield() {
       window.removeEventListener("keyup", handleKeyUp, true);
       window.removeEventListener("blur", handleWindowBlur);
     };
-  }, [isMobileDevice, triggerDesktopShield]);
+  }, [isAdminRoute, isMobileDevice, triggerDesktopShield]);
+
+  if (isAdminRoute) return null;
 
   return (
     <>
