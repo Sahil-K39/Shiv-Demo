@@ -173,7 +173,6 @@ func migrateSQLite(db *sql.DB) error {
 		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 	);
 	CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
-	CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
 
 	CREATE TABLE IF NOT EXISTS cart_items (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -261,9 +260,16 @@ func migrateSQLite(db *sql.DB) error {
 		{"users", "role", "TEXT DEFAULT 'user'"},
 		{"users", "last_login_at", "DATETIME"},
 		{"users", "login_count", "INTEGER DEFAULT 0"},
+		{"products", "slug", "TEXT DEFAULT ''"},
 		{"products", "sale_price", "REAL DEFAULT 0"},
 		{"products", "is_on_sale", "BOOLEAN DEFAULT 0"},
 		{"products", "currency", "TEXT DEFAULT 'INR'"},
+		{"products", "collection", "TEXT DEFAULT 'SS26'"},
+		{"products", "sizes", "TEXT DEFAULT '[\"XS\",\"S\",\"M\",\"L\",\"XL\"]'"},
+		{"products", "colors", "TEXT DEFAULT '[\"Void Black\"]'"},
+		{"products", "images", "TEXT DEFAULT '[]'"},
+		{"products", "in_stock", "BOOLEAN DEFAULT 1"},
+		{"products", "featured", "BOOLEAN DEFAULT 0"},
 		{"products", "quantity", "INTEGER DEFAULT 0"},
 		{"products", "sku", "TEXT DEFAULT ''"},
 		{"products", "is_featured", "BOOLEAN DEFAULT 0"},
@@ -290,6 +296,7 @@ func migrateSQLite(db *sql.DB) error {
 	db.Exec("UPDATE products SET updated_at = COALESCE(updated_at, created_at, CURRENT_TIMESTAMP)")
 	db.Exec("UPDATE orders SET updated_at = COALESCE(updated_at, created_at, CURRENT_TIMESTAMP)")
 	normalizeProductCurrency(db)
+	db.Exec("CREATE INDEX IF NOT EXISTS idx_products_slug ON products(slug)")
 	if _, err := db.Exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_products_sku_not_empty ON products(sku) WHERE sku <> ''"); err != nil {
 		log.Printf("Could not create unique SKU index: %v", err)
 	}

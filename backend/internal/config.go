@@ -2,7 +2,6 @@ package internal
 
 import (
     "log"
-    "os"
     "strings"
 
     "github.com/kelseyhightower/envconfig"
