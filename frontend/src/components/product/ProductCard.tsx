@@ -11,7 +11,6 @@ import {
   getCategoryFallbackImage,
   getProductImages,
 } from "@/lib/productMedia";
-import { formatPriceINR } from "@/lib/pricing";
 import { useLanguage } from "@/context/LanguageContext";
 import { translateProductText } from "@/lib/productTranslations";
 
@@ -21,7 +20,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
-  const { t, currentLanguage } = useLanguage();
+  const { t, currentLanguage, formatPrice } = useLanguage();
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-80px" });
   const [isHovered, setIsHovered] = useState(false);
@@ -130,7 +129,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             ) : null}
           </div>
           <p className="text-[11px] sm:text-[13px] font-medium sm:font-normal tracking-[0.05em] text-black/80 sm:text-black">
-            {formatPriceINR(product.price)}
+            {formatPrice(product.price)}
           </p>
         </div>
       </Link>

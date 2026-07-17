@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import BrandLogo from "@/components/ui/BrandLogo";
 import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
+import CurrencySwitcherButton from "@/components/ui/CurrencySwitcherButton";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -68,8 +69,11 @@ export default function Footer() {
       </div>
 
       <div className="max-w-[1400px] mx-auto mt-16 pt-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <LanguageSwitcherButton variant="footer" />
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2">
+            <LanguageSwitcherButton variant="footer" />
+            <CurrencySwitcherButton variant="footer" />
+          </div>
           <p className="text-[9px] tracking-[0.2em] text-gray-500 uppercase text-center sm:text-left">
             {t("footer.rights")}
           </p>

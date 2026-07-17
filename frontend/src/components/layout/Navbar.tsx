@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/cart";
 import BrandLogo from "@/components/ui/BrandLogo";
 import LanguageSwitcherButton from "@/components/ui/LanguageSwitcherButton";
+import CurrencySwitcherButton from "@/components/ui/CurrencySwitcherButton";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/translations";
 import {
@@ -137,8 +138,9 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 lg:gap-3">
             <LanguageSwitcherButton variant="nav" />
+            <CurrencySwitcherButton variant="nav" />
 
             <Link
               href="/search"
@@ -213,11 +215,19 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              <div className="py-4 flex items-center justify-between">
-                <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
-                  {t("nav.languageRegion")}
-                </span>
-                <LanguageSwitcherButton variant="footer" />
+              <div className="py-4 flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
+                    {t("nav.languageRegion")}
+                  </span>
+                  <LanguageSwitcherButton variant="footer" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
+                    Currency & Pricing
+                  </span>
+                  <CurrencySwitcherButton variant="footer" />
+                </div>
               </div>
             </div>
           </motion.div>

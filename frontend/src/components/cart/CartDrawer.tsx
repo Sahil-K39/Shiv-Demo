@@ -10,7 +10,6 @@ import { useCartStore } from "@/store/cart";
 import { CloseIcon, MinusIcon, PlusIcon } from "@/components/ui/Icons";
 import { ordersAPI } from "@/lib/api";
 import { getCartItemImage } from "@/lib/productMedia";
-import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 import { useLanguage } from "@/context/LanguageContext";
 import { translateProductText } from "@/lib/productTranslations";
@@ -26,7 +25,7 @@ const emptyEnquiryForm = {
 };
 
 export default function CartDrawer() {
-  const { t, currentLanguage } = useLanguage();
+  const { t, currentLanguage, formatPrice } = useLanguage();
   const { items, isOpen, closeCart, total, removeItem, updateQuantity, fetchCart, isLoading, user } =
     useCartStore();
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
@@ -212,7 +211,7 @@ export default function CartDrawer() {
                         </div>
 
                         <span className="text-[12px] tracking-[0.1em] text-black/70">
-                          {formatPriceINR(item.price * item.quantity)}
+                          {formatPrice(item.price * item.quantity)}
                         </span>
 
                         <button
@@ -235,7 +234,7 @@ export default function CartDrawer() {
                     {t("cart.subtotal")}
                   </span>
                   <span className="text-[18px] tracking-[0.05em] text-black font-light">
-                    {formatPriceINR(total)}
+                    {formatPrice(total)}
                   </span>
                 </div>
 

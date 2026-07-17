@@ -12,13 +12,18 @@ export default function LanguageSwitcherButton({
   variant = "nav",
   className = "",
 }: LanguageSwitcherButtonProps) {
-  const { currentLanguage, setIsModalOpen, isRtl } = useLanguage();
+  const { currentLanguage, setIsModalOpen, setActiveModalTab, isRtl } = useLanguage();
+
+  const handleClick = () => {
+    setActiveModalTab("language");
+    setIsModalOpen(true);
+  };
 
   if (variant === "footer") {
     return (
       <button
         type="button"
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleClick}
         aria-label="Select language and region"
         className={`inline-flex items-center gap-2.5 rounded-full border border-neutral-300 bg-white px-4 py-2 text-xs font-medium text-neutral-800 shadow-sm transition-all hover:border-black hover:bg-neutral-900 hover:text-white ${className}`}
       >
@@ -50,7 +55,7 @@ export default function LanguageSwitcherButton({
   return (
     <button
       type="button"
-      onClick={() => setIsModalOpen(true)}
+      onClick={handleClick}
       aria-label={`Current language: ${currentLanguage.name}. Click to change language.`}
       className={`inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1.5 text-xs font-medium text-neutral-800 transition-all hover:border-black hover:bg-neutral-900 hover:text-white ${className}`}
     >

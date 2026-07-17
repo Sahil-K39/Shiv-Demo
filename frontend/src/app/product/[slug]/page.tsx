@@ -20,7 +20,6 @@ import {
   parseList,
 } from "@/lib/productMedia";
 import { getAllProducts } from "@/lib/productData";
-import { formatPriceINR } from "@/lib/pricing";
 import { MIN_WHOLESALE_QUANTITY, WHOLESALE_PACK_SIZES } from "@/lib/wholesale";
 import { useLanguage } from "@/context/LanguageContext";
 import { translateProductText } from "@/lib/productTranslations";
@@ -29,7 +28,7 @@ export default function ProductDetail() {
   const params = useParams();
   const slug = params.slug as string;
   const { addItem, openCart, user } = useCartStore();
-  const { t, currentLanguage } = useLanguage();
+  const { t, currentLanguage, formatPrice } = useLanguage();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loadedSlug, setLoadedSlug] = useState("");
@@ -250,7 +249,7 @@ export default function ProductDetail() {
                   {t("productDetail.wholesaleUnit")}
                 </p>
                 <p className="mt-1 text-[24px] font-light tracking-[0.06em] text-black md:text-[28px]">
-                  {formatPriceINR(product.price)}
+                  {formatPrice(product.price)}
                 </p>
               </div>
               <div className="text-right">
@@ -385,7 +384,7 @@ export default function ProductDetail() {
                 {t("productDetail.estLineTotal")}
               </span>
               <span className="text-[20px] font-light tracking-[0.06em] text-black">
-                {formatPriceINR(wholesaleSubtotal)}
+                {formatPrice(wholesaleSubtotal)}
               </span>
             </div>
           </div>
@@ -454,7 +453,7 @@ export default function ProductDetail() {
             <span className="h-4 w-4 animate-spin border border-white/40 border-t-white" />
           ) : product.in_stock ? (
             <>
-              <span>{t("productDetail.addToEnquiry")} \u2014 {formatPriceINR(product.price * quantity)}</span>
+              <span>{t("productDetail.addToEnquiry")} \u2014 {formatPrice(product.price * quantity)}</span>
             </>
           ) : (
             <span>{t("products.outOfStock")}</span>
