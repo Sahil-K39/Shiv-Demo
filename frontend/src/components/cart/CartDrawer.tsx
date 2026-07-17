@@ -301,11 +301,16 @@ export default function CartDrawer() {
                   onClick={() => {
                     setError("");
                     setMessage("");
+                    if (!user) {
+                      closeCart();
+                      window.location.href = "/login";
+                      return;
+                    }
                     if (!canSendEnquiry) return;
                     setIsEnquiryOpen((value) => !value);
                   }}
-                  disabled={!canSendEnquiry}
-                  className="relative w-full overflow-hidden group border border-black text-black py-4 text-[11px] tracking-[0.2em] uppercase bg-transparent"
+                  disabled={Boolean(user) && !canSendEnquiry}
+                  className="relative w-full overflow-hidden group border border-black text-black py-4 text-[11px] tracking-[0.2em] uppercase bg-transparent disabled:opacity-40 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >

@@ -5,7 +5,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
 import type { Product, ProductInput } from "@/types";
 import { getColorSwatch, getProductImages, parseList } from "@/lib/productMedia";
-import { formatPriceINR } from "@/lib/pricing";
+import { useLanguage } from "@/context/LanguageContext";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 const emptyForm: ProductInput = {
@@ -55,9 +55,6 @@ const colorOptions = [
   "Silver",
 ];
 
-function money(value: number) {
-  return formatPriceINR(value);
-}
 
 function toDateInput(value: string | null | undefined) {
   if (!value) return "";
@@ -684,6 +681,7 @@ function ProductForm({
 }
 
 export default function AdminProductsPage() {
+  const { formatPrice: money } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [form, setForm] = useState<ProductInput>(emptyForm);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);

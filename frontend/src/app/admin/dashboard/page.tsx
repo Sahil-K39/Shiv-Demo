@@ -6,7 +6,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
 import type { AdminOrder, OrderStatus, Product } from "@/types";
 import { getProductImages } from "@/lib/productMedia";
-import { formatPriceINR } from "@/lib/pricing";
+import { useLanguage } from "@/context/LanguageContext";
 import { MIN_WHOLESALE_QUANTITY } from "@/lib/wholesale";
 
 type DashboardStats = {
@@ -28,9 +28,6 @@ type DashboardStats = {
   confirmed_revenue: number;
 };
 
-function money(value: number) {
-  return formatPriceINR(value);
-}
 
 function number(value: number) {
   return new Intl.NumberFormat("en-US").format(value);
@@ -62,6 +59,7 @@ function statusLabel(status: OrderStatus) {
 }
 
 export default function AdminDashboardPage() {
+  const { formatPrice: money } = useLanguage();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<AdminOrder[]>([]);

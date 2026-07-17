@@ -3,14 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import AdminShell from "@/components/admin/AdminShell";
 import { adminAPI } from "@/lib/api";
-import { formatPriceINR } from "@/lib/pricing";
+import { useLanguage } from "@/context/LanguageContext";
 import type { AdminOrder, OrderStatus } from "@/types";
 
 const statusFilters = ["all", "payment_pending", "confirmed", "shipped", "delivered"] as const;
 
-function money(value: number) {
-  return formatPriceINR(value);
-}
 
 function formatDate(value?: string | null) {
   if (!value) return "Pending";
@@ -65,6 +62,7 @@ function Badge({
 }
 
 export default function AdminOrdersPage() {
+  const { formatPrice: money } = useLanguage();
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] =
