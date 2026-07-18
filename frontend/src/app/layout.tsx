@@ -10,7 +10,7 @@ import LanguageModal from "@/components/ui/LanguageModal";
 import ContentProtectionShield from "@/components/security/ContentProtectionShield";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shiv-demo.vercel.app"),
+  metadataBase: new URL("https://www.shivshaktiproject.com"),
   title: "Shiv Shakti Project",
   description:
     "Avant-garde clothing for the post-apocalyptic era. Deconstructed silhouettes, ritual textures, and ceremonial armor designed for the Council of Light.",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Shiv Shakti Project \u2014 SS26 Wholesale Buying Room",
     description:
       "Premium wholesale fashion. Deconstructed silhouettes, ritual textures, and limited seasonal releases.",
-    url: "https://shiv-demo.vercel.app",
+    url: "https://www.shivshaktiproject.com",
     siteName: "Shiv Shakti Project",
     images: [
       {
