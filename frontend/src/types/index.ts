@@ -135,6 +135,7 @@ export interface CheckoutInput {
   shipping_zip: string;
   shipping_country: string;
   shipping_phone: string;
+  payment_method?: string;
 }
 
 export interface CommunityPost {
