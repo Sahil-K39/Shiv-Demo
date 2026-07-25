@@ -935,7 +935,7 @@ export const ordersAPI = {
             total: o.total_price,
             created_at: o.created_at,
             items: o.items,
-          })) as any,
+          })) as unknown as Order[],
         };
       }
     ),

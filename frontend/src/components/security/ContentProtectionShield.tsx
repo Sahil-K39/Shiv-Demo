@@ -36,7 +36,6 @@ export default function ContentProtectionShield() {
 
   useEffect(() => {
     if (isAdminRoute) {
-      setIsShieldActive(false);
       return;
     }
 

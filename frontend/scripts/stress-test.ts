@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Shiv Shakti Project — Comprehensive Stress Test Suite
  * Benchmarks API gateway, local fallback engine, localStorage limits, concurrency, and dashboard aggregation.
@@ -55,7 +56,7 @@ const mockSessionStorage = new LocalStorageMock();
 (global as any).sessionStorage = mockSessionStorage;
 
 // Now import the API engine after mocking window & storage
-import { productsAPI, ordersAPI, adminAPI, cartAPI } from "../src/lib/api";
+import { ordersAPI, adminAPI } from "../src/lib/api";
 import { ProductInput } from "../src/types";
 
 async function runStressTests() {

@@ -1,5 +1,5 @@
 import { ALL_86_TRANSLATIONS } from "./all86Translations";
-import { TRANSLATIONS, TranslationKey } from "./translations";
+import { TRANSLATIONS } from "./translations";
 import { PAGE_TRANSLATIONS } from "./pageTranslations";
 
 /**
@@ -18,13 +18,13 @@ export function getUniversalTranslation(langCode: string, key: string): string {
   }
 
   // 2. Check TRANSLATIONS exact or prefix
-  const dictCore = (TRANSLATIONS as any)[codeExact] || (TRANSLATIONS as any)[codePrefix];
+  const dictCore = (TRANSLATIONS as Record<string, Record<string, string>>)[codeExact] || (TRANSLATIONS as Record<string, Record<string, string>>)[codePrefix];
   if (dictCore && dictCore[key] && dictCore[key] !== key) {
     return dictCore[key];
   }
 
   // 3. Check PAGE_TRANSLATIONS exact or prefix
-  const dictPage = (PAGE_TRANSLATIONS as any)[codeExact] || (PAGE_TRANSLATIONS as any)[codePrefix];
+  const dictPage = (PAGE_TRANSLATIONS as Record<string, Record<string, string>>)[codeExact] || (PAGE_TRANSLATIONS as Record<string, Record<string, string>>)[codePrefix];
   if (dictPage && dictPage[key] && dictPage[key] !== key) {
     return dictPage[key];
   }
