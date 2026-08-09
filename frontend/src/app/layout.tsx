@@ -59,8 +59,10 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  children,
 }: {
-
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
