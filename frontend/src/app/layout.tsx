@@ -1,13 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import MobileBottomNav from "@/components/layout/MobileBottomNav";
-import CartDrawer from "@/components/cart/CartDrawer";
-import { Analytics } from '@vercel/analytics/react';
-import { LanguageProvider } from "@/context/LanguageContext";
-import LanguageModal from "@/components/ui/LanguageModal";
-import ContentProtectionShield from "@/components/security/ContentProtectionShield";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.shivshaktiproject.com"),
@@ -66,26 +59,17 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({
-  children,
 }: {
-  children: React.ReactNode;
+
 }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className="antialiased flex flex-col min-h-screen">
-        <LanguageProvider>
-          <ContentProtectionShield />
-          <div className="noise-overlay" />
-          <Navbar />
-          <MobileBottomNav />
-          <CartDrawer />
-          <LanguageModal />
-          <main id="main-content" className="flex-1 pt-[70px] sm:pt-[80px] pb-16 md:pb-0">
-            {children}
-          </main>
-          <Footer />
-          <Analytics />
-        </LanguageProvider>
+      <body className="antialiased flex flex-col min-h-screen bg-black text-white items-center justify-center p-4">
+        <div className="max-w-md w-full text-center space-y-4">
+          <h1 className="text-2xl font-bold tracking-widest text-red-500 uppercase">Hosting Expired</h1>
+          <p className="text-sm text-gray-400">The hosting for this website has expired.</p>
+          <p className="text-sm text-gray-500 uppercase tracking-widest border-t border-white/10 pt-4">Files have been removed from the hosting.</p>
+        </div>
       </body>
     </html>
   );
