@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/Icons";
+import NgoApplicationForm from "@/components/ngo/NgoApplicationForm";
 
 export const metadata: Metadata = {
   title: "Shiv Shakti Project | NGO — Women Empowering Women",
@@ -122,6 +123,11 @@ export default function NGOPage() {
             </span>
           </Link>
         </div>
+      </section>
+
+      {/* Application Form Section */}
+      <section className="bg-neutral-100 px-6 py-24 md:px-10 md:py-32 border-t border-black/10">
+        <NgoApplicationForm />
       </section>
     </main>
   );
