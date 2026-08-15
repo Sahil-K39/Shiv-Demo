@@ -20,12 +20,13 @@ import {
   UserIcon,
 } from "@/components/ui/Icons";
 
-const navLinks: Array<{ href: string; key: TranslationKey }> = [
+const navLinks: Array<{ href: string; key?: TranslationKey; label?: string }> = [
   { href: "/shop/shiva", key: "nav.shiva" },
   { href: "/shop/shakti", key: "nav.shakti" },
   { href: "/", key: "nav.wholesale" },
   { href: "/fabric-selling", key: "nav.fabric" },
   { href: "/council", key: "nav.council" },
+  { href: "/ngo", label: "NGO" },
 ];
 
 export default function Navbar() {
@@ -125,7 +126,7 @@ export default function Navbar() {
                   href={link.href}
                   className={`nav-link relative py-2 ${isActive ? "text-black font-semibold" : "text-black/70 hover:text-black"}`}
                 >
-                  {t(link.key)}
+                  {link.label || (link.key && t(link.key))}
                   {isActive && (
                     <motion.span
                       layoutId="nav-underline"
@@ -210,7 +211,7 @@ export default function Navbar() {
                       isActive ? "text-black font-semibold" : "text-black/55"
                     }`}
                   >
-                    {t(link.key)}
+                    {link.label || (link.key && t(link.key))}
                     <span className="h-px w-8 bg-current opacity-40" />
                   </Link>
                 );
